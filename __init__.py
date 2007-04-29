@@ -6,9 +6,20 @@
 # and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
 ##########################################################################
 
+try:
+    import z3c.sqlalchemy
+except ImportError:
+    raise ImportError('The z3c.sqlalchemy is not installed properly')
 
-import z3c.sqlalchemy
+from config import ADD_SA_WRAPPER_PERMISSION
 
 
 def initialize(context):
-    pass
+
+    from da import SAWrapper, manage_addSAWrapper, manage_addSAWrapperForm
+
+    context.registerClass(SAWrapper, 
+                          constructors=(manage_addSAWrapperForm, manage_addSAWrapper),
+                          permission=ADD_SA_WRAPPER_PERMISSION)                          
+        
+  
