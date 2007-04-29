@@ -1,0 +1,50 @@
+<div tal:replace="structure context/manage_page_header" />
+<div tal:replace="structure context/manage_tabs" />
+
+<p class="form-help">
+Add a SQLAlchemy wrapper
+</p>
+
+<form action="manage_addSAWrapper" method="post" name="addForm">
+
+
+<form action="manage_addTextIndexNG3" method="post" enctype="multipart/form-data" name="addform">
+<table cellspacing="0" cellpadding="2" border="0">
+  <tr>
+    <td>
+    <div class="form-label">
+    Id
+    </div>
+    </td>
+    <td>
+      <input type="text" name="id" size="40" />
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <div class="form-label">
+    Title
+    </div>
+    </td>
+    <td>
+      <input type="text" name="title" size="40" value="SQLAlchemy wrapper"/>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    </td>
+    <td   colspan="2">
+    <div class="form-element">
+    <input class="form-element" type="submit" name="submit" 
+     value=" Add " /> 
+    </div>
+    </td>
+  </tr>
+</table>
+
+
+</form>
+
+<div tal:replace="structure context/manage_page_footer" />
