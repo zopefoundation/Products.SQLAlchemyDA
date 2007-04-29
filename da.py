@@ -14,14 +14,13 @@ from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 
-
 class SAWrapper(SimpleItem, PropertyManager):
 
     manage_options = PropertyManager.manage_options + \
                      SimpleItem.manage_options
 
     _properties = (
-        {'id' : 'wrapper_name', 'type' : 'string', 'value' : '', 'mode' : 'rw'},
+        {'id' : 'wrapper_name', 'type' : 'string', 'mode' : 'rw'},
     )
 
     id = 'sqlalchemy_da'
@@ -46,4 +45,6 @@ def manage_addSAWrapper(self, id, title, RESPONSE=None):
         return wrapper 
 
 
-manage_addSAWrapperForm = PageTemplateFile('pt/addSAWrapperForm', globals(), __name__='addSAWrapperForm')
+manage_addSAWrapperForm = PageTemplateFile('pt/addSAWrapperForm', 
+                                           globals(), 
+                                           __name__='addSAWrapperForm')

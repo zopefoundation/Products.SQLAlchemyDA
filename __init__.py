@@ -16,10 +16,12 @@ from config import ADD_SA_WRAPPER_PERMISSION
 
 def initialize(context):
 
-    from da import SAWrapper, manage_addSAWrapper, manage_addSAWrapperForm
+    from da import (SAWrapper, manage_addSAWrapper, 
+                   manage_addSAWrapperForm)
 
     context.registerClass(SAWrapper, 
-                          constructors=(manage_addSAWrapperForm, manage_addSAWrapper),
+                          constructors=(manage_addSAWrapperForm, 
+                                        manage_addSAWrapper),
                           permission=ADD_SA_WRAPPER_PERMISSION)                          
         
   
