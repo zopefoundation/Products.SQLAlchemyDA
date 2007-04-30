@@ -33,6 +33,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     meta_type = 'SQLAlchemy Wrapper Integration'
     sqlalchemy_wrapper_name = None
+    _isAnSQLConnection = True
 
     security = ClassSecurityInfo()
 
