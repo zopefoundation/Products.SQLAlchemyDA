@@ -8,6 +8,8 @@
 
 
 A shim providing access to registered z3c.sqlalchemy wrapper instances.
+The DA also might act as a generic DA for all databases supported through
+SQLAlchemy
 
 Requirements:
 -------------
@@ -17,6 +19,27 @@ Requirements:
   - SQLAlchemy 0.3.X
 
   - z3c.sqlalchemy 0.1.10 + 
+
+
+Installation:
+-------------
+
+A z3c.sqlAlchemy SAWrapper must be registered. The best way to do this right
+now to put something like this into your Product's initialize():
+
+Products/YourProduct/__init__.py:
+
+   def  initialize(context):
+
+       from z3c.sqlalchemy import createSAWrapper, registerSAWrapper
+       wrapper = createSAWrapper('postgres://user:password@host/database', forZope=True)
+       registerSAWrapper(wrapper, 'my-sa-wrapper')
+
+After restarting Zope you go to the ZMI and create an instance of "SQLAlchemy
+Wrapper Integration" (as you would create some DA instance). After creating the
+instance you should see 'my-sa-wrapper' in the properties form of the new
+instance. When creating a new ZSQL method you should be able to use this DA
+instance as connection id.
 
 
 
