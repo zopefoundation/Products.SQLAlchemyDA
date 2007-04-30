@@ -13,7 +13,7 @@ from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
-from z3c.sqlalchemy import allSAWrapperNames
+from z3c.sqlalchemy import allSAWrapperNames, getSAWrapper
 
 class SAWrapper(SimpleItem, PropertyManager):
 
@@ -34,7 +34,23 @@ class SAWrapper(SimpleItem, PropertyManager):
     def registeredWrappers(self):
         """ return a list of registered wrapper names """
         return allSAWrapperNames()
-            
+
+
+    def getMapper(self, name):
+        """ return a mapper class """
+        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
+        return wrapper.getMapper(name)
+
+
+    def getSession(self):
+        """ return a session instance """
+        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
+        return wrapper.session
+        
+
+    def test(self):
+        """ test """
+        return self.getSession()            
 
 InitializeClass(SAWrapper)
 
