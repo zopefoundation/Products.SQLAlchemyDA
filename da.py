@@ -79,20 +79,20 @@ class SAWrapper(SimpleItem, PropertyManager):
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         c = wrapper.connection
 
-        result = c.execute(query_string).fetchall()
+        result_proxy  = c.execute(query_string)
+        rows = result_proxy.fetchall()
 
         items = []
-        if len(result) > 0:
-           for i, v in enumerate(result[0]):
-                items.append(
-                    {'name' : 'col%d' % i,
-                     'type' : 'string',
-                     'width' : 72,
-                     'null' : True,
-                    }
-                ) 
+        for  key in result_proxy.keys:
+            items.append(
+                {'name' : key,
+                 'type' : 'string',  # fix this
+                 'width' : 0,        # fix this
+                 'null' : True,      # fix this
+                }
+            ) 
 
-        return items, result
+        return items, rows
 
     def __call__(self, *args, **kv):
         return self    
