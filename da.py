@@ -73,13 +73,35 @@ class SAWrapper(SimpleItem, PropertyManager):
         d['DSN'] = wrapper.dsn
         return d
 
-    def query(self, stmt):
+    def query(self, query_string, max_rows=None, query_data=None):
         """ foo """
+
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         c = wrapper.connection
-        result = c.execute(stmt)
-        return result
-    
+
+        result = c.execute(query_string).fetchall()
+
+        items = []
+        if len(result) > 0:
+           for i, v in enumerate(result[0]):
+                items.append(
+                    {'name' : 'col%d' % i,
+                     'type' : 'string',
+                     'width' : 72,
+                     'null' : True,
+                    }
+                ) 
+
+        return items, result
+
+    def __call__(self, *args, **kv):
+        return self    
+
+    def sql_quote__(self, s):
+        return s
+
+    def connected(self):
+        return True # this is a lie
  
     manage_info = PageTemplateFile('pt/info', 
                                    globals(), 
