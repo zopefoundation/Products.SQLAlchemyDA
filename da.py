@@ -23,13 +23,17 @@ class SAWrapper(SimpleItem, PropertyManager):
     _properties = (
         {'id' : 'sqlalchemy_wrapper_name', 'type' : 'selection', 'mode' : 'rw', 
          'select_variable' : 'registeredWrappers'},
+        {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
     )
 
-    id = 'sqlalchemy_da'
     meta_type = 'SQLAlchemy Wrapper Integration'
     sqlalchemy_wrapper_name = ''
 
     security = ClassSecurityInfo()
+
+    def __init__(self, id, title=''):
+        self.id = id
+        self.title = title
 
     def registeredWrappers(self):
         """ return a list of registered wrapper names """
