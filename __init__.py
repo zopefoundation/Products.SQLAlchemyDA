@@ -23,5 +23,14 @@ def initialize(context):
                           constructors=(manage_addSAWrapperForm, 
                                         manage_addSAWrapper),
                           permission=ADD_SA_WRAPPER_PERMISSION)                          
-        
-  
+
+
+    # make sqlalchemy classes available to untrusted code
+    from AccessControl.SecurityInfo import ModuleSecurityInfo, allow_module, allow_class
+
+    from sqlalchemy.orm.session import Session
+    from sqlalchemy.orm.query import Query
+
+    allow_class(Session)
+    allow_class(Query)
+
