@@ -71,6 +71,14 @@ class SAWrapper(SimpleItem, PropertyManager):
         d = wrapper.kw
         d['DSN'] = wrapper.dsn
         return d
+
+    def query(self, stmt):
+        """ foo """
+        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
+        c = wrapper.connection
+        result = c.execute(stmt)
+        return result
+    
  
     manage_info = PageTemplateFile('pt/info', 
                                    globals(), 
