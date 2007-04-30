@@ -7,6 +7,7 @@
 ##########################################################################
 
 
+
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
 from AccessControl.Permissions import view, view_management_screens
@@ -16,7 +17,9 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from z3c.sqlalchemy import allSAWrapperNames, getSAWrapper
 
+
 class SAWrapper(SimpleItem, PropertyManager):
+    """ A shim around z3c.sqlalchemy implementing something DA-ish """
 
     manage_options = PropertyManager.manage_options + \
                      ({'label' : 'Info', 'action' : 'manage_info'},) +\
@@ -29,7 +32,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     )
 
     meta_type = 'SQLAlchemy Wrapper Integration'
-    sqlalchemy_wrapper_name = ''
+    sqlalchemy_wrapper_name = None
 
     security = ClassSecurityInfo()
 
@@ -42,13 +45,17 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ return a list of registered wrapper names """
         return allSAWrapperNames()
 
-
     security.declareProtected(view, 'getMapper')
     def getMapper(self, name):
         """ return a mapper class """
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         return wrapper.getMapper(name)
 
+    security.declareProtected(view, 'getMappers')
+    def getMappers(self, *names):
+        """ return a mapper class """
+        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
+        return wrapper.getMappers(*names)
 
     security.declareProtected(view, 'getSession')
     def getSession(self):
@@ -65,7 +72,9 @@ class SAWrapper(SimpleItem, PropertyManager):
         d['DSN'] = wrapper.dsn
         return d
  
-    manage_info = PageTemplateFile('pt/info', globals(), __name__='manage_info')
+    manage_info = PageTemplateFile('pt/info', 
+                                   globals(), 
+                                   __name__='manage_info')
 
 InitializeClass(SAWrapper)
 
