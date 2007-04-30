@@ -13,6 +13,7 @@ from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
+from z3c.sqlalchemy import allSAWrapperNames
 
 class SAWrapper(SimpleItem, PropertyManager):
 
@@ -20,15 +21,20 @@ class SAWrapper(SimpleItem, PropertyManager):
                      SimpleItem.manage_options
 
     _properties = (
-        {'id' : 'wrapper_name', 'type' : 'string', 'mode' : 'rw'},
+        {'id' : 'sqlalchemy_wrapper_name', 'type' : 'selection', 'mode' : 'rw', 
+         'select_variable' : 'registeredWrappers'},
     )
 
     id = 'sqlalchemy_da'
     meta_type = 'SQLAlchemy Wrapper Integration'
-    wrapper_name = ''
+    sqlalchemy_wrapper_name = ''
 
     security = ClassSecurityInfo()
 
+    def registeredWrappers(self):
+        """ return a list of registered wrapper names """
+        return allSAWrapperNames()
+            
 
 InitializeClass(SAWrapper)
 
