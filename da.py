@@ -83,7 +83,9 @@ class SAWrapper(SimpleItem, PropertyManager):
 
 
     def query(self, query_string, max_rows=None, query_data=None):
-        """ *the* query() method"""
+        """ *The* query() method as used by the internal ZSQL
+            machinery.
+        """
 
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         c = wrapper.connection
@@ -144,7 +146,21 @@ class SAWrapper(SimpleItem, PropertyManager):
 
 
     def connected(self):
-        return True # this is a lie
+        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
+        return wrapper.engine is not None
+
+    def manage_stop(self):
+        """ close engine """
+        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
+        wrapper._engine = None
+        return 'All engines stopped'
+        
+    def manage_start(self):
+        """ Re(start) engine """
+        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
+        wrapper._createEngine()
+        return 'All engines started'
+
  
     manage_info = PageTemplateFile('pt/info', 
                                    globals(), 
