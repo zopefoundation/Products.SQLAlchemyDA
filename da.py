@@ -6,7 +6,8 @@
 # and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
 ##########################################################################
 
-
+import logging
+import time
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -16,6 +17,9 @@ from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from z3c.sqlalchemy import allSAWrapperNames, getSAWrapper
+
+
+LOG = logging.getLogger('SQLAlchemyDA')
 
 
 class SAWrapper(SimpleItem, PropertyManager):
@@ -41,10 +45,12 @@ class SAWrapper(SimpleItem, PropertyManager):
         self.id = id
         self.title = title
 
+
     security.declareProtected(view_management_screens, 'registeredWrappers')
     def registeredWrappers(self):
         """ return a list of registered wrapper names """
         return allSAWrapperNames()
+
 
     security.declareProtected(view, 'getMapper')
     def getMapper(self, name):
@@ -52,11 +58,13 @@ class SAWrapper(SimpleItem, PropertyManager):
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         return wrapper.getMapper(name)
 
+
     security.declareProtected(view, 'getMappers')
     def getMappers(self, *names):
         """ return a mapper class """
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         return wrapper.getMappers(*names)
+
 
     security.declareProtected(view, 'getSession')
     def getSession(self):
@@ -73,6 +81,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         d['DSN'] = wrapper.dsn
         return d
 
+
     def query(self, query_string, max_rows=None, query_data=None):
         """ *the* query() method"""
 
@@ -83,7 +92,11 @@ class SAWrapper(SimpleItem, PropertyManager):
         nselects = 0
         desc = None
 
+        ts_start = time.time()
+
         for qs in [x for x in query_string.split('\0') if x]:
+
+            LOG.debug(qs)
                
             if query_data:
                 proxy = c.execute(qs, query_data)
@@ -105,6 +118,8 @@ class SAWrapper(SimpleItem, PropertyManager):
 
                     desc = description  
 
+        LOG.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
+
         if desc is None:            
             return [], None
 
@@ -115,16 +130,18 @@ class SAWrapper(SimpleItem, PropertyManager):
                  'type' : 'string',  # fix this
                  'width' : 0,        # fix this
                  'null' : null_ok,
-                }
-            ) 
+                }) 
 
         return items, rows
+
 
     def __call__(self, *args, **kv):
         return self    
 
+
     def sql_quote__(self, s):
         return s
+
 
     def connected(self):
         return True # this is a lie
