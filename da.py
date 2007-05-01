@@ -74,18 +74,17 @@ class SAWrapper(SimpleItem, PropertyManager):
         return d
 
     def query(self, query_string, max_rows=None, query_data=None):
-        """ foo """
+        """ *the* query() method"""
 
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         c = wrapper.connection
-
 
         rows = []
         nselects = 0
         desc = None
 
         for qs in [x for x in query_string.split('\0') if x]:
-
+               
             if query_data:
                 proxy = c.execute(qs, query_data)
             else:
