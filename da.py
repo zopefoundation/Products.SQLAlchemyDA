@@ -79,16 +79,43 @@ class SAWrapper(SimpleItem, PropertyManager):
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         c = wrapper.connection
 
-        result_proxy  = c.execute(query_string)
-        rows = result_proxy.fetchall()
+
+        rows = []
+        nselects = 0
+        desc = None
+
+        for qs in [x for x in query_string.split('\0') if x]:
+
+            if query_data:
+                proxy = c.execute(qs, query_data)
+            else:
+                proxy = c.execute(qs)
+
+                description = proxy.cursor.description
+
+                if description is not None:
+                    nselects += 1
+            
+                    if nselects > 1:
+                        raise ValueError("Can't execute multiple SELECTs within a single query")
+
+                    if max_rows:
+                        rows = proxy.fetchmany(max_rows)
+                    else:
+                        rows = proxy.fetchall()
+
+                    desc = description  
+
+        if desc is None:            
+            return [], None
 
         items = []
-        for  key in result_proxy.keys:
+        for  name, type_code, display_size, internal_size, precision, scale, null_ok in desc:
             items.append(
-                {'name' : key,
+                {'name' : name,
                  'type' : 'string',  # fix this
                  'width' : 0,        # fix this
-                 'null' : True,      # fix this
+                 'null' : null_ok,
                 }
             ) 
 
