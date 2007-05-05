@@ -1,6 +1,6 @@
-0.1.1 (unreleased)
+0.2.0 (05.05.2007)
 
-    -
+    - first public release
 
 0.1.0 (30.04.2007)
 
