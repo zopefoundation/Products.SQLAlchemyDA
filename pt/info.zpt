@@ -1,17 +1,24 @@
 <div tal:replace="structure context/manage_page_header" />
 <div tal:replace="structure context/manage_tabs" />
 
-<ul class="info" tal:define="info_d context/getInfo">
+<table class="info" 
+       tal:define="info_d context/getInfo">
+    <tbody>
+        <tr>
+            <td class="form-label">Name</td>:
+            <td class="list-item" tal:content="context/getId" />
+        </tr>
 
-    <li>
-        <span class="label">Name</span>:
-        <span tal:content="context/getId" />
-    </li>
+        <tr>
+            <td class="form-label">Connected</td>:
+            <td class="list-item" tal:content="context/connected" />
+        </tr>
 
-    <li tal:repeat="k info_d">
-        <span class="label" tal:content="k"/>:
-        <span tal:content="info_d/?k" />
-    </li>
-</ul>
+        <tr tal:repeat="k info_d">
+            <td class="form-label" tal:content="k"/>:
+            <td class="list-item" tal:content="info_d/?k" />
+        </tr>
+    </tbody>
+</table>
 
 <div tal:replace="structure context/manage_page_footer" />
