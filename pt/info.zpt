@@ -21,4 +21,9 @@
     </tbody>
 </table>
 
+<form action="manage_stop" tal:condition="context/connected">
+    <input type="submit" value="Close connections"/>
+</form>
+
+
 <div tal:replace="structure context/manage_page_footer" />
