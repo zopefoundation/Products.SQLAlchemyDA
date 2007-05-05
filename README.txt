@@ -23,7 +23,7 @@ Requirements:
 
   - SQLAlchemy 0.3.X
 
-  - z3c.sqlalchemy 0.1.10 + 
+  - z3c.sqlalchemy 1.0.0 +
 
 
 Installation:
@@ -70,25 +70,30 @@ Using SQLAlchemyDA:
     transactions leading to unpredictable results. 
 
 
-Notice:
+Notices:
 -------
 
-The methods must be accessed from trusted code. You can not use these methods
-from PythonScripts (unless you use TrustedExecutables by Dieter Maurer).  At
-least some of the methods might raise Unauthorized exception because the
-SQLAlchemy internal classes don't have security assertions which are necessary
-for classes to be used within RestrictedPython.
+    Using SQLAlchemyDA as SQLAlchemy wrapper (means you are working with
+    mappers) requires that the API methods must be accessed from trusted code right
+    now.  You can not use these methods from PythonScripts or PageTemplates (unless
+    you use TrustedExecutables by Dieter Maurer).  At least some of the methods
+    might raise Unauthorized exception because the SQLAlchemy internal classes
+    don't have security assertions which are necessary for classes to be used
+    within RestrictedPython.
+
+    When using SQLAlchemyDA as a DA for ZSQL methods there should not be any
+    limitations.
 
 
 Author
 ======
-z3c.sqlalchemy was written by Andreas Jung for Haufe Mediengruppe, Freiburg, Germany
+SQLAlchemyDA was written by Andreas Jung for Haufe Mediengruppe, Freiburg, Germany
 and ZOPYX Ltd. & Co. KG, Tuebingen, Germany.
 
 
 License
 =======
-z3c.sqlalchemy is licensed under the Zope Public License 2.1. 
+SQLAlchemyDA is  licensed under the Zope Public License 2.1. 
 See LICENSE.txt.
 
 
