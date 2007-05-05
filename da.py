@@ -21,6 +21,19 @@ from z3c.sqlalchemy import allSAWrapperNames, getSAWrapper
 
 LOG = logging.getLogger('SQLAlchemyDA')
 
+types_mapping = {
+    'DATE' : 'd',
+    'IME' : 'd',
+    'DATETIME' : 'd',
+    'STRING' : 's',
+    'LONGINTEGER' : 'i',
+    'INTEGER' : 'i',
+    'NUMBER' : 'n',
+    'BOOLEAN' : 'n',
+    'ROWID' : 'i',
+    'BINARY' : None, #????
+}
+
 
 class SAWrapper(SimpleItem, PropertyManager):
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
@@ -82,6 +95,24 @@ class SAWrapper(SimpleItem, PropertyManager):
         return d
 
 
+    def _typesMap(self, proxy):
+        """ Obtain types map from the underlying DB-API. I
+            hope that is portable code.
+        """
+
+        if not hasattr(self, '__v__types_map'):
+            dbapi = proxy.dialect.dbapi
+
+            map = dict()
+            for name  in types_mapping.keys():
+                type_obj = getattr(dbapi, name, None)
+                if type_obj is not None:
+                    for v in type_obj.values:
+                        map[v] = name
+            self.__v__types_map = map  
+        return self.__v__types_map
+
+
     def query(self, query_string, max_rows=None, query_data=None):
         """ *The* query() method as used by the internal ZSQL
             machinery.
@@ -91,8 +122,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         c = wrapper.connection
 
         rows = []
-        nselects = 0
         desc = None
+        nselects = 0
 
         ts_start = time.time()
 
@@ -105,20 +136,21 @@ class SAWrapper(SimpleItem, PropertyManager):
             else:
                 proxy = c.execute(qs)
 
-                description = proxy.cursor.description
+            description = proxy.cursor.description
 
-                if description is not None:
-                    nselects += 1
-            
-                    if nselects > 1:
-                        raise ValueError("Can't execute multiple SELECTs within a single query")
+            if description is not None:
+                nselects += 1
+        
+                if nselects > 1:
+                    raise ValueError("Can't execute multiple SELECTs within a single query")
 
-                    if max_rows:
-                        rows = proxy.fetchmany(max_rows)
-                    else:
-                        rows = proxy.fetchall()
+                if max_rows:
+                    rows = proxy.fetchmany(max_rows)
+                else:
+                    rows = proxy.fetchall()
 
-                    desc = description  
+                desc = description  
+                types_map = self._typesMap(proxy)
 
         LOG.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
 
@@ -126,13 +158,13 @@ class SAWrapper(SimpleItem, PropertyManager):
             return [], None
 
         items = []
-        for  name, type_code, display_size, internal_size, precision, scale, null_ok in desc:
-            items.append(
-                {'name' : name,
-                 'type' : 'string',  # fix this
-                 'width' : 0,        # fix this
-                 'null' : null_ok,
-                }) 
+        for  name, type_code, width, internal_size, precision, scale, null_ok in desc:
+    
+            items.append({'name' : name,
+                          'type' : types_mapping.get(types_map.get(type_code, None), 's'),
+                          'null' : null_ok,
+                          'width' : width,
+                         }) 
 
         return items, rows
 
