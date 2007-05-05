@@ -38,8 +38,8 @@ types_mapping = {
 class SAWrapper(SimpleItem, PropertyManager):
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
 
-    manage_options = PropertyManager.manage_options + \
-                     ({'label' : 'Info', 'action' : 'manage_info'},) +\
+    manage_options = ({'label' : 'Info', 'action' : 'manage_workspace'},) +\
+                     PropertyManager.manage_options + \
                      SimpleItem.manage_options
 
     _properties = (
@@ -177,23 +177,25 @@ class SAWrapper(SimpleItem, PropertyManager):
         return s
 
 
+    security.declareProtected(view_management_screens, 'connected')
     def connected(self):
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         return wrapper._engine.connection_provider._pool.checkedin() > 0
 
 
+    security.declareProtected(view_management_screens, 'manage_stop')
     def manage_stop(self, RESPONSE=None):
         """ close engine """
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
         wrapper._engine.connection_provider._pool.dispose()
         if RESPONSE:
             msg = 'Database connection halted'
-            RESPONSE.redirect(self.absolute_url() + '/manage_info?manage_tabs_message=%s' % msg)
+            RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
 
  
-    manage_info = PageTemplateFile('pt/info', 
-                                   globals(), 
-                                   __name__='manage_info')
+    manage_workspace = PageTemplateFile('pt/info', 
+                                        globals(), 
+                                        __name__='manage_workspace')
 
 InitializeClass(SAWrapper)
 
@@ -205,7 +207,7 @@ def manage_addSAWrapper(self, id, title, RESPONSE=None):
     wrapper = SAWrapper(id, title)
     self._setObject(id, wrapper.__of__(self))
     if RESPONSE:
-        RESPONSE.redirect(wrapper.absolute_url() + '/manage_main')
+        RESPONSE.redirect(wrapper.absolute_url() + '/manage_workspace')
     else:
         return wrapper 
 
