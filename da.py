@@ -179,19 +179,16 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     def connected(self):
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        return wrapper.engine is not None
+        return wrapper._engine.connection_provider._pool.checkedin() > 0
 
-    def manage_stop(self):
+
+    def manage_stop(self, RESPONSE=None):
         """ close engine """
         wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        wrapper._engine = None
-        return 'All engines stopped'
-        
-    def manage_start(self):
-        """ Re(start) engine """
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        wrapper._createEngine()
-        return 'All engines started'
+        wrapper._engine.connection_provider._pool.dispose()
+        if RESPONSE:
+            msg = 'Database connection halted'
+            RESPONSE.redirect(self.absolute_url() + '/manage_info?manage_tabs_message=%s' % msg)
 
  
     manage_info = PageTemplateFile('pt/info', 
