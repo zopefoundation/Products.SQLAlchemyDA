@@ -6,6 +6,7 @@
 # and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
 ##########################################################################
 
+import os
 import logging
 import time
 
@@ -205,6 +206,12 @@ class SAWrapper(SimpleItem, PropertyManager):
         if RESPONSE:
             msg = 'Database connections closed'
             RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
+
+    
+    security.declareProtected(view_management_screens, 'getVersion')
+    def getVersion(self):
+        """ return version.txt """
+        return open(os.path.join(os.path.dirname(__file__), 'version.txt')).read()
 
  
     manage_workspace = PageTemplateFile('pt/info', 
