@@ -3,6 +3,8 @@
     - connections can be closed/opened through the ZMI
 
     - some code cleanup
+
+    - fixed a *very* stupid typo causing ZODB conflict errors
  
 0.2.0 (05.05.2007)
 

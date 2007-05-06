@@ -102,7 +102,7 @@ class SAWrapper(SimpleItem, PropertyManager):
             hope that is portable code.
         """
 
-        if not hasattr(self, '__v__types_map'):
+        if not hasattr(self, '_v_types_map'):
             dbapi = proxy.dialect.dbapi
 
             map = dict()
@@ -111,8 +111,8 @@ class SAWrapper(SimpleItem, PropertyManager):
                 if type_obj is not None:
                     for v in type_obj.values:
                         map[v] = name
-            self.__v__types_map = map  
-        return self.__v__types_map
+            self._v_types_map = map  
+        return self._v_types_map
 
 
     def query(self, query_string, max_rows=None, query_data=None):
