@@ -183,6 +183,16 @@ class SAWrapper(SimpleItem, PropertyManager):
         return self._wrapper._engine.connection_provider._pool.checkedin() > 0
 
 
+    security.declareProtected(view_management_screens, 'getPoolSize()')
+    def getPoolSize(self):
+        """ """
+        return self._wrapper._engine.connection_provider._pool.size() 
+
+    security.declareProtected(view_management_screens, 'getCheckedin()')
+    def getCheckedin(self):
+        """ """
+        return self._wrapper._engine.connection_provider._pool.checkedin() 
+
     security.declareProtected(view_management_screens, 'manage_start')
     def manage_start(self, RESPONSE=None):
         """ start engine """               

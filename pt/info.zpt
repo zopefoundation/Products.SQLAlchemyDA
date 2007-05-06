@@ -10,6 +10,15 @@
         </tr>
 
         <tr>
+            <td class="form-label">Connection pool size</td>
+            <td class="list-item" tal:content="context/getPoolSize" />
+        </tr>
+
+        <tr>
+            <td class="form-label">Number of open connections</td>
+            <td class="list-item" tal:content="context/getCheckedin" />
+        </tr>
+        <tr>
             <td class="form-label">Connected</td>
             <td class="list-item" tal:content="context/connected" />
         </tr>
