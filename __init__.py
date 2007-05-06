@@ -33,4 +33,3 @@ def initialize(context):
 
     allow_class(Session)
     allow_class(Query)
-

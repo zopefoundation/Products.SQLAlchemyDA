@@ -92,7 +92,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     def getInfo(self):
         """ return a dict with additional information """
         d = self._wrapper.kw
-        d['DSN'] = wrapper.dsn
+        d['DSN'] = self._wrapper.dsn
         return d
 
 
@@ -180,6 +180,22 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'connected')
     def connected(self):
         return self._wrapper._engine.connection_provider._pool.checkedin() > 0
+
+
+    security.declareProtected(view_management_screens, 'manage_start')
+    def manage_start(self, RESPONSE=None):
+        """ start engine """               
+        try:
+            self.query('BEGIN; COMMIT;');
+            if RESPONSE:
+                msg = 'Database connection opened'
+                RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
+        except Exception, e:
+            if RESPONSE:
+                msg = 'Database connection could not be opened (%s)' % e
+                RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
+            else: 
+                raise
 
 
     security.declareProtected(view_management_screens, 'manage_stop')
