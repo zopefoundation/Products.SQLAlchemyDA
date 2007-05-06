@@ -39,9 +39,25 @@ Installation:
 
        def  initialize(context):
 
-           from z3c.sqlalchemy import createSAWrapper, registerSAWrapper
-           wrapper = createSAWrapper('postgres://user:password@host/database', forZope=True)
-           registerSAWrapper(wrapper, 'my-sa-wrapper')
+           from z3c.sqlalchemy import createSAWrapper
+           wrapper = createSAWrapper('postgres://user:password@host/database', 
+                                     forZope=True,
+                                     name='my-sa-wrapper')
+
+    If you have trouble with the number of connections (5 by default + 10 threshold) you must
+    customize the connection pool:
+
+           from sqlalchemy.pool import QueuePool
+           from z3c.sqlalchemy import createSAWrapper
+
+           wrapper = createSAWrapper('postgres://user:password@host/database', 
+                                     poolclass=QueuePool,
+                                     pool_size=20,
+                                     max_overflow=10,
+                                     forZope=True)
+
+            
+    
 
   - After restarting Zope you go to the ZMI and create an instance of
     "SQLAlchemy Wrapper Integration" (as you would create some DA instance). After
