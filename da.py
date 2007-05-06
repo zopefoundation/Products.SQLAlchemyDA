@@ -21,6 +21,7 @@ from z3c.sqlalchemy import allSAWrapperNames, getSAWrapper
 
 LOG = logging.getLogger('SQLAlchemyDA')
 
+# maps Python DB-API types to Zope types
 types_mapping = {
     'DATE' : 'd',
     'IME' : 'd',
@@ -62,35 +63,35 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'registeredWrappers')
     def registeredWrappers(self):
         """ return a list of registered wrapper names """
-        return allSAWrapperNames()
+        return allSAWrapperNames()      
+
+    @property
+    def _wrapper(self):
+        return getSAWrapper(self.sqlalchemy_wrapper_name)
 
 
     security.declareProtected(view, 'getMapper')
     def getMapper(self, name):
         """ return a mapper class """
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        return wrapper.getMapper(name)
+        return self._wrapper.getMapper(name)
 
 
     security.declareProtected(view, 'getMappers')
     def getMappers(self, *names):
         """ return a mapper class """
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        return wrapper.getMappers(*names)
+        return self._wrapper.getMappers(*names)
 
 
     security.declareProtected(view, 'getSession')
     def getSession(self):
         """ return a session instance """
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        return wrapper.session
+        return self._wrapper.session
         
 
     security.declareProtected(view_management_screens, 'getInfo')
     def getInfo(self):
         """ return a dict with additional information """
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        d = wrapper.kw
+        d = self._wrapper.kw
         d['DSN'] = wrapper.dsn
         return d
 
@@ -118,8 +119,7 @@ class SAWrapper(SimpleItem, PropertyManager):
             machinery.
         """
 
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        c = wrapper.connection
+        c = self._wrapper.connection
 
         rows = []
         desc = None
@@ -179,17 +179,15 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     security.declareProtected(view_management_screens, 'connected')
     def connected(self):
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        return wrapper._engine.connection_provider._pool.checkedin() > 0
+        return self._wrapper._engine.connection_provider._pool.checkedin() > 0
 
 
     security.declareProtected(view_management_screens, 'manage_stop')
     def manage_stop(self, RESPONSE=None):
         """ close engine """
-        wrapper = getSAWrapper(self.sqlalchemy_wrapper_name)
-        wrapper._engine.connection_provider._pool.dispose()
+        self._wrapper._engine.connection_provider._pool.dispose()
         if RESPONSE:
-            msg = 'Database connection halted'
+            msg = 'Database connections closed'
             RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
 
  
