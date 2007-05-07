@@ -50,7 +50,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
     )
 
-    meta_type = 'SQLAlchemy Wrapper Integration'
+    meta_type = 'SQLAlchemyDA '
     sqlalchemy_wrapper_name = None
     _isAnSQLConnection = True
 
