@@ -60,7 +60,7 @@ Installation:
     
 
   - After restarting Zope you go to the ZMI and create an instance of
-    "SQLAlchemy Wrapper Integration" (as you would create some DA instance). After
+    "SQLAlchemyDA" (as you would create some DA instance). After
     creating the instance you should see 'my-sa-wrapper' in the properties form of
     the new instance. When creating a new ZSQL method you should be able to use
     this DA instance as connection id.
