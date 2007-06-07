@@ -50,7 +50,6 @@ class SAWrapper(SimpleItem, PropertyManager):
         {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
     )
 
-
     meta_type = 'SQLAlchemyDA '
     dsn = ''
     _isAnSQLConnection = True
@@ -276,7 +275,6 @@ def manage_addSAWrapper(self, id, title, RESPONSE=None):
         RESPONSE.redirect(wrapper.absolute_url() + '/manage_workspace')
     else:
         return wrapper 
-
 
 manage_addSAWrapperForm = PageTemplateFile('pt/addSAWrapperForm', 
                                            globals(), 
