@@ -4,7 +4,9 @@
 <tal:def tal:define="info_d context/getInfo">
 
     <div tal:condition="not: info_d">
-        No database connection configured! Go to the <em>Properties</em> tab in order to change the configuration.       
+        No database connection configured!
+        <br/>
+        Go to the <em>Properties</em> tab in order to change the configuration.       
     </div>
 
     <fieldset tal:condition="info_d">
