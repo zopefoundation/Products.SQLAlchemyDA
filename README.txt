@@ -32,38 +32,16 @@ Installation:
   - download and install z3c.sqlalchemy as egg or from the sources 
     from Cheeseshop (easy_install z3c.sqlalchemy)
 
-  - A z3c.sqlAlchemy SAWrapper must be registered. The best way to do this
-    right now to put something like this into your Product's initialize():
-
-    Products/YourProduct/__init__.py:
-
-       def  initialize(context):
-
-           from z3c.sqlalchemy import createSAWrapper
-           wrapper = createSAWrapper('postgres://user:password@host/database', 
-                                     forZope=True,
-                                     name='my-sa-wrapper')
-
-    If you have trouble with the number of connections (5 by default + 10 threshold) you must
-    customize the connection pool:
-
-           from sqlalchemy.pool import QueuePool
-           from z3c.sqlalchemy import createSAWrapper
-
-           wrapper = createSAWrapper('postgres://user:password@host/database', 
-                                     poolclass=QueuePool,
-                                     pool_size=20,
-                                     max_overflow=10,
-                                     forZope=True)
-
-            
-    
-
   - After restarting Zope you go to the ZMI and create an instance of
-    "SQLAlchemyDA" (as you would create some DA instance). After
-    creating the instance you should see 'my-sa-wrapper' in the properties form of
-    the new instance. When creating a new ZSQL method you should be able to use
-    this DA instance as connection id.
+    "SQLAlchemyDA" (as you would create some DA instance)
+
+  - click on the new created SQLAlchemyDA instance within the ZMI
+    and configure your database connection through the "Properties" tab.
+    The connection parameter 'dsn' must be specified as a valid SQLAlchemy DSN 
+    like
+
+         <dbschema>://<username>:<password>@<hostname>/<databasename>
+
 
 
 Using SQLAlchemyDA:
