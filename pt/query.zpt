@@ -25,6 +25,7 @@
                 Empty resultset returned
             </div>
 
+            <span tal:content="python: len(result[1])" /> Hits
             <table tal:condition="result" border="1">
                 <thead>
                     <tr> 
