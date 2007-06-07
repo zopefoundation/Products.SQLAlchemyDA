@@ -1,6 +1,10 @@
-0.2.2 (unreleased)
+0.3.0 (unreleased)
 
     - fixed some security assertions
+
+    - added Test tab for executing SQL queries directly
+
+    - better error handling for ZMI screens
 
 0.2.1 (06.05.2007)
 

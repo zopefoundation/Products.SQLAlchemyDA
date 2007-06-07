@@ -41,9 +41,9 @@ class SAWrapper(SimpleItem, PropertyManager):
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
 
     manage_options = ({'label' : 'Info', 'action' : 'manage_workspace'},) +\
+                     ({'label' : 'Test', 'action' : 'manage_test'},) + \
                      PropertyManager.manage_options + \
                      SimpleItem.manage_options
-
     _properties = (
         {'id' : 'sqlalchemy_wrapper_name', 'type' : 'selection', 'mode' : 'rw', 
          'select_variable' : 'registeredWrappers'},
@@ -68,7 +68,10 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     @property
     def _wrapper(self):
-        return getSAWrapper(self.sqlalchemy_wrapper_name)
+        try:
+            return getSAWrapper(self.sqlalchemy_wrapper_name)
+        except ValueError:
+            return None
 
 
     security.declareProtected(view, 'getMapper')
@@ -92,9 +95,14 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'getInfo')
     def getInfo(self):
         """ return a dict with additional information """
-        d = self._wrapper.kw
-        d['DSN'] = self._wrapper.dsn
-        return d
+
+        wrapper = self._wrapper
+        if wrapper is not None:
+            d = self._wrapper.kw
+            d['DSN'] = self._wrapper.dsn
+            return d
+        else:
+            return {}
 
 
     def _typesMap(self, proxy):
@@ -219,6 +227,12 @@ class SAWrapper(SimpleItem, PropertyManager):
             msg = 'Database connections closed'
             RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
 
+
+    security.declareProtected(view_management_screens, 'manage_doQuery')
+    def manage_doQuery(self, query):
+        """ perform a query through the ZMI"""
+        return self.query(query)
+
     
     security.declareProtected(view_management_screens, 'getVersion')
     def getVersion(self):
@@ -229,6 +243,9 @@ class SAWrapper(SimpleItem, PropertyManager):
     manage_workspace = PageTemplateFile('pt/info', 
                                         globals(), 
                                         __name__='manage_workspace')
+    manage_test = PageTemplateFile('pt/query', 
+                                        globals(), 
+                                        __name__='manage_test')
 
 InitializeClass(SAWrapper)
 
