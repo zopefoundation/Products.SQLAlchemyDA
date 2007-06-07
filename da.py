@@ -60,13 +60,16 @@ class SAWrapper(SimpleItem, PropertyManager):
     def __init__(self, id, title=''):
         self.id = id
         self.title = title
+        self._new_utilid()
+
+    def _new_utilid(self):
         self.util_id = '%s.%s' % (time.time(), random.random())
 
     @property
     def _wrapper(self):
         if self.dsn:
             try:
-                return getSAWrapper(self.dsn)
+                return getSAWrapper(self.util_id)
             except ValueError:               
                 return createSAWrapper(self.dsn, forZope=True, name=self.util_id)
         return None
@@ -243,6 +246,13 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ Intercept changed properties in order to perform 
             further actions.
         """
+        if REQUEST.get('dsn') != self.dsn:
+            try:
+                from zope.component import unregisterUtility
+                unregisterUtility(name=self.util_id)
+            except ImportError:
+                self._new_utilid()
+
         return PropertyManager.manage_editProperties(self, REQUEST)
 
  
