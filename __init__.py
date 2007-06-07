@@ -22,6 +22,7 @@ def initialize(context):
     context.registerClass(SAWrapper, 
                           constructors=(manage_addSAWrapperForm, 
                                         manage_addSAWrapper),
+                          icon = SOFTWARE_HOME + '/Shared/DC/ZRDB/www/DBAdapterFolder_icon.gif',
                           permission=ADD_SA_WRAPPER_PERMISSION)                          
 
 
