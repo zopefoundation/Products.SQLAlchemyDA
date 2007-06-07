@@ -8,6 +8,7 @@
 
 import os
 import logging
+import random
 import time
 
 from Globals import InitializeClass
@@ -17,7 +18,7 @@ from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
-from z3c.sqlalchemy import allSAWrapperNames, getSAWrapper
+from z3c.sqlalchemy import getSAWrapper, createSAWrapper
 
 
 LOG = logging.getLogger('SQLAlchemyDA')
@@ -45,13 +46,13 @@ class SAWrapper(SimpleItem, PropertyManager):
                      PropertyManager.manage_options + \
                      SimpleItem.manage_options
     _properties = (
-        {'id' : 'sqlalchemy_wrapper_name', 'type' : 'selection', 'mode' : 'rw', 
-         'select_variable' : 'registeredWrappers'},
+        {'id' : 'dsn', 'type' : 'string', 'mode' : 'rw', },
         {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
     )
 
+
     meta_type = 'SQLAlchemyDA '
-    sqlalchemy_wrapper_name = None
+    dsn = ''
     _isAnSQLConnection = True
 
     security = ClassSecurityInfo()
@@ -59,19 +60,16 @@ class SAWrapper(SimpleItem, PropertyManager):
     def __init__(self, id, title=''):
         self.id = id
         self.title = title
-
-
-    security.declareProtected(view_management_screens, 'registeredWrappers')
-    def registeredWrappers(self):
-        """ return a list of registered wrapper names """
-        return allSAWrapperNames()      
+        self.util_id = '%s.%s' % (time.time(), random.random())
 
     @property
     def _wrapper(self):
-        try:
-            return getSAWrapper(self.sqlalchemy_wrapper_name)
-        except ValueError:
-            return None
+        if self.dsn:
+            try:
+                return getSAWrapper(self.dsn)
+            except ValueError:               
+                return createSAWrapper(self.dsn, forZope=True, name=self.util_id)
+        return None
 
 
     security.declareProtected(view, 'getMapper')
@@ -106,8 +104,8 @@ class SAWrapper(SimpleItem, PropertyManager):
 
 
     def _typesMap(self, proxy):
-        """ Obtain types map from the underlying DB-API. I
-            hope that is portable code.
+        """ Obtain types map from the underlying DB-API. I hope
+            that is portable code.
         """
 
         if not hasattr(self, '_v_types_map'):
@@ -238,6 +236,14 @@ class SAWrapper(SimpleItem, PropertyManager):
     def getVersion(self):
         """ return version.txt """
         return open(os.path.join(os.path.dirname(__file__), 'version.txt')).read()
+
+
+    security.declareProtected(view_management_screens, 'manage_editProperties')
+    def manage_editProperties(self, REQUEST):
+        """ Intercept changed properties in order to perform 
+            further actions.
+        """
+        return PropertyManager.manage_editProperties(self, REQUEST)
 
  
     manage_workspace = PageTemplateFile('pt/info', 

@@ -6,6 +6,9 @@
 
     - better error handling for ZMI screens
 
+    - no longer depending on a pre-registered SQLAlchemy wrapper. SQLAlchemyDA
+      now accepts as any other DA a DSN as propertiy 'dsn'
+
 0.2.1 (06.05.2007)
 
     - connections can be closed/opened through the ZMI
