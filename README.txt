@@ -30,9 +30,16 @@ Installation:
 -------------
 
   - download and install z3c.sqlalchemy as egg or from the sources 
-    from Cheeseshop (easy_install z3c.sqlalchemy)
+    from Cheeseshop (easy_install z3c.sqlalchemy). See
 
-  - After restarting Zope you go to the ZMI and create an instance of
+    http://cheeseshop.python.org/pypi/z3c.sqlalchemy/
+
+    for details.
+
+  - unpack the archive containing SQLAlchemyDA inside the "Products"
+    directory of your Zope instance home.
+
+  - after restarting Zope you go to the ZMI and create an instance of
     "SQLAlchemyDA" (as you would create some DA instance)
 
   - click on the new created SQLAlchemyDA instance within the ZMI
@@ -42,38 +49,28 @@ Installation:
 
          <dbschema>://<username>:<password>@<hostname>/<databasename>
 
+    Example:
+        
+        postgres://admin:123@localhost:5432/TestDB
+
+
+  - ZSQL methods should see the new DA through the selection widget of available
+    database adapters
+
 
 
 Using SQLAlchemyDA:
 -------------------
 
-  - for using SQLAlchemyDA through object mappers as used in SQLAlchemy
-    you can use the getMapper() and getMappers() methods. Check
-    the z3c.sqlchemy documentation for details. A SQLAlchemy Session object
-    can be obtained by the getSession() method. Sessions are integrated
-    with Zope 2 transaction management.
- 
-  - a SQLAlchemyDA instance can be used as a standard DA together with
-    ZSQL methods. 
+    SQLAlchemyDA works as a database adapter as documented within "The Zope Book"
 
-    WARNING: YOU SHOULD NOT USE ZSQL METHODS AND MAPPERS WITHIN THE SAME
-    REQUEST!!!
+    http://www.plope.com/Books/2_7Edition/RelationalDatabases.stx
 
-    Mappers/Sessions and Connections (for ZSQL methods) are totally independent
-    and have their own transaction. Mixing both would result in two distinct
-    transactions leading to unpredictable results. 
+    and can be used like any other DA together with ZSQL methods.
 
 
 Notices:
 -------
-
-    Using SQLAlchemyDA as SQLAlchemy wrapper (means you are working with
-    mappers) requires that the API methods must be accessed from trusted code right
-    now.  You can not use these methods from PythonScripts or PageTemplates (unless
-    you use TrustedExecutables by Dieter Maurer).  At least some of the methods
-    might raise Unauthorized exception because the SQLAlchemy internal classes
-    don't have security assertions which are necessary for classes to be used
-    within RestrictedPython.
 
     When using SQLAlchemyDA as a DA for ZSQL methods there should not be any
     limitations.
