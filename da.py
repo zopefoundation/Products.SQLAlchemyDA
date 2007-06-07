@@ -59,10 +59,20 @@ class SAWrapper(SimpleItem, PropertyManager):
     def __init__(self, id, title=''):
         self.id = id
         self.title = title
+
+
+    def manage_afterAdd(self, item, container):
+        """ Ensure that a new utility id is assigned after creating
+            or copying an instance.
+        """
         self._new_utilid()
+        return SimpleItem.manage_afterAdd(self, item, container)
+
 
     def _new_utilid(self):
+        """ Assign a new unique utility ID """
         self.util_id = '%s.%s' % (time.time(), random.random())
+
 
     @property
     def _wrapper(self):
