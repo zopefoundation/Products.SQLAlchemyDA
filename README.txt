@@ -13,7 +13,8 @@ What is SQLAlchemyDA?
 SQLAlchemyDA is both a tiny frontend to the z3c.sqlalchemy SQLAlchemy package
 for Zope 2 and Zope 3. In addition it acts as a database adapter for ZSQL
 methods. Since it is based on SQLAlchemy, SQLAlchemy supports all databases
-out-of-the box that are supported by SQLAlchemy.
+out-of-the box that are supported by SQLAlchemy (Postgres, MySQL, Oracle,
+SQLite, MS-SQL, Firebird, Informix). 
 
 
 Requirements:
@@ -21,13 +22,20 @@ Requirements:
 
   - Zope 2.8 +
 
-  - SQLAlchemy 0.3.X
+  - SQLAlchemy 0.3.X (+ database specific low-level Python drivers)
 
   - z3c.sqlalchemy 1.0.0 +
 
 
 Installation:
 -------------
+
+  - download and install SQLAlchemy as egg or from the sources
+    from Cheeseshop (easy_install sqlalchemy). See
+    
+    http://www.sqlalchemy.org
+
+    for details
 
   - download and install z3c.sqlalchemy as egg or from the sources 
     from Cheeseshop (easy_install z3c.sqlalchemy). See
@@ -53,9 +61,15 @@ Installation:
         
         postgres://admin:123@localhost:5432/TestDB
 
-
   - ZSQL methods should see the new DA through the selection widget of available
     database adapters
+
+  - NOTE: you must have the low-level Python DB drivers installed in order to 
+    access a particular database. See 
+
+        http://www.sqlalchemy.org/docs/dbengine.html#dbengine_supported
+
+    for details.
 
 
 
