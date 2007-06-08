@@ -40,6 +40,7 @@ Add a SQLAlchemy wrapper
     </td>
     <td>
       <input type="text" name="dsn" size="40" value=""/>
+      <em>e.g. postgres://username:password@hostname:port/mydatabase</em>
     </td>
   </tr>
 
