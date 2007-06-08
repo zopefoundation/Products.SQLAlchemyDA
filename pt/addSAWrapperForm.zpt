@@ -34,6 +34,17 @@ Add a SQLAlchemy wrapper
 
   <tr>
     <td>
+    <div class="form-label">
+    DSN
+    </div>
+    </td>
+    <td>
+      <input type="text" name="dsn" size="40" value=""/>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
     </td>
     <td   colspan="2">
     <div class="form-element">

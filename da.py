@@ -276,13 +276,14 @@ InitializeClass(SAWrapper)
 
 
 
-def manage_addSAWrapper(self, id, title, RESPONSE=None):
+def manage_addSAWrapper(self, id, dsn, title, RESPONSE=None):
     """ create a new SAWrapper instance """
     
     wrapper = SAWrapper(id, title)
+    wrapper.dsn = dsn
     self._setObject(id, wrapper.__of__(self))
     if RESPONSE:
-        RESPONSE.redirect(wrapper.absolute_url() + '/manage_workspace')
+        return RESPONSE.redirect(self._getOb(id).absolute_url() + '/manage_workspace')
     else:
         return wrapper 
 
