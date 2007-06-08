@@ -198,19 +198,28 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     security.declareProtected(view_management_screens, 'connected')
     def connected(self):
-        return self._wrapper._engine.connection_provider._pool.checkedin() > 0
+        try:
+            return self._wrapper._engine.connection_provider._pool.checkedin() > 0
+        except:
+            return 'n/a'
 
 
     security.declareProtected(view_management_screens, 'getPoolSize')
     def getPoolSize(self):
         """ """
-        return self._wrapper._engine.connection_provider._pool.size() 
-
+        try: 
+            return self._wrapper._engine.connection_provider._pool.size() 
+        except:
+            return self._wrapper._engine.connection_provider._pool
 
     security.declareProtected(view_management_screens, 'getCheckedin')
     def getCheckedin(self):
         """ """
-        return self._wrapper._engine.connection_provider._pool.checkedin() 
+        try:
+            return self._wrapper._engine.connection_provider._pool.checkedin() 
+        except:
+            return 'n/a'
+
 
 
     security.declareProtected(view_management_screens, 'manage_start')

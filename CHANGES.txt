@@ -13,6 +13,9 @@
 
     - redirect directly to "Info" tab after creating an instance through the ZMI
 
+    - catching some low-level exceptions from the sqlite interface in order to
+      make it work with SQLite
+
 0.2.1 (06.05.2007)
 
     - connections can be closed/opened through the ZMI
