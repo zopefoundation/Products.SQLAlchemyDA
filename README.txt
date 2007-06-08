@@ -83,6 +83,14 @@ Using SQLAlchemyDA:
     and can be used like any other DA together with ZSQL methods.
 
 
+Tested with databases:
+----------------------
+
+    - Postgres 7.4, 8.1
+
+    - SQLite 3.3.X
+
+
 Notices:
 -------
 
