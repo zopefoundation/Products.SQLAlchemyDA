@@ -217,7 +217,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     def manage_start(self, RESPONSE=None):
         """ start engine """               
         try:
-            self.query('BEGIN; COMMIT;');
+            self.query('COMMIT;');
             if RESPONSE:
                 msg = 'Database connection opened'
                 RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
