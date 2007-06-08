@@ -126,9 +126,14 @@ class SAWrapper(SimpleItem, PropertyManager):
             map = dict()
             for name  in types_mapping.keys():
                 type_obj = getattr(dbapi, name, None)
-                if type_obj is not None:
-                    for v in type_obj.values:
-                        map[v] = name
+                if type_obj:
+                    if hasattr(type_obj, 'values'):
+                        for v in type_obj.values:
+                            map[v] = name
+                    else:
+                        for v in type_obj:
+                            map[v] = name
+
             self._v_types_map = map  
         return self._v_types_map
 
