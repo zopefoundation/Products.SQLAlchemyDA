@@ -86,10 +86,13 @@ Using SQLAlchemyDA:
 Tested with databases:
 ----------------------
 
-    - Postgres 7.4, 8.1
+    - Postgres 7.4, 8.0-8.2
 
     - SQLite 3.3.X
 
+    - MySQL is *only* supported for MySQL databases with transaction support.
+      (see also z3c/sqlalchemy/README.txt)      
+ 
 
 Notices:
 -------
