@@ -15,7 +15,7 @@
         <form action="manage_test" method="post">
             <textarea name="query" rows="5" cols="60"><span tal:replace="request/query | nothing"/></textarea>
             <br/>
-            <input type="submit" value="Execute query" />
+            <input type="submit" value="Execute query" accesskey="U"/>
         </form>
     </fieldset>
 

@@ -222,6 +222,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         except:
             return self._wrapper._engine.connection_provider._pool
 
+
     security.declareProtected(view_management_screens, 'getCheckedin')
     def getCheckedin(self):
         """ """
@@ -295,12 +296,9 @@ class SAWrapper(SimpleItem, PropertyManager):
         return super(SAWrapper, self).manage_editProperties(REQUEST)
 
  
-    manage_workspace = PageTemplateFile('pt/info', 
-                                        globals(), 
-                                        __name__='manage_workspace')
-    manage_test = PageTemplateFile('pt/query', 
-                                        globals(), 
-                                        __name__='manage_test')
+    manage_workspace = PageTemplateFile('pt/info', globals(), __name__='manage_workspace')
+    manage_test = PageTemplateFile('pt/query', globals(), __name__='manage_test')
+
 
 InitializeClass(SAWrapper)
 
