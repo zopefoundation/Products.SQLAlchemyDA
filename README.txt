@@ -22,9 +22,9 @@ Requirements:
 
   - Zope 2.8 +
 
-  - SQLAlchemy 0.3.X (+ database specific low-level Python drivers)
+  - SQLAlchemy 0.3.8 (+ database specific low-level Python drivers)
 
-  - z3c.sqlalchemy 1.0.0 +
+  - z3c.sqlalchemy 1.0.4 +
 
 
 Installation:
@@ -71,6 +71,19 @@ Installation:
 
     for details.
 
+
+Configuration of SQLAlchemy:
+----------------------------
+
+   - 'dsn' - SQLAlchemy compliant Database Set Name (see www.sqlalchemy.org/docs)
+
+   - 'transactional' - uncheck this property if you are working with a non-transactional
+     database like older versions of MySQL. Uncheck this property *only* if you see any
+     commit() related error. Otherwise leave this property checked. Changing this
+     property *requires* a Zope restart.
+
+   - 'quoting_style' - affects how strings are quoted in SQL. For using Oracle you might
+     set this to 'oracle', otherwise use the default value 'standard'.
 
 
 Using SQLAlchemyDA:

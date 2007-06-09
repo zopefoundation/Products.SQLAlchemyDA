@@ -48,10 +48,16 @@ class SAWrapper(SimpleItem, PropertyManager):
     _properties = (
         {'id' : 'dsn', 'type' : 'string', 'mode' : 'rw', },
         {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
+        {'id' : 'transactional', 'type' : 'boolean', 'mode' : 'rw'}, 
+        {'id' : 'quoting_style', 'type' : 'selection', 'mode' : 'rw', 
+                 'select_variable' : 'allQuotingStyles'},
     )
+
 
     meta_type = 'SQLAlchemyDA '
     dsn = ''
+    transactional = True
+    quoting_style = 'standard'
     _isAnSQLConnection = True
 
     security = ClassSecurityInfo()
@@ -74,13 +80,19 @@ class SAWrapper(SimpleItem, PropertyManager):
         self.util_id = '%s.%s' % (time.time(), random.random())
 
 
+    def allQuotingStyles(self):
+        return ('standard', 'oracle')
+
     @property
     def _wrapper(self):
         if self.dsn:
             try:
                 return getSAWrapper(self.util_id)
             except ValueError:               
-                return createSAWrapper(self.dsn, forZope=True, name=self.util_id)
+                return createSAWrapper(self.dsn, 
+                                       forZope=True, 
+                                       transactional=self.transactional,
+                                       name=self.util_id)
         return None
 
 
@@ -196,9 +208,15 @@ class SAWrapper(SimpleItem, PropertyManager):
     def __call__(self, *args, **kv):
         return self    
 
-
     def sql_quote__(self, s):
-        return s
+    
+        if self.quoting_style == 'oracle':
+            # oracle style quoting
+            if "\'" in v: 
+                v = "''".join(v.split("\'"))
+            return "'%s'" % v
+        else:
+            return s
 
 
     security.declareProtected(view_management_screens, 'connected')

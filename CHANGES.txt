@@ -16,6 +16,8 @@
     - catching some low-level exceptions from the sqlite interface in order to
       make it work with SQLite
 
+    - new properties 'transactional' and 'quoting_style'
+
 0.2.1 (06.05.2007)
 
     - connections can be closed/opened through the ZMI
