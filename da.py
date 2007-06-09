@@ -281,12 +281,16 @@ class SAWrapper(SimpleItem, PropertyManager):
             unregisterUtility(name=self.util_id)
             self._new_utilid()
         except ImportError:
-            # zope 2.8
-            from zope.component.servicenames import Utilities
-            from zope.app import zapi
-            s = zapi.getGlobalServices().getService(Utilities)
-            s.register((), ISQLAlchemyWrapper, self.util_id, None)
-            self._new_utilid()
+            try:
+                # zope 2.8
+                from zope.component.servicenames import Utilities
+                from zope.app import zapi
+                s = zapi.getGlobalServices().getService(Utilities)
+                s.register((), ISQLAlchemyWrapper, self.util_id, None)
+                self._new_utilid()
+            except:
+                # Zope 2.9 ATT: fix this
+                self._new_utilid()
             
         return super(SAWrapper, self).manage_editProperties(REQUEST)
 
