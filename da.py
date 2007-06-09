@@ -19,6 +19,7 @@ from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from z3c.sqlalchemy import getSAWrapper, createSAWrapper
+from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
 
 
 LOG = logging.getLogger('SQLAlchemyDA')
@@ -273,14 +274,21 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ Intercept changed properties in order to perform 
             further actions.
         """
-        if REQUEST.get('dsn') != self.dsn:
-            try:
-                from zope.component import unregisterUtility
-                unregisterUtility(name=self.util_id)
-            except ImportError:
-                self._new_utilid()
 
-        return PropertyManager.manage_editProperties(self, REQUEST)
+        try:
+            # zope 2.10
+            from zope.component import unregisterUtility
+            unregisterUtility(name=self.util_id)
+            self._new_utilid()
+        except ImportError:
+            # zope 2.8
+            from zope.component.servicenames import Utilities
+            from zope.app import zapi
+            s = zapi.getGlobalServices().getService(Utilities)
+            s.register((), ISQLAlchemyWrapper, self.util_id, None)
+            self._new_utilid()
+            
+        return super(SAWrapper, self).manage_editProperties(REQUEST)
 
  
     manage_workspace = PageTemplateFile('pt/info', 
