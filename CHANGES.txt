@@ -2,14 +2,14 @@
 
     - fixed some security assertions
 
-    - added Test tab for executing SQL queries directly
+    - added "Test" tab for executing SQL queries directly
 
     - better error handling for ZMI screens
 
     - no longer depending on a pre-registered SQLAlchemy wrapper. SQLAlchemyDA
-      now accepts as any other DA a DSN as propertiy 'dsn'
+      now accepts (as any other DA) a DSN as property 'dsn'
 
-    - DSN can be passed within the add form
+    - DSN can be passed through the add form
 
     - redirect directly to "Info" tab after creating an instance through the ZMI
 
@@ -17,6 +17,8 @@
       make it work with SQLite
 
     - new properties 'transactional' and 'quoting_style'
+
+    - improved support for Oracle and MySQL
 
 0.2.1 (06.05.2007)
 
