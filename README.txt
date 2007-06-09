@@ -135,5 +135,5 @@ Web: http://www.zopyx.com
 
 Credits
 =======
-Parts of the SQLAlchemy V 0.3.X development has been sponsored by Wayne
+Parts of the SQLAlchemyDA V 0.3.X development has been sponsored by Wayne
 Volkmuth (renovis.com)
