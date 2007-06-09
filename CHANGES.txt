@@ -23,6 +23,9 @@
     - SQLAlchemyDA no longer provides access to mapper related functionalities.
       It now acts as a DA for executing SQL statements *only*.
 
+    - fixed unregistration code for a wrapper (hopefully works with Zope 2.8 or
+      higher)
+
 0.2.1 (06.05.2007)
 
     - connections can be closed/opened through the ZMI
