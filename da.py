@@ -143,8 +143,12 @@ class SAWrapper(SimpleItem, PropertyManager):
                         for v in type_obj.values:
                             map[v] = name
                     else:
-                        for v in type_obj:
-                            map[v] = name
+                        try:
+                            for v in type_obj:
+                                map[v] = name
+                        except TypeError:
+                            # ATT: fix this :->
+                            pass
 
             self._v_types_map = map  
         return self._v_types_map
