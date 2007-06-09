@@ -107,12 +107,16 @@ Tested with databases:
       (see also z3c/sqlalchemy/README.txt)      
  
 
-Notices:
--------
+Known issues:
+-------------
 
-    When using SQLAlchemyDA as a DA for ZSQL methods there should not be any
-    limitations.
-
+""" Database connection could not be opened ((ProgrammingError) (1064, You
+have an error in your SQL syntax near 'COMMIT .
+"""
+    This bug might appear with older MySQL versions when opening/closing
+    the connections manually through the ZMI. It should not affect the
+    functionality of SQLAlchemyDA.
+    
 
 Author
 ======
