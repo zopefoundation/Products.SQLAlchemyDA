@@ -96,24 +96,6 @@ class SAWrapper(SimpleItem, PropertyManager):
         return None
 
 
-    security.declareProtected(view, 'getMapper')
-    def getMapper(self, name):
-        """ return a mapper class """
-        return self._wrapper.getMapper(name)
-
-
-    security.declareProtected(view, 'getMappers')
-    def getMappers(self, *names):
-        """ return a mapper class """
-        return self._wrapper.getMappers(*names)
-
-
-    security.declareProtected(view, 'getSession')
-    def getSession(self):
-        """ return a session instance """
-        return self._wrapper.session
-        
-
     security.declareProtected(view_management_screens, 'getInfo')
     def getInfo(self):
         """ return a dict with additional information """

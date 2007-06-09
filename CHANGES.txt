@@ -20,6 +20,9 @@
 
     - improved support for Oracle and MySQL
 
+    - SQLAlchemyDA no longer provides access to mapper related functionalities.
+      It now acts as a DA for executing SQL statements *only*.
+
 0.2.1 (06.05.2007)
 
     - connections can be closed/opened through the ZMI
