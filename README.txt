@@ -82,8 +82,9 @@ Configuration of SQLAlchemyDA:
      commit() related error. Otherwise leave this property checked. Changing this
      property *requires* a Zope restart.
 
-   - 'quoting_style' - affects how strings are quoted in SQL. For using Oracle you might
-     set this to 'oracle', otherwise use the default value 'standard'.
+   - 'quoting_style' - affects how strings are quoted in SQL. By default 'standard' 
+     quotes strings correctly. Setting the value to 'no-quote' might solve quoting issues
+     with some databases.
 
 
 Using SQLAlchemyDA:
