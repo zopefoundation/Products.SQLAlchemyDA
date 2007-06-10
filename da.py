@@ -199,9 +199,9 @@ class SAWrapper(SimpleItem, PropertyManager):
     
         if self.quoting_style == 'oracle':
             # oracle style quoting
-            if "\'" in v: 
-                v = "''".join(v.split("\'"))
-            return "'%s'" % v
+            if "\'" in s: 
+                s = "''".join(s.split("\'"))
+            return "'%s'" % s
         else:
             return s
 
