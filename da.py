@@ -82,7 +82,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
 
     def allQuotingStyles(self):
-        return ('standard', 'oracle')
+        return ('standard', 'no-quote')
 
     @property
     def _wrapper(self):
@@ -197,8 +197,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     def sql_quote__(self, s):
     
-        if self.quoting_style == 'oracle':
-            # oracle style quoting
+        if self.quoting_style == 'standard':
             if "\'" in s: 
                 s = "''".join(s.split("\'"))
             return "'%s'" % s
