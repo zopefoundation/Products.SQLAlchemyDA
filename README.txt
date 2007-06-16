@@ -10,11 +10,10 @@
 What is SQLAlchemyDA?
 ---------------------
 
-SQLAlchemyDA is both a tiny frontend to the z3c.sqlalchemy SQLAlchemy package
-for Zope 2 and Zope 3. In addition it acts as a database adapter for ZSQL
-methods. Since it is based on SQLAlchemy, SQLAlchemyDA supports all databases
-out-of-the box that are supported by SQLAlchemy (Postgres, MySQL, Oracle,
-SQLite, MS-SQL, Firebird, Informix). 
+SQLAlchemyDA is a generic database adapter for ZSQL methods. Since it is based
+on SQLAlchemy, SQLAlchemyDA supports all databases out-of-the box that are
+supported by SQLAlchemy (Postgres, MySQL, Oracle, SQLite, MS-SQL, Firebird,
+Informix). 
 
 
 Requirements:
