@@ -1,3 +1,10 @@
+0.4.0 (unreleased)
+
+    - using z3c.sqlalchemy (1.1.0 or higher)
+
+    - required SQLAlchemy 0.4.0 or higer
+
+
 0.3.0 (10.06.2007)
 
     - fixed some security assertions
