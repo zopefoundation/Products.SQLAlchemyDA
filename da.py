@@ -103,8 +103,11 @@ class SAWrapper(SimpleItem, PropertyManager):
 
         wrapper = self._wrapper
         if wrapper is not None:
-            d = self._wrapper.kw
+            d = self._wrapper.__dict__.copy()
             d['DSN'] = self._wrapper.dsn
+            for k in d.keys()[:]:
+                if k.startswith('_'):
+                    del d[k]
             return d
         else:
             return {}
