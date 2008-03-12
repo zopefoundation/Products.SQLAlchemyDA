@@ -11,10 +11,9 @@ CLASSIFIERS = [
     'Programming Language :: Python',
 ]
 
-version_file = os.path.join('Products', 'SQLAlchemyDA', 'version.txt')
-version = open(version_file).read().strip()
+version = '0.4.0'
 
-readme_file= os.path.join('Products', 'SQLAlchemyDA', 'doc', 'README.txt')
+readme_file= os.path.join('Products', 'SQLAlchemyDA', 'README.txt')
 desc = open(readme_file).read().strip()
 
 long_description = desc 

@@ -1,11 +1,5 @@
-##########################################################################
-# A DA-like integration of SQLAlchemy based on z3c.sqlalchemy
-#
-# (C) Zope Corporation and Contributors
-# Written by Andreas Jung for Haufe Mediengruppe, Freiburg, Germany
-# and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
-##########################################################################
-
+A-like integration of SQLAlchemy based on z3c.sqlalchemy
+========================================================
 
 What is SQLAlchemyDA?
 ---------------------
@@ -113,9 +107,10 @@ Known issues:
 """ Database connection could not be opened ((ProgrammingError) (1064, You
 have an error in your SQL syntax near 'COMMIT .
 """
-    This bug might appear with older MySQL versions when opening/closing
-    the connections manually through the ZMI. It should not affect the
-    functionality of SQLAlchemyDA.
+
+This bug might appear with older MySQL versions when opening/closing
+the connections manually through the ZMI. It should not affect the
+functionality of SQLAlchemyDA.
     
 
 Author
@@ -132,9 +127,11 @@ See LICENSE.txt.
 
 Contact
 =======
-Andreas Jung
-E-mail: info at zopyx dot com
-Web: http://www.zopyx.com
+
+| ZOPYX Ltd. & Co. KG
+| Andreas Jung
+| E-mail: info at zopyx dot com
+| Web: http://www.zopyx.com
 
 
 Credits
