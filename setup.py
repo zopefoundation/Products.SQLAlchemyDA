@@ -16,10 +16,13 @@ CLASSIFIERS = [
 version = '0.4.0'
 
 readme_file= os.path.join('Products', 'SQLAlchemyDA', 'README.txt')
+changes_file = os.path.join('Products', 'SQLAlchemyDA', 'CHANGES.txt')
 desc = open(readme_file).read().strip()
+changes = open(changes_file).read().strip()
 
-long_description = desc 
+long_description = desc  + "\n\nCHANGES\n=======\n\n" + changes
 
+print long_description
 
 setup(name='Products.SQLAlchemyDA',
       version=version,
