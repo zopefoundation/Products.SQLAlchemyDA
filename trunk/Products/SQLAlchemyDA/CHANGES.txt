@@ -1,0 +1,44 @@
+0.4.0 (unreleased)
+------------------
+
+- using z3c.sqlalchemy (1.1.0 or higher)
+- required SQLAlchemy 0.4.0 or higer
+
+
+0.3.0 (10.06.2007)
+------------------
+
+- fixed some security assertions
+- added "Test" tab for executing SQL queries directly
+- better error handling for ZMI screens
+- no longer depending on a pre-registered SQLAlchemy wrapper. SQLAlchemyDA
+  now accepts (as any other DA) a DSN as property 'dsn'
+- DSN can be passed through the add form
+- redirect directly to "Info" tab after creating an instance through the ZMI
+- catching some low-level exceptions from the sqlite interface in order to
+  make it work with SQLite
+- new properties 'transactional' and 'quoting_style'
+- improved support for Oracle and MySQL
+- SQLAlchemyDA no longer provides access to mapper related functionalities.
+  It now acts as a DA for executing SQL statements *only*.
+- fixed unregistration code for a wrapper (hopefully works with Zope 2.8 or
+  higher)
+
+- updated documentation
+
+0.2.1 (06.05.2007)
+------------------
+
+- connections can be closed/opened through the ZMI
+- some code cleanup
+- fixed a *very* stupid typo causing ZODB conflict errors
+
+0.2.0 (05.05.2007)
+------------------
+
+- first public release
+
+0.1.0 (30.04.2007)
+------------------
+
+- initial coding

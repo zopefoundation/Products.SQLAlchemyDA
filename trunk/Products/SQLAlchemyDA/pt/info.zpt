@@ -1,0 +1,61 @@
+<div tal:replace="structure context/manage_page_header" />
+<div tal:replace="structure context/manage_tabs" />
+
+<tal:def tal:define="info_d context/getInfo">
+
+    <div tal:condition="not: info_d">
+        No database connection configured!
+        <br/>
+        Go to the <em>Properties</em> tab in order to change the configuration.       
+    </div>
+    
+    <tal:if condition="info_d">
+
+        <table class="info" >
+            <tbody>
+                <tr>
+                    <td class="form-label">Name</td>
+                    <td class="list-item" tal:content="context/getId" />
+                </tr>
+
+                <tr>
+                    <td class="form-label">Connection pool size</td>
+                    <td class="list-item" tal:content="context/getPoolSize" />
+                </tr>
+
+                <tr>
+                    <td class="form-label">Number of open connections</td>
+                    <td class="list-item" tal:content="context/getCheckedin" />
+                </tr>
+                <tr>
+                    <td class="form-label">Connected</td>
+                    <td class="list-item" tal:content="context/connected" />
+                </tr>
+
+                <tr tal:repeat="k info_d">
+                    <td class="form-label" tal:content="k"/>
+                    <td class="list-item" tal:content="info_d/?k" />
+                </tr>
+            </tbody>
+        </table>
+
+        <form action="manage_stop" method="POST" tal:condition="context/connected">
+            <input type="submit" value="Close connections"/> 
+        </form>
+
+        <form action="manage_start" method="POST" tal:condition="not: context/connected">
+            <input type="submit" value="Open connections"/> 
+        </form>
+
+    </tal:if>
+
+</tal:def>
+
+<hr>
+<div style="font-size: 80%; text-align: center" >
+Written by Andreas Jung for <a href="http://www.zopyx.com">ZOPYX Ltd. & Co. KG</a>, D-72070 T&uuml;bingen, Germany.
+<br>
+SQLAlchemyDA <span tal:replace="context/getVersion"/> is published under the Zope Public License ZPL 2.1.
+</div>
+
+<div tal:replace="structure context/manage_page_footer" />
