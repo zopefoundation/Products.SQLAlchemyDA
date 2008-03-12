@@ -9,6 +9,8 @@ from setuptools import setup, find_packages
 
 CLASSIFIERS = [
     'Programming Language :: Python',
+    'Framework :: Zope2',
+    'Topic :: Database',
 ]
 
 version = '0.4.0'
