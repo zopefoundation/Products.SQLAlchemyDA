@@ -48,6 +48,19 @@ Add a SQLAlchemy wrapper
 
   <tr>
     <td>
+    <div class="form-label">
+    Convert to unicode
+    </div>
+    </td>
+    <td>
+      <input type="checkbox" name="convert_unicode:int" value="1"/>
+      <br/>
+      Convert string data to unicode
+    </td>
+  </tr>
+
+  <tr>
+    <td>
     </td>
     <td   colspan="2">
     <div class="form-element">

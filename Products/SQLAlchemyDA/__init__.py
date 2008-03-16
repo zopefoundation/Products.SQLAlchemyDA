@@ -18,7 +18,6 @@ def initialize(context):
 
     from da import (SAWrapper, manage_addSAWrapper, 
                    manage_addSAWrapperForm)
-
     context.registerClass(SAWrapper, 
                           constructors=(manage_addSAWrapperForm, 
                                         manage_addSAWrapper),

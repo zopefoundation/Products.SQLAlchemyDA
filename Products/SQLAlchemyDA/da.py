@@ -57,6 +57,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     meta_type = 'SQLAlchemyDA '
     dsn = ''
+    convert_unicode = 0
     transactional = True
     quoting_style = 'standard'
     _isAnSQLConnection = True
@@ -304,11 +305,12 @@ InitializeClass(SAWrapper)
 
 
 
-def manage_addSAWrapper(self, id, dsn, title, RESPONSE=None):
+def manage_addSAWrapper(self, id, dsn, title, convert_unicode=0, RESPONSE=None):
     """ create a new SAWrapper instance """
     
     wrapper = SAWrapper(id, title)
     wrapper.dsn = dsn
+    wrapper.convert_unicode = convert_unicode
     self._setObject(id, wrapper.__of__(self))
     if RESPONSE:
         return RESPONSE.redirect(self._getOb(id).absolute_url() + '/manage_workspace')
