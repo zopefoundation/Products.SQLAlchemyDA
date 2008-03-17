@@ -51,6 +51,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
         {'id' : 'encoding', 'type' : 'string', 'mode' : 'rw'}, 
         {'id' : 'transactional', 'type' : 'boolean', 'mode' : 'rw'}, 
+        {'id' : 'convert_unicode', 'type' : 'boolean', 'mode' : 'rw'}, 
         {'id' : 'quoting_style', 'type' : 'selection', 'mode' : 'rw', 
                  'select_variable' : 'allQuotingStyles'},
     )
