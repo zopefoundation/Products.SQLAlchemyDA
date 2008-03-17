@@ -269,7 +269,15 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ perform a query through the ZMI"""
         return self.query(query)
 
-    
+    security.declareProtected(view_management_screens, 'manage_formatItem')
+    def manage_formatItem(self, s):
+        """ used by query form """
+        if isinstance(s, unicode):
+            return s
+        if isinstance(s, str):
+            return unicode(s, self.encoding, 'ignore')
+        return str(s)
+
     security.declareProtected(view_management_screens, 'getVersion')
     def getVersion(self):
         """ return version.txt """

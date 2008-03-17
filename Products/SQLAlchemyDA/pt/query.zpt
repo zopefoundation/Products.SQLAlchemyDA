@@ -39,7 +39,7 @@
                 <tbody>
                     <tr tal:repeat="row python: result[1]">
                         <td tal:repeat="item row">
-                            <span tal:replace="python: unicode(item, 'iso-8859-15', 'ignore')" tal:on-error="item" />
+                            <span tal:replace="python: context.manage_formatItem(item)" />&nbsp;
                         </td>
                     </tr>
                 </tbody>
