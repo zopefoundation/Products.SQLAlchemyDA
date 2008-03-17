@@ -49,6 +49,21 @@ Add a SQLAlchemy wrapper
   <tr>
     <td>
     <div class="form-label">
+    Encoding
+    </div>
+    </td>
+    <td>
+      <input type="text" name="encoding" size="40" value="iso-8859-15"/>
+      <em>Encoding of your database</em>
+      <br/>
+      Ensure that the underlying database supports transactions!
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>
+    <div class="form-label">
     Convert to unicode
     </div>
     </td>

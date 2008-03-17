@@ -49,6 +49,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     _properties = (
         {'id' : 'dsn', 'type' : 'string', 'mode' : 'rw', },
         {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
+        {'id' : 'encoding', 'type' : 'string', 'mode' : 'rw'}, 
         {'id' : 'transactional', 'type' : 'boolean', 'mode' : 'rw'}, 
         {'id' : 'quoting_style', 'type' : 'selection', 'mode' : 'rw', 
                  'select_variable' : 'allQuotingStyles'},
@@ -57,6 +58,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     meta_type = 'SQLAlchemyDA '
     dsn = ''
+    encoding = 'iso-8859-15'
     convert_unicode = 0
     transactional = True
     quoting_style = 'standard'
@@ -87,6 +89,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     @property
     def _wrapper(self):
+
         if self.dsn:
             try:
                 return getSAWrapper(self.util_id)
@@ -94,6 +97,8 @@ class SAWrapper(SimpleItem, PropertyManager):
                 return createSAWrapper(self.dsn, 
                                        forZope=True, 
                                        transactional=self.transactional,
+                                       engine_options={'convert_unicode' : self.convert_unicode,
+                                                       'encoding' : self.encoding},
                                        name=self.util_id)
         return None
 
@@ -305,12 +310,14 @@ InitializeClass(SAWrapper)
 
 
 
-def manage_addSAWrapper(self, id, dsn, title, convert_unicode=0, RESPONSE=None):
+def manage_addSAWrapper(self, id, dsn, title, encoding='iso-8859-15', 
+                        convert_unicode=0, RESPONSE=None):
     """ create a new SAWrapper instance """
     
     wrapper = SAWrapper(id, title)
     wrapper.dsn = dsn
     wrapper.convert_unicode = convert_unicode
+    wrapper.encoding = encoding 
     self._setObject(id, wrapper.__of__(self))
     if RESPONSE:
         return RESPONSE.redirect(self._getOb(id).absolute_url() + '/manage_workspace')
