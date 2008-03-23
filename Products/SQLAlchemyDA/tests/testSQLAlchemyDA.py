@@ -9,14 +9,15 @@ Tests for SQLAlchemyDA
 
 import sys, os, unittest
 from Testing import ZopeTestCase
-ZopeTestCase.installProduct('SQLAlchemyDA', 1)
 
+import transaction
 from Products.SQLAlchemyDA.da import SAWrapper
 from z3c.sqlalchemy import createSAWrapper
 from z3c.sqlalchemy.mapper import MappedClassBase
 from sqlalchemy import MetaData, Table, Column, Integer, String, Unicode
 from sqlalchemy.orm import mapper
 
+ZopeTestCase.installProduct('SQLAlchemyDA', 1)
 
 class SQLAlchemyDATests(ZopeTestCase.ZopeTestCase):
 
@@ -62,7 +63,6 @@ class SQLAlchemyDATests(ZopeTestCase.ZopeTestCase):
         da = self.makeOne()
         rows = da.query("update test set text='bar'")
 
-
 def test_suite():
     s = unittest.TestSuite()
     s.addTest(unittest.makeSuite(SQLAlchemyDATests))
@@ -83,5 +83,3 @@ if __name__=='__main__':
         globals()[sys.argv[1]]()
     else:
         main()
-
-

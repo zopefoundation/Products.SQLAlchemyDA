@@ -154,6 +154,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
        
         c = self._wrapper.connection
+        cursor = c.cursor()
 
         rows = []
         desc = None
@@ -164,13 +165,12 @@ class SAWrapper(SimpleItem, PropertyManager):
         for qs in [x for x in query_string.split('\0') if x]:
 
             LOG.debug(qs)
-               
             if query_data:
-                proxy = c.execute(qs, query_data)
+                proxy = cursor.execute(qs, query_data)
             else:
-                proxy = c.execute(qs)
+                proxy = cursor.execute(qs)
 
-            description = proxy.description
+            description = cursor.description
 
             if description is not None:
                 nselects += 1
@@ -179,9 +179,9 @@ class SAWrapper(SimpleItem, PropertyManager):
                     raise ValueError("Can't execute multiple SELECTs within a single query")
 
                 if max_rows:
-                    rows = proxy.fetchmany(max_rows)
+                    rows = cursor.fetchmany(max_rows)
                 else:
-                    rows = proxy.fetchall()
+                    rows = cursor.fetchall()
 
                 desc = description  
                 types_map = self._typesMap(proxy)
