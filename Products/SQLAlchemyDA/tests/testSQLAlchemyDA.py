@@ -23,7 +23,7 @@ class SQLAlchemyDATests(ZopeTestCase.ZopeTestCase):
     def afterSetUp(self):
 
         self.dsn = os.environ.get('TEST_DSN', 'sqlite:///test')
-        wrapper = createSAWrapper(self.dsn, name='foo')
+        wrapper = createSAWrapper(self.dsn)
         metadata = MetaData(bind=wrapper.engine)
 
         test_table = Table('test', metadata,
@@ -54,6 +54,13 @@ class SQLAlchemyDATests(ZopeTestCase.ZopeTestCase):
         rows = da.query('select * from test')
         self.assertEqual(len(rows), 2)
         
+    def testSimpleInsert(self):
+        da = self.makeOne()
+        rows = da.query("insert into test (id, text) values(42, 'foo')")
+        
+    def testSimpleUpdate(self):
+        da = self.makeOne()
+        rows = da.query("update test set text='bar'")
 
 
 def test_suite():
