@@ -13,6 +13,7 @@ ZopeTestCase.installProduct('SQLAlchemyDA', 1)
 
 from Products.SQLAlchemyDA.da import SAWrapper
 from z3c.sqlalchemy import createSAWrapper
+from z3c.sqlalchemy.mapper import MappedClassBase
 from sqlalchemy import MetaData, Table, Column, Integer, String, Unicode
 from sqlalchemy.orm import mapper
 
@@ -30,13 +31,15 @@ class SQLAlchemyDATests(ZopeTestCase.ZopeTestCase):
                       Column('utext', Unicode(255)),
                       Column('text', String(255)))
 
-        class Test(object): pass
+        class Test(MappedClassBase): pass
         mapper(Test, test_table)
 
         metadata.create_all()
         session = wrapper.session
-        session.save(Test(id=1, utext=u'Hello world', text='hello world'))
-        session.save(Test(id=2, utext=u'foo', text='far'))
+        t1 = Test(id=1, utext=u'Hello world', text='hello world')
+        t2 = Test(id=2, utext=u'foo', text='far')
+        session.save(t1)
+        session.save(t2)
 
 
     def makeOne(self, **kw):
@@ -46,8 +49,10 @@ class SQLAlchemyDATests(ZopeTestCase.ZopeTestCase):
                                     **kw)
         return self.app['da']
 
-    def test1(self):
+    def testSimpleSelect(self):
         da = self.makeOne()
+        rows = da.query('select * from test')
+        self.assertEqual(len(rows), 2)
         
 
 
