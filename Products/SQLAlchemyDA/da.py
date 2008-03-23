@@ -126,7 +126,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
 
         if not hasattr(self, '_v_types_map'):
-            dbapi = proxy.dialect.dbapi
+            dbapi = self._wrapper.engine.dialect.dbapi
 
             map = dict()
             for name  in types_mapping.keys():
@@ -170,7 +170,7 @@ class SAWrapper(SimpleItem, PropertyManager):
             else:
                 proxy = c.execute(qs)
 
-            description = proxy.cursor.description
+            description = proxy.description
 
             if description is not None:
                 nselects += 1
