@@ -1,3 +1,8 @@
+0.4.1 (01.06.2008)
+------------------
+
+- fixed issue with version.txt file
+
 0.4.0 (unreleased)
 ------------------
 
