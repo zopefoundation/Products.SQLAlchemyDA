@@ -13,9 +13,9 @@ Informix).
 Requirements:
 -------------
 
-- Zope 2.8 +
-- SQLAlchemy 0.3.8 (+ database specific low-level Python drivers)
-- z3c.sqlalchemy 1.0.4 +
+- Zope 2.10+
+- SQLAlchemy >= 0.4.6 (+ database specific low-level Python drivers)
+- z3c.sqlalchemy >= 1.2.0
 
 
 Installation:
