@@ -39,8 +39,8 @@ class SQLAlchemyDATests(ZopeTestCase.ZopeTestCase):
         session = wrapper.session
         t1 = Test(id=1, utext=u'Hello world', text='hello world')
         t2 = Test(id=2, utext=u'foo', text='far')
-        session.save(t1)
-        session.save(t2)
+        session.add(t1)
+        session.add(t2)
 
 
     def makeOne(self, **kw):
