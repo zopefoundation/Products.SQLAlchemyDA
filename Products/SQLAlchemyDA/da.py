@@ -98,6 +98,7 @@ class SAWrapper(SimpleItem, PropertyManager):
                 return createSAWrapper(self.dsn, 
                                        forZope=True, 
                                        transactional=self.transactional,
+                                       extension_options={'initial_state': 'invalidated'},
                                        engine_options={'convert_unicode' : self.convert_unicode,
                                                        'encoding' : self.encoding},
                                        name=self.util_id)
