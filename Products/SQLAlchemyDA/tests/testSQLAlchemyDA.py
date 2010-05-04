@@ -73,6 +73,12 @@ class SQLAlchemyDATests(TestBase):
         da = self.makeOne()
         rows = da.query("update test set text='bar'")
 
+    def testExtraEngineOptions(self):
+        da = self.makeOne()
+        da.add_extra_engine_options((('echo', True),
+                                     ('pool_size', 20)))
+        self.assertEqual(da.engine_options['pool_size'], 20)
+
 
 class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
 

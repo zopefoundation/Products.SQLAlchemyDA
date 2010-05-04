@@ -64,7 +64,8 @@ class SAWrapper(SimpleItem, PropertyManager):
     transactional = True
     quoting_style = 'standard'
     _isAnSQLConnection = True
-
+    extra_engine_options = ()
+    
     security = ClassSecurityInfo()
 
     def __init__(self, id, title=''):
@@ -94,16 +95,32 @@ class SAWrapper(SimpleItem, PropertyManager):
         if self.dsn:
             try:
                 return getSAWrapper(self.util_id)
-            except ValueError:               
+            except ValueError:
                 return createSAWrapper(self.dsn, 
                                        forZope=True, 
                                        transactional=self.transactional,
                                        extension_options={'initial_state': 'invalidated'},
-                                       engine_options={'convert_unicode' : self.convert_unicode,
-                                                       'encoding' : self.encoding},
+                                       engine_options=self.engine_options,
                                        name=self.util_id)
         return None
 
+    @property
+    def engine_options(self):
+        engine_options = dict(self.extra_engine_options)
+        engine_options.update(convert_unicode=self.convert_unicode,
+                              encoding=self.encoding)
+        return engine_options
+
+    def add_extra_engine_options(self, engine_options):
+        """ engine_options is a tuple containing additional
+            options for sqlalchemy.create_engine.
+            Say you need to pass some engine options
+            to SQLAlchemy.create_engine::
+            wrapper = SAWrapper(id)
+            wrapper.add_extra_engine_options((('echo', True),
+                                              ('pool_size', 20)))
+        """
+        self.extra_engine_options = engine_options
 
     security.declareProtected(view_management_screens, 'getInfo')
     def getInfo(self):
