@@ -13,7 +13,7 @@ CLASSIFIERS = [
     'Topic :: Database',
 ]
 
-version = '0.5.0'
+version = '0.5.1dev'
 
 readme_file= os.path.join('Products', 'SQLAlchemyDA', 'README.txt')
 changes_file = os.path.join('Products', 'SQLAlchemyDA', 'CHANGES.txt')
