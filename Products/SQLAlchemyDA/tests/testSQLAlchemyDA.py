@@ -98,7 +98,16 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         self.publish(self.folder_path)
         rows = self.session.query(Test).all()
         self.assertEqual(len(rows), 1)
-
+        
+    def testZsqlInsertWithRollback(self):
+        da = self.createDA()
+        template = "INSERT INTO test (id, text) VALUES (07, 'bar')"
+        manage_addZSQLMethod(self.app, 'zsql_id', 'title', 'da', '', template)
+        self.app['zsql_id']()
+        transaction.abort()
+        rows = self.session.query(Test).all()
+        self.assertEqual(len(rows), 0)
+        
     def testORMInsertWithCommit(self):
         t1 = Test(id=8, utext=u'Hello world', text='hello world')
         t2 = Test(id=9, utext=u'foo', text='far')
@@ -107,7 +116,16 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         self.publish(self.folder_path)
         rows = self.session.query(Test).all()
         self.assertEqual(len(rows), 2)
-
+        
+    def testORMInsertWithRollback(self):
+        t1 = Test(id=8, utext=u'Hello world', text='hello world')
+        t2 = Test(id=9, utext=u'foo', text='far')
+        self.session.add(t1)
+        self.session.add(t2)
+        transaction.abort()
+        rows = self.session.query(Test).all()
+        self.assertEqual(len(rows), 0)
+        
     def beforeTearDown(self):
         metadata.drop_all()
 
