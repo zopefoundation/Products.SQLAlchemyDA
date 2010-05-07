@@ -38,7 +38,7 @@ mapper(Test, test_table)
 
 class TestBase(ZopeTestCase.ZopeTestCase):
 
-    def makeOne(self, **kw):
+    def createDA(self, **kw):
         factory = self.app.manage_addProduct['SQLAlchemyDA']
         factory.manage_addSAWrapper(id='da', title='da',
                                     dsn=self.dsn,
@@ -61,20 +61,20 @@ class SQLAlchemyDATests(TestBase):
         session.add(t2)
 
     def testSimpleSelect(self):
-        da = self.makeOne()
+        da = self.createDA()
         rows = da.query('select * from test')
         self.assertEqual(len(rows), 2)
 
     def testSimpleInsert(self):
-        da = self.makeOne()
+        da = self.createDA()
         rows = da.query("insert into test (id, text) values(42, 'foo')")
 
     def testSimpleUpdate(self):
-        da = self.makeOne()
+        da = self.createDA()
         rows = da.query("update test set text='bar'")
 
     def testExtraEngineOptions(self):
-        da = self.makeOne()
+        da = self.createDA()
         da.add_extra_engine_options((('echo', True),
                                      ('pool_size', 20)))
         self.assertEqual(da.engine_options['pool_size'], 20)
@@ -90,8 +90,8 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         metadata.create_all()
         self.session = wrapper.session
 
-    def testZsqlInsert(self):
-        da = self.makeOne()
+    def testZsqlInsertWithCommit(self):
+        da = self.createDA()
         template = "INSERT INTO test (id, text) VALUES (07, 'bar')"
         manage_addZSQLMethod(self.app, 'zsql_id', 'title', 'da', '', template)
         self.app['zsql_id']()
@@ -99,7 +99,7 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         rows = self.session.query(Test).all()
         self.assertEqual(len(rows), 1)
 
-    def testORMInsert(self):
+    def testORMInsertWithCommit(self):
         t1 = Test(id=8, utext=u'Hello world', text='hello world')
         t2 = Test(id=9, utext=u'foo', text='far')
         self.session.add(t1)
