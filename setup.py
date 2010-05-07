@@ -22,7 +22,7 @@ changes = open(changes_file).read().strip()
 
 long_description = desc  + "\n\nCHANGES\n=======\n\n" + changes
 
-print long_description
+#print long_description
 
 setup(name='Products.SQLAlchemyDA',
       version=version,
@@ -40,6 +40,7 @@ setup(name='Products.SQLAlchemyDA',
       include_package_data = True,
       zip_safe=False,
       install_requires=['setuptools', 'z3c.sqlalchemy'],
+      extras_require = {'test': ['Zope2']},
       namespace_packages=['Products'],
 
       )
