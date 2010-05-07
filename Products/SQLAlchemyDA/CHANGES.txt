@@ -1,16 +1,25 @@
-0.4.1 (01.06.2008)
+0.5.0 (2010-05-07)
+------------------
+
+- Fixed LP #570208
+- Added a method 'add_extra_engine_options' to set additional engine
+  options for SQLAlchemy.create_engine.
+- Removed SOFTWARE_HOME dependency
+- Requires SQLALchemy >= 0.5.0
+
+0.4.1 (2008-06-01)
 ------------------
 
 - fixed issue with version.txt file
 
-0.4.0 (unreleased)
+0.4.0 (2008-01-24)
 ------------------
 
 - requires z3c.sqlalchemy (2.0.0 or higher)
 - requires SQLAlchemy 0.4.4 or higer
 
 
-0.3.0 (10.06.2007)
+0.3.0 (2007-06-10)
 ------------------
 
 - fixed some security assertions
@@ -31,19 +40,19 @@
 
 - updated documentation
 
-0.2.1 (06.05.2007)
+0.2.1 (2007-05-06)
 ------------------
 
 - connections can be closed/opened through the ZMI
 - some code cleanup
 - fixed a *very* stupid typo causing ZODB conflict errors
 
-0.2.0 (05.05.2007)
+0.2.0 (2007-05-05)
 ------------------
 
 - first public release
 
-0.1.0 (30.04.2007)
+0.1.0 (2007-04-30)
 ------------------
 
 - initial coding

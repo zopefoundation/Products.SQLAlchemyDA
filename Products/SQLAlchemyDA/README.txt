@@ -14,7 +14,7 @@ Requirements:
 -------------
 
 - Zope 2.10+
-- SQLAlchemy >= 0.4.6 (+ database specific low-level Python drivers)
+- SQLAlchemy >= 0.5.0 (+ database specific low-level Python drivers)
 - z3c.sqlalchemy >= 1.2.0
 
 
@@ -93,6 +93,7 @@ Tested with databases:
 
 - Postgres 7.4, 8.0-8.2
 - SQLite 3.3.X
+- Oracle 10g
 - MySQL is *only* supported for MySQL databases with transaction support.
   (see also z3c/sqlalchemy/README.txt)      
  
