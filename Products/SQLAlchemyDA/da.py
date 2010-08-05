@@ -27,7 +27,7 @@ LOG = logging.getLogger('SQLAlchemyDA')
 # maps Python DB-API types to Zope types
 types_mapping = {
     'DATE' : 'd',
-    'IME' : 'd',
+    'TIME' : 'd',
     'DATETIME' : 'd',
     'STRING' : 's',
     'LONGINTEGER' : 'i',
