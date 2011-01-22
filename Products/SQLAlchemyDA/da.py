@@ -207,7 +207,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         LOG.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
 
         if desc is None:            
-            return [], None
+            return [], []
 
         items = []
         for  name, type_code, width, internal_size, precision, scale, null_ok in desc:
