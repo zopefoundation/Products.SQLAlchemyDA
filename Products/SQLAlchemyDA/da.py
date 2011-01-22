@@ -48,11 +48,11 @@ class SAWrapper(SimpleItem, PropertyManager):
                      SimpleItem.manage_options
     _properties = (
         {'id' : 'dsn', 'type' : 'string', 'mode' : 'rw', },
-        {'id' : 'title', 'type' : 'string', 'mode' : 'rw'}, 
-        {'id' : 'encoding', 'type' : 'string', 'mode' : 'rw'}, 
-        {'id' : 'transactional', 'type' : 'boolean', 'mode' : 'rw'}, 
-        {'id' : 'convert_unicode', 'type' : 'boolean', 'mode' : 'rw'}, 
-        {'id' : 'quoting_style', 'type' : 'selection', 'mode' : 'rw', 
+        {'id' : 'title', 'type' : 'string', 'mode' : 'rw'},
+        {'id' : 'encoding', 'type' : 'string', 'mode' : 'rw'},
+        {'id' : 'transactional', 'type' : 'boolean', 'mode' : 'rw'},
+        {'id' : 'convert_unicode', 'type' : 'boolean', 'mode' : 'rw'},
+        {'id' : 'quoting_style', 'type' : 'selection', 'mode' : 'rw',
                  'select_variable' : 'allQuotingStyles'},
     )
 
@@ -65,7 +65,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     quoting_style = 'standard'
     _isAnSQLConnection = True
     extra_engine_options = ()
-    
+
     security = ClassSecurityInfo()
 
     def __init__(self, id, title=''):
@@ -96,8 +96,8 @@ class SAWrapper(SimpleItem, PropertyManager):
             try:
                 return getSAWrapper(self.util_id)
             except ValueError:
-                return createSAWrapper(self.dsn, 
-                                       forZope=True, 
+                return createSAWrapper(self.dsn,
+                                       forZope=True,
                                        transactional=self.transactional,
                                        extension_options={'initial_state': 'invalidated'},
                                        engine_options=self.engine_options,
@@ -161,7 +161,7 @@ class SAWrapper(SimpleItem, PropertyManager):
                             # ATT: fix this :->
                             pass
 
-            self._v_types_map = map  
+            self._v_types_map = map
         return self._v_types_map
 
 
@@ -170,7 +170,7 @@ class SAWrapper(SimpleItem, PropertyManager):
             machinery.
         """
 
-       
+
         c = self._wrapper.connection
         cursor = c.cursor()
 
@@ -192,7 +192,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
             if description is not None:
                 nselects += 1
-        
+
                 if nselects > 1:
                     raise ValueError("Can't execute multiple SELECTs within a single query")
 
@@ -201,33 +201,33 @@ class SAWrapper(SimpleItem, PropertyManager):
                 else:
                     rows = cursor.fetchall()
 
-                desc = description  
+                desc = description
                 types_map = self._typesMap(proxy)
 
         LOG.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
 
-        if desc is None:            
+        if desc is None:
             return [], []
 
         items = []
         for  name, type_code, width, internal_size, precision, scale, null_ok in desc:
-    
+
             items.append({'name' : name,
                           'type' : types_mapping.get(types_map.get(type_code, None), 's'),
                           'null' : null_ok,
                           'width' : width,
-                         }) 
+                         })
 
         return items, rows
 
 
     def __call__(self, *args, **kv):
-        return self    
+        return self
 
     def sql_quote__(self, s):
-    
+
         if self.quoting_style == 'standard':
-            if "\'" in s: 
+            if "\'" in s:
                 s = "''".join(s.split("\'"))
             return "'%s'" % s
         else:
@@ -245,14 +245,14 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'getPoolSize')
     def getPoolSize(self):
         """ """
-        return self._wrapper._engine.pool.size() 
+        return self._wrapper._engine.pool.size()
 
 
     security.declareProtected(view_management_screens, 'getCheckedin')
     def getCheckedin(self):
         """ """
         try:
-            return self._wrapper._engine.pool.checkedin() 
+            return self._wrapper._engine.pool.checkedin()
         except:
             return 'n/a'
 
@@ -260,7 +260,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     security.declareProtected(view_management_screens, 'manage_start')
     def manage_start(self, RESPONSE=None):
-        """ start engine """               
+        """ start engine """
         try:
             self.query('COMMIT');
             if RESPONSE:
@@ -270,7 +270,7 @@ class SAWrapper(SimpleItem, PropertyManager):
             if RESPONSE:
                 msg = 'Database connection could not be opened (%s)' % e
                 RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
-            else: 
+            else:
                 raise
 
 
@@ -305,7 +305,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     security.declareProtected(view_management_screens, 'manage_editProperties')
     def manage_editProperties(self, REQUEST):
-        """ Intercept changed properties in order to perform 
+        """ Intercept changed properties in order to perform
             further actions.
         """
 
@@ -325,10 +325,10 @@ class SAWrapper(SimpleItem, PropertyManager):
             except:
                 # Zope 2.9 ATT: fix this
                 self._new_utilid()
-            
+
         return super(SAWrapper, self).manage_editProperties(REQUEST)
 
- 
+
     manage_workspace = PageTemplateFile('pt/info', globals(), __name__='manage_workspace')
     manage_test = PageTemplateFile('pt/query', globals(), __name__='manage_test')
 
@@ -337,20 +337,20 @@ InitializeClass(SAWrapper)
 
 
 
-def manage_addSAWrapper(self, id, dsn, title, encoding='iso-8859-15', 
+def manage_addSAWrapper(self, id, dsn, title, encoding='iso-8859-15',
                         convert_unicode=0, RESPONSE=None):
     """ create a new SAWrapper instance """
-    
+
     wrapper = SAWrapper(id, title)
     wrapper.dsn = dsn
     wrapper.convert_unicode = convert_unicode
-    wrapper.encoding = encoding 
+    wrapper.encoding = encoding
     self._setObject(id, wrapper.__of__(self))
     if RESPONSE:
         return RESPONSE.redirect(self._getOb(id).absolute_url() + '/manage_workspace')
     else:
-        return wrapper 
+        return wrapper
 
-manage_addSAWrapperForm = PageTemplateFile('pt/addSAWrapperForm', 
-                                           globals(), 
+manage_addSAWrapperForm = PageTemplateFile('pt/addSAWrapperForm',
+                                           globals(),
                                            __name__='addSAWrapperForm')
