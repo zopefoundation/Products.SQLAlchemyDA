@@ -1,3 +1,7 @@
+0.5.2 (unreleased)
+------------------
+- Fixed LP #639597
+
 0.5.1 (2010-08-05)
 ------------------
 - fixed typo in type mapping
@@ -9,7 +13,7 @@
 - Added a method 'add_extra_engine_options' to set additional engine
   options for SQLAlchemy.create_engine.
 - Removed SOFTWARE_HOME dependency
-- Requires SQLALchemy >= 0.5.0
+- Requires SQLAlchemy >= 0.5.0
 
 0.4.1 (2008-06-01)
 ------------------
