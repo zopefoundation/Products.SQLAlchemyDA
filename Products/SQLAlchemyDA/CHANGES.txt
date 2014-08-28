@@ -1,6 +1,7 @@
 0.5.2 (unreleased)
 ------------------
 - Fixed LP #639597
+- Avoid ExpressionError: Not a valid path-expression
 
 0.5.1 (2010-08-05)
 ------------------
