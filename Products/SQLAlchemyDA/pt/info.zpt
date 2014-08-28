@@ -32,9 +32,13 @@
                     <td class="list-item" tal:content="context/connected" />
                 </tr>
 
+
                 <tr tal:repeat="k info_d">
                     <td class="form-label" tal:content="k"/>
-                    <td class="list-item" tal:content="info_d/?k" />
+                    <td class="list-item" tal:condition="python: not isinstance(info_d[k], dict)" tal:content="python: info_d[k]" />
+                    <td class="list-item" tal:condition="python: isinstance(info_d[k], dict)"
+                                          tal:content="structure python: ' '.join([ '<strong>%s:</strong> %s<br/>' %(key_dict[0], info_d[k][key_dict[0]]) for key_dict in [dct for dct in info_d[k].items()][0:] ]) "> </td>
+
                 </tr>
             </tbody>
         </table>
