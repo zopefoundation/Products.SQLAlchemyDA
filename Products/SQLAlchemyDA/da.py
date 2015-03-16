@@ -39,6 +39,44 @@ types_mapping = {
 }
 
 
+# Global registry of named SQLAlchemyDA instances
+_da_registry = {}
+
+
+def register_da(name, da_instance):
+    """
+    Register an SQLAlchemy database adapter by name as part of a module
+    level dict. This might be called early in Zope startup, so this type
+    of registration is necessary instead of a zope.component registration.
+    (The same reason z3c.sqlalchemy uses a module dict for registration)
+    """
+    global _da_registry
+    _da_registry[name] = da_instance
+
+
+def lookup_da(name):
+    """
+    Look up and return an `SAWrapper` DA-ish instance registered by name.
+
+    These instances are populated by the `SAWrapper` during creation
+    of `ZopeWrapper` instances.
+    """
+    global _da_registry
+    return _da_registry.get(name)
+
+
+def lookup_zope_sa_wrapper(name):
+    """
+    Look up and return a `z3c.sqlalchemy.ZopeWrapper` instance by name.
+    
+    This is done by finding the `ZopeWrapper` instance associated with
+    the named `SAWrapper` instance.
+    """
+    da = lookup_da(name)
+    if da:
+        return da._wrapper
+
+
 class SAWrapper(SimpleItem, PropertyManager):
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
 
@@ -65,12 +103,13 @@ class SAWrapper(SimpleItem, PropertyManager):
     quoting_style = 'standard'
     _isAnSQLConnection = True
     extra_engine_options = ()
-
+    
     security = ClassSecurityInfo()
 
     def __init__(self, id, title=''):
         self.id = id
         self.title = title
+        register_da(self.id, self)
 
 
     def manage_afterAdd(self, item, container):

@@ -13,12 +13,14 @@ import unittest
 from Testing import ZopeTestCase
 
 import transaction
-from Products.SQLAlchemyDA.da import SAWrapper
+from Products.SQLAlchemyDA.da import (SAWrapper, lookup_da,
+                                      lookup_zope_sa_wrapper)
 from Products.ZSQLMethods.SQL import manage_addZSQLMethod
 from z3c.sqlalchemy import createSAWrapper
 from z3c.sqlalchemy.mapper import MappedClassBase
 from sqlalchemy import MetaData, Table, Column, Integer, String, Unicode
 from sqlalchemy.orm import mapper
+
 
 ZopeTestCase.installProduct('SQLAlchemyDA', 1)
 
@@ -128,6 +130,16 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         
     def beforeTearDown(self):
         metadata.drop_all()
+
+    def test_lookup_da(self):
+        da = self.createDA()
+        registered_da = lookup_da('da')
+        assert registered_da is da.aq_self
+
+    def test_lookup_da(self):
+        da = self.createDA()
+        z3c_wrapper = lookup_zope_sa_wrapper('da')
+        assert z3c_wrapper is da._wrapper
 
 
 def test_suite():
