@@ -1,3 +1,16 @@
+
+0.6.0 (TBD)
+-----------
+
+- Added alternative lookup API to get a handle on SAWrapper instances.  To use
+  the new lookup mechanism, see Products.SQLAlchemyDA.da.py and look for the
+  function `lookup_da`. This was created to allow avoiding Zope Acquisition as
+  a lookup mechanism, and to work around the issue that the underlying
+  z3c.sqlalchemy `getSAWrapper` function is non-usable when created by the
+  SAWrapper DA. This is because API consumers have no access to the  which
+  uses a random internally generated string ('util_id') as the utility name,
+  at least not without resorting to Acquisition calls.
+
 0.5.2 (unreleased)
 ------------------
 - Fixed LP #639597
