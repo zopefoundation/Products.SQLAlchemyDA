@@ -1,10 +1,10 @@
-##########################################################################
-# A DA-like integration of SQLAlchemy based on z3c.sqlalchemy
-#
-# (C) Zope Corporation and Contributors
-# Written by Andreas Jung for Haufe Mediengruppe, Freiburg, Germany
-# and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
-##########################################################################
+"""
+A DA-like integration of SQLAlchemy based on z3c.sqlalchemy
+
+(C) Zope Corporation and Contributors
+Written by Andreas Jung for Haufe Mediengruppe, Freiburg, Germany
+and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
+"""
 
 import os
 import logging
@@ -46,7 +46,22 @@ _da_registry = {}
 def register_da(name, da_instance):
     """
     Register an SQLAlchemy database adapter by name as part of a module
-    level dict. This might be called early in Zope startup, so this type
+    level dict.
+
+    Args:
+        name(str): a globally unique name for the given `da_instance`). This
+                   is generally a Zope object id, automatically registered when
+                   instances of `SAWrapper` are initialized.  If this name is
+                   not unique, the most recently registered name will take
+                   effect. This registration API is not designed to be used
+                   with multiple `SAWrapper` instances sharing the same Zope
+                   object ids. An error will not be raised, to prevent problems
+                   for the majority of users who don't make use of this
+                   registration API (and use Acquisition instead).
+        da_instance(`SAWrapper`): a configured instance of
+                                  `Products.SQLAlchemyDA.SAWrapper`
+
+    This might be called early in Zope startup, so this type
     of registration is necessary instead of a zope.component registration.
     (The same reason z3c.sqlalchemy uses a module dict for registration)
     """
@@ -58,8 +73,11 @@ def lookup_da(name):
     """
     Look up and return an `SAWrapper` DA-ish instance registered by name.
 
-    These instances are populated by the `SAWrapper` during creation
+    These instances are registered by the `SAWrapper` during initialization
     of `ZopeWrapper` instances.
+
+    Returns:
+        'SAWrapper' instance.
     """
     global _da_registry
     return _da_registry.get(name)
@@ -79,6 +97,10 @@ def lookup_zope_sa_wrapper(name):
 
 class SAWrapper(SimpleItem, PropertyManager):
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
+
+    # TODO document any special DA-ish hooks or places where Zope
+    #      automatically makes calls, or at least link to docs on
+    #      what makes it DA-ish. Is there a documented protocol?
 
     manage_options = ({'label': 'Info', 'action': 'manage_workspace'},) +\
                      ({'label': 'Test', 'action': 'manage_test'},) + \
