@@ -13,7 +13,7 @@ import time
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
-from AccessControl.Permissions import view, view_management_screens
+from AccessControl.Permissions import view_management_screens
 from OFS.SimpleItem import SimpleItem
 from OFS.PropertyManager import PropertyManager
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -26,16 +26,16 @@ LOG = logging.getLogger('SQLAlchemyDA')
 
 # maps Python DB-API types to Zope types
 types_mapping = {
-    'DATE' : 'd',
-    'TIME' : 'd',
-    'DATETIME' : 'd',
-    'STRING' : 's',
-    'LONGINTEGER' : 'i',
-    'INTEGER' : 'i',
-    'NUMBER' : 'n',
-    'BOOLEAN' : 'n',
-    'ROWID' : 'i',
-    'BINARY' : None, #????
+    'DATE': 'd',
+    'TIME': 'd',
+    'DATETIME': 'd',
+    'STRING': 's',
+    'LONGINTEGER': 'i',
+    'INTEGER': 'i',
+    'NUMBER': 'n',
+    'BOOLEAN': 'n',
+    'ROWID': 'i',
+    'BINARY': None,  # ????
 }
 
 
@@ -68,7 +68,7 @@ def lookup_da(name):
 def lookup_zope_sa_wrapper(name):
     """
     Look up and return a `z3c.sqlalchemy.ZopeWrapper` instance by name.
-    
+
     This is done by finding the `ZopeWrapper` instance associated with
     the named `SAWrapper` instance.
     """
@@ -80,20 +80,19 @@ def lookup_zope_sa_wrapper(name):
 class SAWrapper(SimpleItem, PropertyManager):
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
 
-    manage_options = ({'label' : 'Info', 'action' : 'manage_workspace'},) +\
-                     ({'label' : 'Test', 'action' : 'manage_test'},) + \
+    manage_options = ({'label': 'Info', 'action': 'manage_workspace'},) +\
+                     ({'label': 'Test', 'action': 'manage_test'},) + \
                      PropertyManager.manage_options + \
                      SimpleItem.manage_options
     _properties = (
-        {'id' : 'dsn', 'type' : 'string', 'mode' : 'rw', },
-        {'id' : 'title', 'type' : 'string', 'mode' : 'rw'},
-        {'id' : 'encoding', 'type' : 'string', 'mode' : 'rw'},
-        {'id' : 'transactional', 'type' : 'boolean', 'mode' : 'rw'},
-        {'id' : 'convert_unicode', 'type' : 'boolean', 'mode' : 'rw'},
-        {'id' : 'quoting_style', 'type' : 'selection', 'mode' : 'rw',
-                 'select_variable' : 'allQuotingStyles'},
+        {'id': 'dsn', 'type': 'string', 'mode': 'rw', },
+        {'id': 'title', 'type': 'string', 'mode': 'rw'},
+        {'id': 'encoding', 'type': 'string', 'mode': 'rw'},
+        {'id': 'transactional', 'type': 'boolean', 'mode': 'rw'},
+        {'id': 'convert_unicode', 'type': 'boolean', 'mode': 'rw'},
+        {'id': 'quoting_style', 'type': 'selection', 'mode': 'rw',
+                 'select_variable': 'allQuotingStyles'},
     )
-
 
     meta_type = 'SQLAlchemyDA '
     dsn = ''
@@ -103,14 +102,13 @@ class SAWrapper(SimpleItem, PropertyManager):
     quoting_style = 'standard'
     _isAnSQLConnection = True
     extra_engine_options = ()
-    
+
     security = ClassSecurityInfo()
 
     def __init__(self, id, title=''):
         self.id = id
         self.title = title
         register_da(self.id, self)
-
 
     def manage_afterAdd(self, item, container):
         """ Ensure that a new utility id is assigned after creating
@@ -119,28 +117,26 @@ class SAWrapper(SimpleItem, PropertyManager):
         self._new_utilid()
         return SimpleItem.manage_afterAdd(self, item, container)
 
-
     def _new_utilid(self):
         """ Assign a new unique utility ID """
         self.util_id = '%s.%s' % (time.time(), random.random())
-
 
     def allQuotingStyles(self):
         return ('standard', 'no-quote')
 
     @property
     def _wrapper(self):
-
         if self.dsn:
             try:
                 return getSAWrapper(self.util_id)
             except ValueError:
-                return createSAWrapper(self.dsn,
-                                       forZope=True,
-                                       transactional=self.transactional,
-                                       extension_options={'initial_state': 'invalidated'},
-                                       engine_options=self.engine_options,
-                                       name=self.util_id)
+                return createSAWrapper(
+                            self.dsn,
+                            forZope=True,
+                            transactional=self.transactional,
+                            extension_options={'initial_state': 'invalidated'},
+                            engine_options=self.engine_options,
+                            name=self.util_id)
         return None
 
     @property
@@ -176,7 +172,6 @@ class SAWrapper(SimpleItem, PropertyManager):
         else:
             return {}
 
-
     def _typesMap(self, proxy):
         """ Obtain types map from the underlying DB-API. I hope
             that is portable code.
@@ -186,7 +181,7 @@ class SAWrapper(SimpleItem, PropertyManager):
             dbapi = self._wrapper.engine.dialect.dbapi
 
             map = dict()
-            for name  in types_mapping.keys():
+            for name in types_mapping.keys():
                 type_obj = getattr(dbapi, name, None)
                 if type_obj:
                     if hasattr(type_obj, 'values'):
@@ -197,19 +192,16 @@ class SAWrapper(SimpleItem, PropertyManager):
                             for v in type_obj:
                                 map[v] = name
                         except TypeError:
-                            # ATT: fix this :->
+                            # ATT: fix this:->
                             pass
 
             self._v_types_map = map
         return self._v_types_map
 
-
     def query(self, query_string, max_rows=None, query_data=None):
         """ *The* query() method as used by the internal ZSQL
             machinery.
         """
-
-
         c = self._wrapper.connection
         cursor = c.cursor()
 
@@ -233,7 +225,8 @@ class SAWrapper(SimpleItem, PropertyManager):
                 nselects += 1
 
                 if nselects > 1:
-                    raise ValueError("Can't execute multiple SELECTs within a single query")
+                    raise ValueError("Can't execute multiple SELECTs "
+                                     "within a single query")
 
                 if max_rows:
                     rows = cursor.fetchmany(max_rows)
@@ -246,32 +239,29 @@ class SAWrapper(SimpleItem, PropertyManager):
         LOG.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
 
         if desc is None:
-            return [], []
+            return [], None
 
         items = []
-        for  name, type_code, width, internal_size, precision, scale, null_ok in desc:
-
-            items.append({'name' : name,
-                          'type' : types_mapping.get(types_map.get(type_code, None), 's'),
-                          'null' : null_ok,
-                          'width' : width,
-                         })
+        for name, type_code, width, internal_size, precision, scale, null_ok in desc:
+    
+            items.append(
+                    {'name': name,
+                    'type': types_mapping.get(types_map.get(type_code, None), 's'),
+                    'null': null_ok,
+                    'width': width,}) 
 
         return items, rows
 
-
     def __call__(self, *args, **kv):
-        return self
+        return self    
 
     def sql_quote__(self, s):
-
         if self.quoting_style == 'standard':
-            if "\'" in s:
+            if "\'" in s: 
                 s = "''".join(s.split("\'"))
             return "'%s'" % s
         else:
             return s
-
 
     security.declareProtected(view_management_screens, 'connected')
     def connected(self):
@@ -280,38 +270,35 @@ class SAWrapper(SimpleItem, PropertyManager):
         except:
             return 'n/a'
 
-
     security.declareProtected(view_management_screens, 'getPoolSize')
     def getPoolSize(self):
         """ """
-        return self._wrapper._engine.pool.size()
-
+        return self._wrapper._engine.pool.size() 
 
     security.declareProtected(view_management_screens, 'getCheckedin')
     def getCheckedin(self):
         """ """
         try:
-            return self._wrapper._engine.pool.checkedin()
+            return self._wrapper._engine.pool.checkedin() 
         except:
             return 'n/a'
-
-
 
     security.declareProtected(view_management_screens, 'manage_start')
     def manage_start(self, RESPONSE=None):
         """ start engine """
         try:
-            self.query('COMMIT');
+            self.query('COMMIT')
             if RESPONSE:
                 msg = 'Database connection opened'
-                RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
+                RESPONSE.redirect(self.absolute_url() +
+                              '/manage_workspace?manage_tabs_message=%s' % msg)
         except Exception, e:
             if RESPONSE:
                 msg = 'Database connection could not be opened (%s)' % e
-                RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
+                RESPONSE.redirect(self.absolute_url() +
+                              '/manage_workspace?manage_tabs_message=%s' % msg)
             else:
                 raise
-
 
     security.declareProtected(view_management_screens, 'manage_stop')
     def manage_stop(self, RESPONSE=None):
@@ -319,8 +306,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         self._wrapper._engine.pool.dispose()
         if RESPONSE:
             msg = 'Database connections closed'
-            RESPONSE.redirect(self.absolute_url() + '/manage_workspace?manage_tabs_message=%s' % msg)
-
+            RESPONSE.redirect(self.absolute_url() +
+                              '/manage_workspace?manage_tabs_message=%s' % msg)
 
     security.declareProtected(view_management_screens, 'manage_doQuery')
     def manage_doQuery(self, query):
@@ -339,15 +326,14 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'getVersion')
     def getVersion(self):
         """ return version.txt """
-        return open(os.path.join(os.path.dirname(__file__), 'version.txt')).read()
-
+        return open(os.path.join(os.path.dirname(__file__),
+                                 'version.txt')).read()
 
     security.declareProtected(view_management_screens, 'manage_editProperties')
     def manage_editProperties(self, REQUEST):
         """ Intercept changed properties in order to perform
             further actions.
         """
-
         try:
             # zope 2.10
             from zope.component import unregisterUtility
@@ -367,26 +353,26 @@ class SAWrapper(SimpleItem, PropertyManager):
 
         return super(SAWrapper, self).manage_editProperties(REQUEST)
 
-
-    manage_workspace = PageTemplateFile('pt/info', globals(), __name__='manage_workspace')
-    manage_test = PageTemplateFile('pt/query', globals(), __name__='manage_test')
+    manage_workspace = PageTemplateFile('pt/info', globals(),
+                                        __name__='manage_workspace')
+    manage_test = PageTemplateFile('pt/query', globals(),
+                                        __name__='manage_test')
 
 
 InitializeClass(SAWrapper)
 
 
-
 def manage_addSAWrapper(self, id, dsn, title, encoding='iso-8859-15',
                         convert_unicode=0, RESPONSE=None):
     """ create a new SAWrapper instance """
-
     wrapper = SAWrapper(id, title)
     wrapper.dsn = dsn
     wrapper.convert_unicode = convert_unicode
     wrapper.encoding = encoding
     self._setObject(id, wrapper.__of__(self))
     if RESPONSE:
-        return RESPONSE.redirect(self._getOb(id).absolute_url() + '/manage_workspace')
+        return RESPONSE.redirect(self._getOb(id).absolute_url()
+                                 + '/manage_workspace')
     else:
         return wrapper
 

@@ -7,21 +7,21 @@
 ##########################################################################
 
 import os
+
 try:
     import z3c.sqlalchemy
 except ImportError:
     raise ImportError('The z3c.sqlalchemy is not installed properly')
-
-from config import ADD_SA_WRAPPER_PERMISSION
-
+from .config import ADD_SA_WRAPPER_PERMISSION
 
 
 def initialize(context):
     from da import (SAWrapper, manage_addSAWrapper,
-                   manage_addSAWrapperForm)
+                    manage_addSAWrapperForm)
     from Shared.DC import ZRDB
 
-    icon_path = os.path.join(os.path.dirname(ZRDB.__file__), 'www', 'DBAdapterFolder_icon.gif')
+    icon_path = os.path.join(os.path.dirname(ZRDB.__file__), 'www',
+                             'DBAdapterFolder_icon.gif')
     context.registerClass(SAWrapper,
                           constructors=(manage_addSAWrapperForm,
                                         manage_addSAWrapper),

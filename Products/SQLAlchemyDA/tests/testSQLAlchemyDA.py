@@ -69,11 +69,11 @@ class SQLAlchemyDATests(TestBase):
 
     def testSimpleInsert(self):
         da = self.createDA()
-        rows = da.query("insert into test (id, text) values(42, 'foo')")
+        da.query("insert into test (id, text) values(42, 'foo')")
 
     def testSimpleUpdate(self):
         da = self.createDA()
-        rows = da.query("update test set text='bar'")
+        da.query("update test set text='bar'")
 
     def testExtraEngineOptions(self):
         da = self.createDA()
@@ -93,23 +93,23 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         self.session = wrapper.session
 
     def testZsqlInsertWithCommit(self):
-        da = self.createDA()
+        self.createDA()
         template = "INSERT INTO test (id, text) VALUES (07, 'bar')"
         manage_addZSQLMethod(self.app, 'zsql_id', 'title', 'da', '', template)
         self.app['zsql_id']()
         self.publish(self.folder_path)
         rows = self.session.query(Test).all()
         self.assertEqual(len(rows), 1)
-        
+
     def testZsqlInsertWithRollback(self):
-        da = self.createDA()
+        self.createDA()
         template = "INSERT INTO test (id, text) VALUES (07, 'bar')"
         manage_addZSQLMethod(self.app, 'zsql_id', 'title', 'da', '', template)
         self.app['zsql_id']()
         transaction.abort()
         rows = self.session.query(Test).all()
         self.assertEqual(len(rows), 0)
-        
+
     def testORMInsertWithCommit(self):
         t1 = Test(id=8, utext=u'Hello world', text='hello world')
         t2 = Test(id=9, utext=u'foo', text='far')
@@ -118,7 +118,7 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         self.publish(self.folder_path)
         rows = self.session.query(Test).all()
         self.assertEqual(len(rows), 2)
-        
+
     def testORMInsertWithRollback(self):
         t1 = Test(id=8, utext=u'Hello world', text='hello world')
         t2 = Test(id=9, utext=u'foo', text='far')
@@ -127,7 +127,7 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         transaction.abort()
         rows = self.session.query(Test).all()
         self.assertEqual(len(rows), 0)
-        
+
     def beforeTearDown(self):
         metadata.drop_all()
 
@@ -136,7 +136,7 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         registered_da = lookup_da('da')
         assert registered_da is da.aq_self
 
-    def test_lookup_da(self):
+    def test_lookup_da_wrapper(self):
         da = self.createDA()
         z3c_wrapper = lookup_zope_sa_wrapper('da')
         assert z3c_wrapper is da._wrapper
