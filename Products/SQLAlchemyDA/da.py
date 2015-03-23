@@ -64,8 +64,10 @@ def register_da(name, da_instance):
     This might be called early in Zope startup, so this type
     of registration is necessary instead of a zope.component registration.
     (The same reason z3c.sqlalchemy uses a module dict for registration)
+
+    Returns:
+        None
     """
-    global _da_registry
     _da_registry[name] = da_instance
 
 
