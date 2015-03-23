@@ -81,7 +81,7 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
     def afterSetUp(self):
         from z3c.sqlalchemy import createSAWrapper
         self.folder_path = '/' + self.folder.absolute_url(1)
-        self.dsn = os.environ.get('TEST_DSN', 'sqlite:///test')
+        self.dsn = os.environ.get('TEST_DSN', 'sqlite:///testdb')
         wrapper = createSAWrapper(self.dsn)
         metadata.bind = wrapper.engine
         metadata.create_all()

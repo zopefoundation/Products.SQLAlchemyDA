@@ -32,6 +32,8 @@ pip-log.txt
 # test cruft
 *_test
 .coverage
+# SQLite test db
+testdb
 
 # Sphinx cruft
 _build
