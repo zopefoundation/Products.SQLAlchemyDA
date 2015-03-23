@@ -33,11 +33,12 @@ mapper(Test, test_table)
 class TestBase(ZopeTestCase.ZopeTestCase):
 
     def createDA(self, **kw):
+        obj_id = kw.pop('id', 'da')
         factory = self.app.manage_addProduct['SQLAlchemyDA']
-        factory.manage_addSAWrapper(id='da', title='da',
+        factory.manage_addSAWrapper(id=obj_id, title='da',
                                     dsn=self.dsn,
                                     **kw)
-        return self.app['da']
+        return self.app[obj_id]
 
 
 class SQLAlchemyDATests(TestBase):
