@@ -285,21 +285,21 @@ class SAWrapper(SimpleItem, PropertyManager):
 
         items = []
         for name, type_code, width, internal_size, precision, scale, null_ok in desc:
-    
+
             items.append(
                     {'name': name,
                     'type': types_mapping.get(types_map.get(type_code, None), 's'),
                     'null': null_ok,
-                    'width': width,}) 
+                    'width': width, })
 
         return items, rows
 
     def __call__(self, *args, **kv):
-        return self    
+        return self
 
     def sql_quote__(self, s):
         if self.quoting_style == 'standard':
-            if "\'" in s: 
+            if "\'" in s:
                 s = "''".join(s.split("\'"))
             return "'%s'" % s
         else:
@@ -315,13 +315,13 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'getPoolSize')
     def getPoolSize(self):
         """ """
-        return self._wrapper._engine.pool.size() 
+        return self._wrapper._engine.pool.size()
 
     security.declareProtected(view_management_screens, 'getCheckedin')
     def getCheckedin(self):
         """ """
         try:
-            return self._wrapper._engine.pool.checkedin() 
+            return self._wrapper._engine.pool.checkedin()
         except:
             return 'n/a'
 
