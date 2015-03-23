@@ -71,6 +71,14 @@ def register_da(name, da_instance):
     _da_registry[name] = da_instance
 
 
+def deregister_da(name):
+    """
+    Remove a named `SAWrapper` instance from the DA registry, if it exists.
+    Either way, the return value is None.
+    """
+    _da_registry.pop(name, None)
+
+
 def lookup_da(name):
     """
     Look up and return an `SAWrapper` DA-ish instance registered by name.
