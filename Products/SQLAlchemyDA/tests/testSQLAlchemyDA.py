@@ -2,17 +2,13 @@
 Tests for SQLAlchemyDA
 """
 
-
 import sys
 import os
 import unittest
 from Testing import ZopeTestCase
 
 import transaction
-from Products.SQLAlchemyDA.da import (SAWrapper, lookup_da,
-                                      lookup_zope_sa_wrapper)
 from Products.ZSQLMethods.SQL import manage_addZSQLMethod
-from z3c.sqlalchemy import createSAWrapper
 from z3c.sqlalchemy.mapper import MappedClassBase
 from sqlalchemy import MetaData, Table, Column, Integer, String, Unicode
 from sqlalchemy.orm import mapper
@@ -47,6 +43,7 @@ class TestBase(ZopeTestCase.ZopeTestCase):
 class SQLAlchemyDATests(TestBase):
 
     def afterSetUp(self):
+        from z3c.sqlalchemy import createSAWrapper
 
         self.dsn = os.environ.get('TEST_DSN', 'sqlite:///test')
         wrapper = createSAWrapper(self.dsn)
@@ -81,6 +78,7 @@ class SQLAlchemyDATests(TestBase):
 class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
 
     def afterSetUp(self):
+        from z3c.sqlalchemy import createSAWrapper
         self.folder_path = '/' + self.folder.absolute_url(1)
         self.dsn = os.environ.get('TEST_DSN', 'sqlite:///test')
         wrapper = createSAWrapper(self.dsn)
