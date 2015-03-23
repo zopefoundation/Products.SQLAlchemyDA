@@ -89,8 +89,11 @@ def lookup_da(name):
     Returns:
         'SAWrapper' instance.
     """
-    global _da_registry
-    return _da_registry.get(name)
+    da = _da_registry.get(name)
+    if not da:
+        raise LookupError("No SAWrapper instance registered under name "
+                          + name)
+    return da
 
 
 def lookup_zope_sa_wrapper(name):
