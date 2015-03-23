@@ -124,17 +124,41 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         self.assertEqual(len(rows), 0)
 
     def beforeTearDown(self):
+        from Products.SQLAlchemyDA.da import clear_da_registry
+        clear_da_registry()
         metadata.drop_all()
 
     def test_lookup_da(self):
-        da = self.createDA()
+        from Products.SQLAlchemyDA.da import lookup_da
+        da = self.createDA(id='da')
         registered_da = lookup_da('da')
         assert registered_da is da.aq_self
 
+    def test_lookup_two_das(self):
+        from Products.SQLAlchemyDA.da import lookup_da
+        da1 = self.createDA(id='da1')
+        da2 = self.createDA(id='da2')
+        lookup_da1 = lookup_da('da1')
+        assert lookup_da1 is da1.aq_self
+        lookup_da2 = lookup_da('da2')
+        assert lookup_da2 is da2.aq_self
+
     def test_lookup_da_wrapper(self):
-        da = self.createDA()
+        from Products.SQLAlchemyDA.da import lookup_zope_sa_wrapper
+        da = self.createDA(id='da')
         z3c_wrapper = lookup_zope_sa_wrapper('da')
         assert z3c_wrapper is da._wrapper
+
+    def test_lookup_nonexistent_da_wrapper(self):
+        from Products.SQLAlchemyDA.da import lookup_zope_sa_wrapper
+        with self.assertRaises(LookupError):
+            lookup_zope_sa_wrapper('dada')
+
+    def test_deregister_nonexistent_da(self):
+        from Products.SQLAlchemyDA.da import lookup_da, deregister_da
+        # nonexistent deregistrations have no effect
+        deregister_da('yada-yada')
+        self.assertRaises(LookupError, lookup_da, 'yada-yada')
 
 
 def test_suite():
