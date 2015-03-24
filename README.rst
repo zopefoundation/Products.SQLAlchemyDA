@@ -6,8 +6,8 @@ About SQLAlchemyDA
 ------------------
 
 SQLAlchemyDA is a generic database adapter for Zope ZSQL methods, which are
-SQL templates generally used by legacy Zope2 applications for communicating
-with relational databases.
+an older/legacy SQL templating feature for executing relational database queries
+from with in a Zope to transaction context.
 
 SQLAlchemyDA provides an implementation in the form of a Zope2 "product" which
 wraps `z3c.sqlalchemy <https://pypi.python.org/pypi/zope.sqlalchemy>`_, so that
