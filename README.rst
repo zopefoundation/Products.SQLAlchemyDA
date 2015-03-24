@@ -10,12 +10,12 @@ SQL templates generally used by legacy Zope2 applications for communicating
 with relational databases.
 
 SQLAlchemyDA provides an implementation in the form of a Zope2 "product" which
-wraps `z3c.sqlalchemy`, so that database connections are installable as
-objects in the Zope2 ZMI. Such connection objects can be set up to connect to
-any kind of database backend supported by SQLAlchemy using a database URI,
-such as Postgres, MySQL, Oracle, SQLite, MS-SQL, Firebird, Informix. However,
-some of these database backends have not been tested with the SQLAlchemyDA, so
-your mileage may vary.
+wraps `z3c.sqlalchemy <https://pypi.python.org/pypi/zope.sqlalchemy>`_, so that
+database connections are installable as objects in the Zope2 ZMI. Such
+connection objects can be set up to connect to any kind of database backend
+supported by SQLAlchemy using a database URI, such as Postgres, MySQL, Oracle,
+SQLite, MS-SQL, Firebird, Informix. However, some of these database backends
+have not been tested with the SQLAlchemyDA, so your mileage may vary.
 
 In addition to ZSQL support, the SQLAlchemyDA makes it possible to use the
 standard SQLAlchemy API within a Zope2 context and participate in Zope
@@ -23,10 +23,9 @@ transactions.
 
 However, if you do not require ZSQL support, and only wish to call 'normal'
 SQLAlchemy APIs within Zope transactions, this package adds no value. Instead,
-you would be better off trying out `zope.sqlalchemy`, as recommended in
-the Zope2 Book:
-
-    http://docs.zope.org/zope2/zope2book/RelationalDatabases.html
+you would be better off trying out `zope.sqlalchemy`, as recommended in the
+`Zope2 book chapter on relational database
+connectivity <http://docs.zope.org/zope2/zope2book/RelationalDatabases.html>`_.
 
 
 Requirements:
