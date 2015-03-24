@@ -1,3 +1,23 @@
+CHANGELOG
+=========
+
+0.6.0 (2015-03-23)
+------------------
+
+- Added alternative lookup API to get a handle on SAWrapper instances.  To use
+  the new lookup mechanism, see Products.SQLAlchemyDA.da.py and look for the
+  function `lookup_da`. This was created to allow avoiding Zope Acquisition as
+  a lookup mechanism, and to work around the issue that the underlying
+  z3c.sqlalchemy `getSAWrapper` function is non-usable when created by the
+  SAWrapper DA. This is because API consumers have no access to the random 
+  internally generated name ('util_id' attribute) under which the utility
+  is registered...at least not without resorting to Acquisition calls.
+- Tested with SQLAlchemy 0.7.6, Zope 2.13, and Python 2.7.9, and SQLite.
+  Your mileage may vary with other databases and versions, but most likely
+  it will run with older versions of Zope and Python as old as 2.5 (running
+  tests requires at least Python 2.5). Newer versions of SQLAlchemy will be
+  tested for the next release.
+
 0.5.2 (unreleased)
 ------------------
 - Fixed LP #639597

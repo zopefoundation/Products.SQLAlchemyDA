@@ -13,10 +13,10 @@ CLASSIFIERS = [
     'Topic :: Database',
 ]
 
-version = '0.5.2.dev'
+version = '0.6.0.dev4'
 
-readme_file= os.path.join('Products', 'SQLAlchemyDA', 'README.txt')
-changes_file = os.path.join('Products', 'SQLAlchemyDA', 'CHANGES.txt')
+readme_file= 'README.rst'
+changes_file = 'CHANGES.rst'
 desc = open(readme_file).read().strip()
 changes = open(changes_file).read().strip()
 
@@ -29,8 +29,8 @@ setup(name='Products.SQLAlchemyDA',
       license='ZPL (see LICENSE.txt)',
       author='Andreas Jung',
       author_email='info@zopyx.com',
-      maintainer='Andreas Jung',
-      maintainer_email='info@zopyx.com',
+      maintainer='Sheila Allen',
+      maintainer_email='sallen@zeomega.com',
       classifiers=CLASSIFIERS,
       keywords='Zope2 Database adapter SQLAlchemy',
       url='http://opensource.zopyx.com/projects/SQLAlchemyDA',
