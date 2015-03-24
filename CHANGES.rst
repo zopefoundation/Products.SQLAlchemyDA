@@ -1,8 +1,10 @@
 CHANGELOG
 =========
 
-0.6.0 (2015-03-23)
-------------------
+0.6.0b (2015-03-23)
+-------------------
+
+Beta Release: If you try out this version, please provide feedback!
 
 - Added alternative lookup API to get a handle on SAWrapper instances.  To use
   the new lookup mechanism, see Products.SQLAlchemyDA.da.py and look for the
