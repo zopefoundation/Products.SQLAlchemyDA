@@ -13,9 +13,9 @@ CLASSIFIERS = [
     'Topic :: Database',
 ]
 
-version = '0.6.0.dev'
+version = '0.6.0.dev1'
 
-readme_file= os.path.join('Products', 'SQLAlchemyDA', 'README.txt')
+readme_file= 'README.rst'
 changes_file = os.path.join('Products', 'SQLAlchemyDA', 'CHANGES.txt')
 desc = open(readme_file).read().strip()
 changes = open(changes_file).read().strip()
