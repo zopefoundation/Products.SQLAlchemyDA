@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.6.0 (TBD)
------------
+0.6.0 (2015-03-23)
+------------------
 
 - Added alternative lookup API to get a handle on SAWrapper instances.  To use
   the new lookup mechanism, see Products.SQLAlchemyDA.da.py and look for the

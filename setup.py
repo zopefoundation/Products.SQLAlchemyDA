@@ -16,7 +16,7 @@ CLASSIFIERS = [
 version = '0.6.0.dev1'
 
 readme_file= 'README.rst'
-changes_file = os.path.join('Products', 'SQLAlchemyDA', 'CHANGES.txt')
+changes_file = 'CHANGES.rst'
 desc = open(readme_file).read().strip()
 changes = open(changes_file).read().strip()
 
