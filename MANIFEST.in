@@ -1,3 +1,5 @@
+recursive-include Products *.txt
+recursive-include Products *.zpt
 include *.rst
+include *.cfg
 include *.txt
-include *.zpt
