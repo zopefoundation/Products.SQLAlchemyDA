@@ -152,6 +152,17 @@ class SAWrapper(SimpleItem, PropertyManager):
         self.title = title
         register_da(self.id, self)
 
+    def __setstate__(self, *args, **kwargs):
+        """
+        When an instance of SAWrapper is unpickled, perform the normal
+        'wakeup', but also ensure that the instance is in the module
+        registry of instances.
+        """
+        # TODO: missing test coverage
+        # Don't use 'super' when old-style classes are involved.
+        SimpleItem.__setstate__(self, *args, **kwargs)
+        register_da(self, id)
+
     def manage_afterAdd(self, item, container):
         """ Ensure that a new utility id is assigned after creating
             or copying an instance.
