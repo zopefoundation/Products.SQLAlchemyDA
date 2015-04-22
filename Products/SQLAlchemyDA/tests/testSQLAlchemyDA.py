@@ -160,6 +160,15 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         deregister_da('yada-yada')
         self.assertRaises(LookupError, lookup_da, 'yada-yada')
 
+    def test_clear_da_registry(self):
+        from Products.SQLAlchemyDA.da import lookup_da, clear_da_registry 
+        da = self.createDA(id='ya-ya')
+        registered_da = lookup_da('ya-ya')
+        assert registered_da is da.aq_self
+        clear_da_registry()
+        with self.assertRaises(LookupError):
+            lookup_da('ya-ya')
+
 
 def test_suite():
     s = unittest.TestSuite()

@@ -113,9 +113,11 @@ def clear_da_registry():
     Completely empty out the registry of `SAWrapper` instances.
     """
     global _da_registry
+    _da_registry = {}
 
 
 class SAWrapper(SimpleItem, PropertyManager):
+
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
 
     # TODO document any special DA-ish hooks or places where Zope
