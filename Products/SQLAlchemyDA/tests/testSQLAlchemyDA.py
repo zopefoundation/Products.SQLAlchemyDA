@@ -75,6 +75,31 @@ class SQLAlchemyDATests(TestBase):
                                      ('pool_size', 20)))
         self.assertEqual(da.engine_options['pool_size'], 20)
 
+    @unittest.skip("Test under construction")
+    def testDeGhostify(self):
+        from persistent import GHOST
+        da = self.createDA(id='spam')
+        # The following comments are about trying to get the da object
+        # to "ghostify" so we can exercise it __setstate__ method
+        # but none of the examples from Persistent or ZODB tests
+        # seem to work with this
+        #del da._p_changed
+        #self.assertEqual(da._p_changed, None)
+        #self.assertEqual(da._p_state, GHOST)
+        #da._p_deactivate() # ghostify
+        from Products.SQLAlchemyDA.da import clear_da_registry, lookup_da
+        clear_da_registry()
+        with self.assertRaises(LookupError):
+            lookup_da('spam')
+        # this should unpickle the object from ZODB
+        assert da.id == 'spam'
+        # well, unpickling doesn't seem to really work automatically;
+        # let's call it directly
+        da.aq_self.__setstate__()
+        # registry should have regenerated upon call to unpickling __setstate__
+        looked_up_da = lookup_da('spam')
+        assert looked_up_da is da
+
 
 class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
 
