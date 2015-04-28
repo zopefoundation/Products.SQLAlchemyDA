@@ -163,7 +163,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         # TODO: missing test coverage
         # Don't use 'super' when old-style classes are involved.
         SimpleItem.__setstate__(self, *args, **kwargs)
-        register_da(self, id)
+        register_da(self.id, self)
 
     def manage_afterAdd(self, item, container):
         """ Ensure that a new utility id is assigned after creating
