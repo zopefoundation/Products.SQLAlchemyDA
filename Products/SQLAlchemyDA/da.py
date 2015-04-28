@@ -10,6 +10,7 @@ import os
 import logging
 import random
 import time
+from threading import local
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -39,8 +40,26 @@ types_mapping = {
 }
 
 
-# Global registry of named SQLAlchemyDA instances
-_da_registry = {}
+
+class ThreadLocalDaRegistry(local):
+    """Factory for thread local registry of named SQLAlchemyDA instances"""
+    da_pool = {}
+
+    def __getitem__(self, key):
+        return self.da_pool[key]
+
+    def __setitem__(self, key, value):
+        self.da_pool[key] = value
+
+    def get(self, key, default=None):
+        try:
+            return self.da_pool[key]
+        except IndexError:
+            return default
+
+
+# global registry of named SQLAlchemyDA instances
+_da_registry = ThreadLocalDaRegistry()
 
 
 def register_da(name, da_instance):
@@ -91,8 +110,8 @@ def lookup_da(name):
     """
     da = _da_registry.get(name)
     if not da:
-        raise LookupError("No SAWrapper instance registered under name "
-                          + name)
+        raise LookupError("No SAWrapper instance registered under name %s"
+                          % name)
     return da
 
 
