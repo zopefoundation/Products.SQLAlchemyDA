@@ -1,13 +1,13 @@
 CHANGELOG
 =========
 
-0.6.0b6 (2015-04-27)
+0.6.0b7 (2015-04-27)
 --------------------
 
 This is a more stable beta, with several fixes. It has been tested
 with SQLAlchemy 0.9.8, Zope2.13, and Python 2.7.9.
 
-Fixes from beta 1-6 include:
+Fixes from beta 1-7 include:
 
 - Manifest now includes the .rst, .txt, and .zpt files required
   for installation via ZMI in Zope2.
@@ -15,10 +15,12 @@ Fixes from beta 1-6 include:
   Zope restarts; now the registry populates when the DA instance
   unpickles. (TODO: needs test coverage; this feature is not
   as robust as it could be, since the registry could be
-  called before unpickling). UPDATE for beta 6: Still no
+  called before unpickling). UPDATE for beta 7: Still no
   test coverage, but after manual testing fixed bug with
   switched key and values in registry.
 - Added a new `clear_da_registry` to support test teardown.
+- NOTE: Beta6 release was taken from the wrong branch,
+  and contained experimental untested code. DO not use beta6.
 
 Some non-public patches to support MSSQL have been tested; please inquire if
 interested in having them merged to public code.
