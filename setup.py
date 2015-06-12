@@ -3,8 +3,7 @@
 # (C) 2008, ZOPYX Ltd & Co. KG, Tuebingen, Germany
 ##########################################################################
 
-import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 CLASSIFIERS = [
@@ -15,14 +14,15 @@ CLASSIFIERS = [
 
 version = '0.6.0b7'
 
-readme_file= 'README.rst'
+readme_file = 'README.rst'
 changes_file = 'CHANGES.rst'
 desc = open(readme_file).read().strip()
 changes = open(changes_file).read().strip()
 
-long_description = desc  + "\n\nCHANGES\n=======\n\n" + changes
+long_description = desc + "\n\nCHANGES\n=======\n\n" + changes
 
-#print long_description
+print(long_description)
+
 
 setup(name='Products.SQLAlchemyDA',
       version=version,
@@ -37,7 +37,7 @@ setup(name='Products.SQLAlchemyDA',
       description='A generic database adapter for Zope 2',
       long_description=long_description,
       packages=['Products', 'Products.SQLAlchemyDA'],
-      include_package_data = True,
+      include_package_data=True,
       zip_safe=False,
       install_requires=['setuptools', 'z3c.sqlalchemy'],
       extras_require={'test': ['Zope2', 'Products.ZSQLMethods']},
