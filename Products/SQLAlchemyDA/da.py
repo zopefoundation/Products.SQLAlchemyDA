@@ -39,14 +39,16 @@ types_mapping = {
 }
 
 
-# Global registry of named SQLAlchemyDA instances
-_da_registry = {}
+# Global registry of named Zope SQLAlchemyDA instances created to
+# work around unique anonymous/random names assigned to such wrappers
+# by the legacy DA code
+_wrapper_registry = {}
 
 
-def register_da(name, da_instance):
+def register_sa_wrapper(name, wrapper):
     """
-    Register an SQLAlchemy database adapter by name as part of a module
-    level dict.
+    Register an SQLAlchemy `ZopeWrapper` database adapter by name as part of a
+    module level dict.
 
     Args:
         name(str): a globally unique name for the given `da_instance`). This
@@ -58,30 +60,31 @@ def register_da(name, da_instance):
                    object ids. An error will not be raised, to prevent problems
                    for the majority of users who don't make use of this
                    registration API (and use Acquisition instead).
-        da_instance(`SAWrapper`): a configured instance of
-                                  `Products.SQLAlchemyDA.SAWrapper`
+        wrapper(`SAWrapper`): a configured instance of
+                              `z3c.sqlalchemy.ZopeWrapper`
 
-    This might be called early in Zope startup, so this type
-    of registration is necessary instead of a zope.component registration.
-    (The same reason z3c.sqlalchemy uses a module dict for registration)
+    This might be called early in Zope startup, so this type of registration is
+    necessary instead of a zope.component registration.  (The same reason
+    z3c.sqlalchemy claims for using a module dict for registration)
 
     Returns:
         None
     """
-    _da_registry[name] = da_instance
+    _wrapper_registry[name] = wrapper
 
 
-def deregister_da(name):
+def deregister_sa_wrapper(name):
     """
     Remove a named `SAWrapper` instance from the DA registry, if it exists.
     Either way, the return value is None.
     """
-    _da_registry.pop(name, None)
+    _wrapper_registry.pop(name, None)
 
 
-def lookup_da(name):
+def lookup_sa_wrapper(name):
     """
-    Look up and return an `SAWrapper` DA-ish instance registered by name.
+    Look up and return an `z3c.sqlalchemy.ZopeWrapper` instance registered by
+    name.
 
     These instances are registered by the `SAWrapper` during initialization
     of `ZopeWrapper` instances.
@@ -89,31 +92,19 @@ def lookup_da(name):
     Returns:
         'SAWrapper' instance.
     """
-    da = _da_registry.get(name)
+    da = _wrapper_registry.get(name)
     if not da:
         raise LookupError("No SAWrapper instance registered under name "
                           + name)
     return da
 
 
-def lookup_zope_sa_wrapper(name):
-    """
-    Look up and return a `z3c.sqlalchemy.ZopeWrapper` instance by name.
-
-    This is done by finding the `ZopeWrapper` instance associated with
-    the named `SAWrapper` instance.
-    """
-    da = lookup_da(name)
-    if da:
-        return da._wrapper
-
-
-def clear_da_registry():
+def clear_sa_wrapper_registry():
     """
     Completely empty out the registry of `SAWrapper` instances.
     """
-    global _da_registry
-    _da_registry = {}
+    global _wrapper_registry
+    _wrapper_registry = {}
 
 
 class SAWrapper(SimpleItem, PropertyManager):
@@ -152,7 +143,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     def __init__(self, id, title=''):
         self.id = id
         self.title = title
-        register_da(self.id, self)
+        register_sa_wrapper(self.id, self)
 
     def __setstate__(self, *args, **kwargs):
         """
@@ -160,10 +151,9 @@ class SAWrapper(SimpleItem, PropertyManager):
         'wakeup', but also ensure that the instance is in the module
         registry of instances.
         """
-        # TODO: missing test coverage
         # Don't use 'super' when old-style classes are involved.
         SimpleItem.__setstate__(self, *args, **kwargs)
-        register_da(self.id, self)
+        register_sa_wrapper(self.id, self)
 
     def manage_afterAdd(self, item, container):
         """ Ensure that a new utility id is assigned after creating

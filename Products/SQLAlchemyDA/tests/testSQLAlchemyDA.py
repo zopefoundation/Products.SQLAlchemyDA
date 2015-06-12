@@ -77,27 +77,17 @@ class SQLAlchemyDATests(TestBase):
 
     @unittest.skip("Test under construction")
     def testDeGhostify(self):
-        from persistent import GHOST
         da = self.createDA(id='spam')
-        # The following comments are about trying to get the da object
-        # to "ghostify" so we can exercise it __setstate__ method
-        # but none of the examples from Persistent or ZODB tests
-        # seem to work with this
-        #del da._p_changed
-        #self.assertEqual(da._p_changed, None)
-        #self.assertEqual(da._p_state, GHOST)
-        #da._p_deactivate() # ghostify
-        from Products.SQLAlchemyDA.da import clear_da_registry, lookup_da
+        from Products.SQLAlchemyDA.da import clear_da_registry, lookup_sa_wrapper
         clear_da_registry()
+        # ensure registry is clear
         with self.assertRaises(LookupError):
-            lookup_da('spam')
-        # this should unpickle the object from ZODB
-        assert da.id == 'spam'
+            lookup_sa_wrapper('spam')
         # well, unpickling doesn't seem to really work automatically;
         # let's call it directly
-        da.aq_self.__setstate__()
+        da.aq_self.__setstate__(da.__dict__)
         # registry should have regenerated upon call to unpickling __setstate__
-        looked_up_da = lookup_da('spam')
+        looked_up_da = lookup_sa_wrapper('spam')
         assert looked_up_da is da
 
 
@@ -153,46 +143,40 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         clear_da_registry()
         metadata.drop_all()
 
-    def test_lookup_da(self):
-        from Products.SQLAlchemyDA.da import lookup_da
+    def test_lookup_sa_wrapper(self):
+        from Products.SQLAlchemyDA.da import lookup_sa_wrapper
         da = self.createDA(id='da')
-        registered_da = lookup_da('da')
-        assert registered_da is da.aq_self
+        wrapper = lookup_sa_wrapper('da')
+        assert wrapper is da._wrapper
 
-    def test_lookup_two_das(self):
-        from Products.SQLAlchemyDA.da import lookup_da
+    def test_lookup_two_sa_wrappers(self):
+        from Products.SQLAlchemyDA.da import lookup_sa_wrapper
         da1 = self.createDA(id='da1')
         da2 = self.createDA(id='da2')
-        lookup_da1 = lookup_da('da1')
-        assert lookup_da1 is da1.aq_self
-        lookup_da2 = lookup_da('da2')
-        assert lookup_da2 is da2.aq_self
+        wrapper1 = lookup_sa_wrapper('da1')
+        assert wrapper1 is da1._wrapper
+        wrapper2 = lookup_sa_wrapper('da2')
+        assert wrapper2 is da2._wrapper
 
-    def test_lookup_da_wrapper(self):
-        from Products.SQLAlchemyDA.da import lookup_zope_sa_wrapper
-        da = self.createDA(id='da')
-        z3c_wrapper = lookup_zope_sa_wrapper('da')
-        assert z3c_wrapper is da._wrapper
-
-    def test_lookup_nonexistent_da_wrapper(self):
-        from Products.SQLAlchemyDA.da import lookup_zope_sa_wrapper
+    def test_lookup_nonexistent_sa_wrapper(self):
+        from Products.SQLAlchemyDA.da import lookup_sa_wrapper
         with self.assertRaises(LookupError):
-            lookup_zope_sa_wrapper('dada')
+            lookup_sa_wrapper('dada')
 
     def test_deregister_nonexistent_da(self):
-        from Products.SQLAlchemyDA.da import lookup_da, deregister_da
+        from Products.SQLAlchemyDA.da import lookup_sa_wrapper, deregister_sa_wrapper
         # nonexistent deregistrations have no effect
-        deregister_da('yada-yada')
-        self.assertRaises(LookupError, lookup_da, 'yada-yada')
+        deregister_sa_wrapper('yada-yada')
+        self.assertRaises(LookupError, lookup_sa_wrapper, 'yada-yada')
 
     def test_clear_da_registry(self):
-        from Products.SQLAlchemyDA.da import lookup_da, clear_da_registry 
+        from Products.SQLAlchemyDA.da import lookup_sa_wrapper, clear_sa_registry
         da = self.createDA(id='ya-ya')
-        registered_da = lookup_da('ya-ya')
-        assert registered_da is da.aq_self
-        clear_da_registry()
+        wrapper = lookup_sa_wrapper('ya-ya')
+        assert wrapper is da._wrapper
+        clear_sa_registry()
         with self.assertRaises(LookupError):
-            lookup_da('ya-ya')
+            lookup_sa_wrapper('ya-ya')
 
 
 def test_suite():
