@@ -143,7 +143,6 @@ class SAWrapper(SimpleItem, PropertyManager):
     def __init__(self, id, title=''):
         self.id = id
         self.title = title
-        register_sa_wrapper(self.id, self)
 
     def __setstate__(self, *args, **kwargs):
         """
@@ -153,13 +152,14 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
         # Don't use 'super' when old-style classes are involved.
         SimpleItem.__setstate__(self, *args, **kwargs)
-        register_sa_wrapper(self.id, self)
+        register_sa_wrapper(self.id, self._wrapper)
 
     def manage_afterAdd(self, item, container):
         """ Ensure that a new utility id is assigned after creating
             or copying an instance.
         """
         self._new_utilid()
+        register_sa_wrapper(self.id, self._wrapper)
         return SimpleItem.manage_afterAdd(self, item, container)
 
     def _new_utilid(self):
@@ -175,13 +175,15 @@ class SAWrapper(SimpleItem, PropertyManager):
             try:
                 return getSAWrapper(self.util_id)
             except ValueError:
-                return createSAWrapper(
+                wrapper = createSAWrapper(
                             self.dsn,
                             forZope=True,
                             transactional=self.transactional,
                             extension_options={'initial_state': 'invalidated'},
                             engine_options=self.engine_options,
                             name=self.util_id)
+                register_sa_wrapper(self.id, wrapper)
+                return wrapper
         return None
 
     @property
@@ -414,6 +416,7 @@ def manage_addSAWrapper(self, id, dsn, title, encoding='iso-8859-15',
     wrapper.dsn = dsn
     wrapper.convert_unicode = convert_unicode
     wrapper.encoding = encoding
+    # this will call manage_afterAdd
     self._setObject(id, wrapper.__of__(self))
     if RESPONSE:
         return RESPONSE.redirect(self._getOb(id).absolute_url()

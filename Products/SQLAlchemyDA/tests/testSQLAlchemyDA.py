@@ -78,8 +78,8 @@ class SQLAlchemyDATests(TestBase):
     @unittest.skip("Test under construction")
     def testDeGhostify(self):
         da = self.createDA(id='spam')
-        from Products.SQLAlchemyDA.da import clear_da_registry, lookup_sa_wrapper
-        clear_da_registry()
+        from Products.SQLAlchemyDA.da import clear_sa_wrapper_registry, lookup_sa_wrapper
+        clear_sa_wrapper_registry()
         # ensure registry is clear
         with self.assertRaises(LookupError):
             lookup_sa_wrapper('spam')
@@ -139,12 +139,13 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         self.assertEqual(len(rows), 0)
 
     def beforeTearDown(self):
-        from Products.SQLAlchemyDA.da import clear_da_registry
-        clear_da_registry()
+        from Products.SQLAlchemyDA.da import clear_sa_wrapper_registry
+        clear_sa_wrapper_registry()
         metadata.drop_all()
 
     def test_lookup_sa_wrapper(self):
         from Products.SQLAlchemyDA.da import lookup_sa_wrapper
+        #import pdb; pdb.set_trace()
         da = self.createDA(id='da')
         wrapper = lookup_sa_wrapper('da')
         assert wrapper is da._wrapper
@@ -169,12 +170,12 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         deregister_sa_wrapper('yada-yada')
         self.assertRaises(LookupError, lookup_sa_wrapper, 'yada-yada')
 
-    def test_clear_da_registry(self):
-        from Products.SQLAlchemyDA.da import lookup_sa_wrapper, clear_sa_registry
+    def test_clear_sa_wrapper_registry(self):
+        from Products.SQLAlchemyDA.da import lookup_sa_wrapper, clear_sa_wrapper_registry
         da = self.createDA(id='ya-ya')
         wrapper = lookup_sa_wrapper('ya-ya')
         assert wrapper is da._wrapper
-        clear_sa_registry()
+        clear_sa_wrapper_registry()
         with self.assertRaises(LookupError):
             lookup_sa_wrapper('ya-ya')
 
