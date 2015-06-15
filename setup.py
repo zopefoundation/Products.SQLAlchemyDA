@@ -12,7 +12,7 @@ CLASSIFIERS = [
     'Topic :: Database',
 ]
 
-version = '0.6.0b7'
+version = '0.6.1b1'
 
 readme_file = 'README.rst'
 changes_file = 'CHANGES.rst'
