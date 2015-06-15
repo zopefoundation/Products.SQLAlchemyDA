@@ -314,7 +314,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     def connected(self):
         try:
             return self._wrapper._engine.pool.checkedin() > 0
-        except:
+        except Exception:
             return 'n/a'
 
     security.declareProtected(view_management_screens, 'getPoolSize')
@@ -327,7 +327,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ """
         try:
             return self._wrapper._engine.pool.checkedin()
-        except:
+        except Exception:
             return 'n/a'
 
     security.declareProtected(view_management_screens, 'manage_start')
@@ -394,7 +394,7 @@ class SAWrapper(SimpleItem, PropertyManager):
                 s = zapi.getGlobalServices().getService(Utilities)
                 s.register((), ISQLAlchemyWrapper, self.util_id, None)
                 self._new_utilid()
-            except:
+            except Exception:
                 # Zope 2.9 ATT: fix this
                 self._new_utilid()
 
