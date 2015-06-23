@@ -116,10 +116,10 @@ class SAWrapper(SimpleItem, PropertyManager):
     #      automatically makes calls, or at least link to docs on
     #      what makes it DA-ish. Is there a documented protocol?
 
-    manage_options = ({'label': 'Info', 'action': 'manage_workspace'},) +\
-                     ({'label': 'Test', 'action': 'manage_test'},) + \
-                     PropertyManager.manage_options + \
-                     SimpleItem.manage_options
+    manage_options = (({'label': 'Info', 'action': 'manage_workspace'},) +
+                      ({'label': 'Test', 'action': 'manage_test'},) +
+                      PropertyManager.manage_options +
+                      SimpleItem.manage_options)
     _properties = (
         {'id': 'dsn', 'type': 'string', 'mode': 'rw', },
         {'id': 'title', 'type': 'string', 'mode': 'rw'},
@@ -127,7 +127,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         {'id': 'transactional', 'type': 'boolean', 'mode': 'rw'},
         {'id': 'convert_unicode', 'type': 'boolean', 'mode': 'rw'},
         {'id': 'quoting_style', 'type': 'selection', 'mode': 'rw',
-                 'select_variable': 'allQuotingStyles'},
+               'select_variable': 'allQuotingStyles'},
     )
 
     meta_type = 'SQLAlchemyDA '
@@ -354,11 +354,10 @@ class SAWrapper(SimpleItem, PropertyManager):
         items = []
         for name, type_code, width, internal_size, precision, scale, null_ok in desc:
 
-            items.append(
-                    {'name': name,
-                    'type': types_mapping.get(types_map.get(type_code, None), 's'),
-                    'null': null_ok,
-                    'width': width, })
+            items.append({'name': name,
+                          'type': types_mapping.get(types_map.get(type_code, None), 's'),
+                          'null': null_ok,
+                          'width': width, })
 
         return items, rows
 
