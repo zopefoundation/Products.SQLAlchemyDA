@@ -171,6 +171,22 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     @property
     def _wrapper(self):
+        """
+        Legacy API for accessing the underlying z3c.sqlalchemy `ZopeWrapper`.
+
+        This API should no longer be used because:
+
+            1. Python property decorators can interfere with acquisition context
+            2. It's not really private so is misnamed.
+
+        Instead use self.sa_zope_wrapper
+        """
+        return self.sa_zope_wrapper()
+
+    def sa_zope_wrapper(self):
+        """
+        Public API for accessing the underlying z3c.sqlalchemy `ZopeWrapper`.
+        """
         if self.dsn:
             try:
                 return getSAWrapper(self.util_id)
