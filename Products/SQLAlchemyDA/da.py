@@ -10,6 +10,7 @@ import os
 import logging
 import random
 import time
+import warnings
 
 from Globals import InitializeClass
 from AccessControl import ClassSecurityInfo
@@ -22,7 +23,7 @@ from z3c.sqlalchemy import getSAWrapper, createSAWrapper
 from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
 
 
-LOG = logging.getLogger('SQLAlchemyDA')
+logger = logging.getLogger('SQLAlchemyDA')
 
 # maps Python DB-API types to Zope types
 types_mapping = {
@@ -152,14 +153,18 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
         # Don't use 'super' when old-style classes are involved.
         SimpleItem.__setstate__(self, *args, **kwargs)
-        register_sa_wrapper(self.id, self._wrapper)
+        wrapper = self.sa_zope_wrapper()
+        if wrapper:
+            register_sa_wrapper(self.id, wrapper)
 
     def manage_afterAdd(self, item, container):
         """ Ensure that a new utility id is assigned after creating
             or copying an instance.
         """
         self._new_utilid()
-        register_sa_wrapper(self.id, self._wrapper)
+        wrapper = self.sa_zope_wrapper()
+        if wrapper:
+            register_sa_wrapper(self.id, wrapper)
         return SimpleItem.manage_afterAdd(self, item, container)
 
     def _new_utilid(self):
@@ -181,23 +186,65 @@ class SAWrapper(SimpleItem, PropertyManager):
 
         Instead use self.sa_zope_wrapper
         """
+        # can't use deprecation decorator, due to interference with acquisition context
+        warnings.warn("SAWrapper._wrapper deprecated; instead call SAWrapper.sa_zope_wrapper()",
+                      DeprecationWarning)
         return self.sa_zope_wrapper()
 
     def sa_zope_wrapper(self):
         """
         Public API for accessing the underlying z3c.sqlalchemy `ZopeWrapper`.
+
+        The first attempt will be to lookup the wrapper via attributes
+        accessible in the Zope context (self.util_id); if it does not exist,
+        the wrapper will be created and return.
+
+        If Zope acquisition context has been lost, fall back to the module
+        dict registration mechanism (which might not always be available
+        very early in the startup process, but should be available most
+        other times).
+        """
+        wrapper = self._supply_z3c_sa_wrapper()
+        if wrapper is not None:
+            return wrapper
+        else:
+            # we've got trouble; log relevant info and fallback on module dict registration
+            selftype = type(self)
+            try:
+                # don't reveal DSN contents in a log file
+                dsn = 'nonempty' if self.dsn else self.dsn
+            except AttributeError:
+                dsn = 'AttributeError'
+            try:
+                util_id = self.util_id
+            except AttributeError:
+                util_id = 'AttributeError'
+            msg = ("SAWrapper failed to get a handle to live connection.\n"
+                   "Did we lose Acquisition context? type(self) is %s.\n"
+                   "The self.dsn is %s and self.util_id is %s.")
+            logger.exception(msg, (selftype, dsn, util_id))
+            # Now that we've logged what we need, try recovering by using
+            # the module dict lookup.
+            try:
+                return lookup_sa_wrapper(self.id)
+            except LookupError:
+                # no such luck
+                return None
+
+    def _supply_z3c_sa_wrapper(self):
+        """
+        Look up or create the underlying z3c.sqlalchemy `ZopeWrapper`.
         """
         if self.dsn:
             try:
                 return getSAWrapper(self.util_id)
             except ValueError:
-                wrapper = createSAWrapper(
-                            self.dsn,
-                            forZope=True,
-                            transactional=self.transactional,
-                            extension_options={'initial_state': 'invalidated'},
-                            engine_options=self.engine_options,
-                            name=self.util_id)
+                wrapper = createSAWrapper(self.dsn,
+                                          forZope=True,
+                                          transactional=self.transactional,
+                                          extension_options={'initial_state': 'invalidated'},
+                                          engine_options=self.engine_options,
+                                          name=self.util_id)
                 register_sa_wrapper(self.id, wrapper)
                 return wrapper
         return None
@@ -224,10 +271,10 @@ class SAWrapper(SimpleItem, PropertyManager):
     def getInfo(self):
         """ return a dict with additional information """
 
-        wrapper = self._wrapper
+        wrapper = self.sa_zope_wrapper()
         if wrapper is not None:
-            d = self._wrapper.__dict__.copy()
-            d['DSN'] = self._wrapper.dsn
+            d = self.sa_zope_wrapper().__dict__.copy()
+            d['DSN'] = self.sa_zope_wrapper().dsn
             for k in d.keys()[:]:
                 if k.startswith('_'):
                     del d[k]
@@ -241,7 +288,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
 
         if not hasattr(self, '_v_types_map'):
-            dbapi = self._wrapper.engine.dialect.dbapi
+            dbapi = self.sa_zope_wrapper().engine.dialect.dbapi
 
             map = dict()
             for name in types_mapping.keys():
@@ -265,8 +312,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ *The* query() method as used by the internal ZSQL
             machinery.
         """
-        c = self._wrapper.connection
-        cursor = c.cursor()
+        conn = self.sa_zope_wrapper().connection
+        cursor = conn.cursor()
 
         rows = []
         desc = None
@@ -276,7 +323,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
         for qs in [x for x in query_string.split('\0') if x]:
 
-            LOG.debug(qs)
+            logger.debug(qs)
             if query_data:
                 proxy = cursor.execute(qs, query_data)
             else:
@@ -299,7 +346,7 @@ class SAWrapper(SimpleItem, PropertyManager):
                 desc = description
                 types_map = self._typesMap(proxy)
 
-        LOG.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
+        logger.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
 
         if desc is None:
             return [], None
@@ -329,20 +376,20 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'connected')
     def connected(self):
         try:
-            return self._wrapper._engine.pool.checkedin() > 0
+            return self.sa_zope_wrapper()._engine.pool.checkedin() > 0
         except Exception:
             return 'n/a'
 
     security.declareProtected(view_management_screens, 'getPoolSize')
     def getPoolSize(self):
         """ """
-        return self._wrapper._engine.pool.size()
+        return self.sa_zope_wrapper()._engine.pool.size()
 
     security.declareProtected(view_management_screens, 'getCheckedin')
     def getCheckedin(self):
         """ """
         try:
-            return self._wrapper._engine.pool.checkedin()
+            return self.sa_zope_wrapper()._engine.pool.checkedin()
         except Exception:
             return 'n/a'
 
@@ -366,7 +413,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'manage_stop')
     def manage_stop(self, RESPONSE=None):
         """ close engine """
-        self._wrapper._engine.pool.dispose()
+        self.sa_zope_wrapper()._engine.pool.dispose()
         if RESPONSE:
             msg = 'Database connections closed'
             RESPONSE.redirect(self.absolute_url() +

@@ -3,6 +3,7 @@ Tests for SQLAlchemyDA
 """
 
 import sys
+import copy
 import os
 import unittest
 from Testing import ZopeTestCase
@@ -75,20 +76,29 @@ class SQLAlchemyDATests(TestBase):
                                      ('pool_size', 20)))
         self.assertEqual(da.engine_options['pool_size'], 20)
 
-    @unittest.skip("Test under construction")
     def testDeGhostify(self):
         da = self.createDA(id='spam')
         from Products.SQLAlchemyDA.da import clear_sa_wrapper_registry, lookup_sa_wrapper
+        wrapper = lookup_sa_wrapper('spam')
+        assert wrapper
         clear_sa_wrapper_registry()
         # ensure registry is clear
         with self.assertRaises(LookupError):
             lookup_sa_wrapper('spam')
-        # well, unpickling doesn't seem to really work automatically;
-        # let's call it directly
-        da.aq_self.__setstate__(da.__dict__)
+        # call unpickling code directly, to simulate restoring from ZODB
+        fake_pickle_input = copy.deepcopy(da.__dict__)
+        assert da.dsn
+        da.aq_self.__setstate__(fake_pickle_input)
+        assert da.dsn
         # registry should have regenerated upon call to unpickling __setstate__
-        looked_up_da = lookup_sa_wrapper('spam')
-        assert looked_up_da is da
+        looked_up_wrapper = lookup_sa_wrapper('spam')
+        assert looked_up_wrapper is da._supply_z3c_sa_wrapper()
+
+    def test_supply_z3c_sa_wrapper(self):
+        da = self.createDA(id='spam')
+        wrapper = da._supply_z3c_sa_wrapper()
+        from z3c.sqlalchemy.base import ZopeWrapper
+        assert type(wrapper) is ZopeWrapper
 
 
 class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
@@ -145,7 +155,6 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
 
     def test_lookup_sa_wrapper(self):
         from Products.SQLAlchemyDA.da import lookup_sa_wrapper
-        #import pdb; pdb.set_trace()
         da = self.createDA(id='da')
         wrapper = lookup_sa_wrapper('da')
         assert wrapper is da._wrapper
