@@ -1,6 +1,29 @@
 CHANGELOG
 =========
 
+
+0.6.2b1 (2015-06-23)
+--------------------
+
+Added public API for use within Zope acquisition context to access
+the underlying zc3.sqlalchemy `ZopeWrapper` instance, with added
+error handling and logging to deal with situations where Zope
+context may have been lost.
+
+Tests now assume a testrunner such as nose or py.test, and
+testfixtures has been added as a testing dependency.
+
+
+0.6.1b1 (2015-06-19)
+--------------------
+
+Improved safety of non-acquisition public API by making registry no longer
+contain Zope Persistent objects; instead storing and returning only the
+underlying zc3.sqlalchemy `ZopeWrapper` instances. These objects
+are plain Python objects in memory with no Persistent connection to ZODB.
+(Thanks to Tres Seaver for the suggestion!)
+
+
 0.6.0b7 (2015-04-27)
 --------------------
 

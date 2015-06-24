@@ -35,31 +35,33 @@ Requirements:
 - SQLAlchemy >= 0.5.0 (+ database specific low-level Python drivers)
 - z3c.sqlalchemy >= 1.2.0
 
+Testing: py.test and testfixtures are needed to run tests.
+
 
 Installation:
 -------------
 
-- download and install SQLAlchemy as egg or from the sources
-  from Cheeseshop (easy_install sqlalchemy). See
+- Download and install SQLAlchemy as egg or from the sources
+  from PyPI (pip sqlalchemy). See
     
     http://www.sqlalchemy.org
 
     for details
 
-- download and install z3c.sqlalchemy as egg or from the sources 
-  from Cheeseshop (easy_install z3c.sqlalchemy). See
+- Download and install z3c.sqlalchemy as egg or from the sources 
+  from PyPI (pip z3c.sqlalchemy). See
 
-    http://cheeseshop.python.org/pypi/z3c.sqlalchemy/
+    http://pypi.python.org/pypi/z3c.sqlalchemy/
 
   for details.
 
-- unpack the archive containing SQLAlchemyDA inside the "Products"
+- Unpack the archive containing SQLAlchemyDA inside the "Products"
   directory of your Zope instance home.
 
-- after restarting Zope you go to the ZMI and create an instance of
+- After restarting Zope you go to the ZMI and create an instance of
   "SQLAlchemyDA" (as you would create some DA instance)
 
-- click on the new created SQLAlchemyDA instance within the ZMI
+- Click on the new created SQLAlchemyDA instance within the ZMI
   and configure your database connection through the "Properties" tab.
   The connection parameter 'dsn' must be specified as a valid SQLAlchemy DSN 
   like
@@ -114,6 +116,7 @@ Tested with databases:
 - Oracle 10g
 - MySQL is *only* supported for MySQL databases with transaction support.
   (see also z3c/sqlalchemy/README.txt)      
+- MSSQL 2008
  
 
 Known issues:
@@ -133,6 +136,9 @@ Author
 
 SQLAlchemyDA was written by Andreas Jung for Haufe Mediengruppe, Freiburg,
 Germany and ZOPYX Ltd. & Co. KG, Tuebingen, Germany.
+
+Currently the package is maintained by Sheila Allen in Texas, USA,
+on behalf of ZeOmega, Inc.
 
 
 License
