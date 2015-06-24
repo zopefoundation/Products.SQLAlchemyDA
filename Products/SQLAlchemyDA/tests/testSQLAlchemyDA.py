@@ -221,29 +221,3 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         clear_sa_wrapper_registry()
         with self.assertRaises(LookupError):
             lookup_sa_wrapper('ya-ya')
-
-
-def test_suite():
-    s = unittest.TestSuite()
-    s.addTests([unittest.makeSuite(SQLAlchemyDATests),
-               unittest.makeSuite(SQLAlchemyDAFunctionalTests)])
-    return s
-
-
-def main():
-    unittest.TextTestRunner().run(test_suite())
-
-
-def debug():
-    test_suite().debug()
-
-
-def pdebug():
-    import pdb
-    pdb.run('debug()')
-
-if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        globals()[sys.argv[1]]()
-    else:
-        main()
