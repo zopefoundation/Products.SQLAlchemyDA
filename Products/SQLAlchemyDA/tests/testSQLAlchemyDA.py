@@ -2,17 +2,17 @@
 Tests for SQLAlchemyDA
 """
 
-import sys
 import copy
 import os
-import unittest
 from Testing import ZopeTestCase
 
 import transaction
 from Products.ZSQLMethods.SQL import manage_addZSQLMethod
 from z3c.sqlalchemy.mapper import MappedClassBase
+from z3c.sqlalchemy.base import ZopeWrapper
 from sqlalchemy import MetaData, Table, Column, Integer, String, Unicode
 from sqlalchemy.orm import mapper
+from testfixtures import LogCapture
 
 
 ZopeTestCase.installProduct('SQLAlchemyDA', 1)
@@ -97,7 +97,41 @@ class SQLAlchemyDATests(TestBase):
     def test_supply_z3c_sa_wrapper(self):
         da = self.createDA(id='spam')
         wrapper = da._supply_z3c_sa_wrapper()
-        from z3c.sqlalchemy.base import ZopeWrapper
+        assert type(wrapper) is ZopeWrapper
+
+    def test_supply_z3c_sa_wrapper_no_dsn(self):
+        da = self.createDA(id='spam')
+        da.dsn = None
+        wrapper = da._supply_z3c_sa_wrapper()
+        assert wrapper is None
+
+    def test_supply_z3c_sa_wrapper_no_util_id(self):
+        da = self.createDA(id='spam')
+        da.util_id = None
+        wrapper = da._supply_z3c_sa_wrapper()
+        # should have created a new ZopeWrapper instance
+        assert type(wrapper) is ZopeWrapper
+
+    def test_sa_zope_wrapper_lost_attrs(self):
+        da = self.createDA(id='spam')
+        da.util_id = None
+        da.dsn = ''
+        with LogCapture() as loggy:
+            wrapper = da.sa_zope_wrapper()
+            log_msg = str(loggy)
+            assert str(type(da)) in log_msg
+            assert "dsn is ''" in log_msg
+            assert "util_id is 'None'" in log_msg
+            assert type(wrapper) is ZopeWrapper
+
+    def test_sa_zope_wrapper(self):
+        da = self.createDA(id='spam')
+        wrapper = da.sa_zope_wrapper()
+        assert type(wrapper) is ZopeWrapper
+
+    def test_legacy_property__wrapper(self):
+        da = self.createDA(id='spam')
+        wrapper = da._wrapper
         assert type(wrapper) is ZopeWrapper
 
 

@@ -40,7 +40,8 @@ setup(name='Products.SQLAlchemyDA',
       include_package_data=True,
       zip_safe=False,
       install_requires=['setuptools', 'z3c.sqlalchemy'],
-      extras_require={'test': ['Zope2', 'Products.ZSQLMethods']},
+      extras_require={'test': ['Zope2', 'Products.ZSQLMethods',
+                               'testfixtures']},
       namespace_packages=['Products'],
 
       )
