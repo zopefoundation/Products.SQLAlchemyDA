@@ -221,8 +221,8 @@ class SAWrapper(SimpleItem, PropertyManager):
                 util_id = 'AttributeError'
             msg = ("SAWrapper failed to get a handle to live connection.\n"
                    "Did we lose Acquisition context? type(self) is %s.\n"
-                   "The self.dsn is %s and self.util_id is %s.")
-            logger.exception(msg, (selftype, dsn, util_id))
+                   "The self.dsn is '%s' and self.util_id is '%s'.")
+            logger.exception(msg, selftype, dsn, util_id)
             # Now that we've logged what we need, try recovering by using
             # the module dict lookup.
             try:
@@ -247,7 +247,8 @@ class SAWrapper(SimpleItem, PropertyManager):
                                           name=self.util_id)
                 register_sa_wrapper(self.id, wrapper)
                 return wrapper
-        return None
+        else:
+            return None
 
     @property
     def engine_options(self):
@@ -270,7 +271,6 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'getInfo')
     def getInfo(self):
         """ return a dict with additional information """
-
         wrapper = self.sa_zope_wrapper()
         if wrapper is not None:
             d = self.sa_zope_wrapper().__dict__.copy()
