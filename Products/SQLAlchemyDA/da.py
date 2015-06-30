@@ -235,20 +235,39 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
         Look up or create the underlying z3c.sqlalchemy `ZopeWrapper`.
         """
-        if self.dsn:
-            try:
-                return getSAWrapper(self.util_id)
-            except ValueError:
-                wrapper = createSAWrapper(self.dsn,
-                                          forZope=True,
-                                          transactional=self.transactional,
-                                          extension_options={'initial_state': 'invalidated'},
-                                          engine_options=self.engine_options,
-                                          name=self.util_id)
-                register_sa_wrapper(self.id, wrapper)
-                return wrapper
-        else:
+        if not self.dsn:
             return None
+        else:
+            try:
+                wrapper = getSAWrapper(self.util_id)
+            except ValueError:
+                try:
+                    if self.util_id is None:
+                        # the z3c.sqlalchemy registration doesn't register None values
+                        # of util_id; we need something that will stick.
+                        self._new_utilid()
+                    wrapper = createSAWrapper(self.dsn,
+                                              forZope=True,
+                                              transactional=self.transactional,
+                                              extension_options={'initial_state': 'invalidated'},
+                                              engine_options=self.engine_options,
+                                              name=self.util_id)
+                    register_sa_wrapper(self.id, wrapper)
+                except ValueError:
+                    # ...weird...could this be a timing issue during startup?
+                    # We've seen log messages that look like this:
+                    # "ValueError: SAWrapper '1435583419.58.0.991532919015' already registered.
+                    # You can not register a wrapper twice under the same name."
+                    # This makes little sense because we just tried a lookup under that
+                    # name and did not find it. Wrapper did not exist in
+                    # component registry, but did exist in the z3c.sqlalchemy
+                    # registeredWrappers dict registry. Try recovering by using
+                    # the module dict lookup.
+                    try:
+                        wrapper = lookup_sa_wrapper(self.id)
+                    except LookupError:
+                        wrapper = None
+        return wrapper
 
     @property
     def engine_options(self):
