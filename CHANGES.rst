@@ -5,6 +5,8 @@ CHANGELOG
 0.6.2b1 (2015-06-23)
 --------------------
 
+Beta Release: If you try out this version, please provide feedback!
+
 Added public API for use within Zope acquisition context to access
 the underlying zc3.sqlalchemy `ZopeWrapper` instance, with added
 error handling and logging to deal with situations where Zope
@@ -52,8 +54,6 @@ interested in having them merged to public code.
 0.6.0b (2015-03-23)
 -------------------
 
-Beta Release: If you try out this version, please provide feedback!
-
 - Added alternative lookup API to get a handle on SAWrapper instances.  To use
   the new lookup mechanism, see Products.SQLAlchemyDA.da.py and look for the
   function `lookup_da`. This was created to allow avoiding Zope Acquisition as
@@ -67,6 +67,7 @@ Beta Release: If you try out this version, please provide feedback!
   it will run with older versions of Zope and Python as old as 2.5 (running
   tests requires at least Python 2.5). Newer versions of SQLAlchemy will be
   tested for the next release.
+
 
 0.5.2 (unreleased)
 ------------------
