@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+0.6.2b2 (2015-06-24)
+--------------------
+
+Workarounds for edge case error conditions looking up or
+creating underlying z3c.sqlalchemy ZopeWrapper instances.
+
 
 0.6.2b1 (2015-06-23)
 --------------------
