@@ -5,6 +5,7 @@ Tests for SQLAlchemyDA
 import copy
 import os
 from Testing import ZopeTestCase
+from mock import patch
 
 import transaction
 from Products.ZSQLMethods.SQL import manage_addZSQLMethod
@@ -27,6 +28,7 @@ test_table = Table('test', metadata,
 
 class Test(MappedClassBase):
     pass
+
 
 mapper(Test, test_table)
 
@@ -123,6 +125,17 @@ class SQLAlchemyDATests(TestBase):
             assert "dsn is ''" in log_msg
             assert "util_id is 'None'" in log_msg
             assert type(wrapper) is ZopeWrapper
+
+    @patch('Products.SQLAlchemyDA.da.createSAWrapper')
+    def test_sa_zope_wrapper_round_and_round(self, mock_func):
+        mock_func.side_effect = ValueError
+        da = self.createDA(id='oonique')
+        with LogCapture() as loggy:
+            wrapper = da._supply_z3c_sa_wrapper()
+            log_msg = str(loggy)
+            assert "Unexpected failure" in log_msg
+            assert "found or created" in log_msg
+            assert wrapper is None
 
     def test_sa_zope_wrapper(self):
         da = self.createDA(id='spam')

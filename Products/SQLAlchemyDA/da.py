@@ -253,7 +253,7 @@ class SAWrapper(SimpleItem, PropertyManager):
                                               engine_options=self.engine_options,
                                               name=self.util_id)
                     register_sa_wrapper(self.id, wrapper)
-                except ValueError:
+                except ValueError as e:
                     # ...weird...could this be a timing issue during startup?
                     # We've seen log messages that look like this:
                     # "ValueError: SAWrapper '1435583419.58.0.991532919015' already registered.
@@ -263,9 +263,15 @@ class SAWrapper(SimpleItem, PropertyManager):
                     # component registry, but did exist in the z3c.sqlalchemy
                     # registeredWrappers dict registry. Try recovering by using
                     # the module dict lookup.
+                    logger.warning("Unexpected failure to create SAWrapper: " + str(e))
                     try:
+                        wrapper = getSAWrapper(self.util_id)
+                    except LookupError as e:
+                        logger.warning("SAWrapper lookup falling back to SQLAlchemyDA registry:"
+                                       + str(e))
                         wrapper = lookup_sa_wrapper(self.id)
-                    except LookupError:
+                    except Exception:
+                        logger.exception("No z3c.sqlalchemy ZopeWrapper found or created!")
                         wrapper = None
         return wrapper
 
