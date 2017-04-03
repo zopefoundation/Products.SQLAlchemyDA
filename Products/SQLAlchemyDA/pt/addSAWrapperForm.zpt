@@ -7,8 +7,6 @@ Add a SQLAlchemy wrapper
 
 <form action="manage_addSAWrapper" method="post" name="addForm">
 
-
-<form action="manage_addTextIndexNG3" method="post" enctype="multipart/form-data" name="addform">
 <table cellspacing="0" cellpadding="2" border="0">
   <tr>
     <td>
