@@ -34,7 +34,7 @@
 
                 <tr tal:repeat="k info_d">
                     <td class="form-label" tal:content="k"/>
-                    <td class="list-item" tal:content="info_d/?k" />
+                    <td class="list-item" tal:content="python:info_d[k]" />
                 </tr>
             </tbody>
         </table>
