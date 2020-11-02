@@ -16,7 +16,7 @@ from .config import ADD_SA_WRAPPER_PERMISSION
 
 
 def initialize(context):
-    from da import (SAWrapper, manage_addSAWrapper,
+    from Products.SQLAlchemyDA.da import (SAWrapper, manage_addSAWrapper,
                     manage_addSAWrapperForm)
     from Shared.DC import ZRDB
 
