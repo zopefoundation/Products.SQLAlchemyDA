@@ -9,33 +9,33 @@ SQLAlchemyDA is a generic database adapter for Zope ZSQL methods, which are
 an older/legacy SQL templating feature for executing relational database queries
 from with in a Zope to transaction context.
 
-SQLAlchemyDA provides an implementation in the form of a Zope2 "product" which
-wraps `z3c.sqlalchemy <https://pypi.python.org/pypi/zope.sqlalchemy>`_, so that
-database connections are installable as objects in the Zope2 ZMI. Such
+SQLAlchemyDA provides an implementation in the form of a Zope "product" which
+wraps `z3c.sqlalchemy <https://pypi.org/project/z3c.sqlalchemy/>`_, so that
+database connections are installable as objects in the Zope ZMI. Such
 connection objects can be set up to connect to any kind of database backend
 supported by SQLAlchemy using a database URI, such as Postgres, MySQL, Oracle,
 SQLite, MS-SQL, Firebird, Informix. However, some of these database backends
 have not been tested with the SQLAlchemyDA, so your mileage may vary.
 
 In addition to ZSQL support, the SQLAlchemyDA makes it possible to use the
-standard SQLAlchemy API within a Zope2 context and participate in Zope
+standard SQLAlchemy API within a Zope context and participate in Zope
 transactions.
 
 However, if you do not require ZSQL support, and only wish to call 'normal'
 SQLAlchemy APIs within Zope transactions, this package adds no value. Instead,
 you would be better off trying out `zope.sqlalchemy`, as recommended in the
-`Zope2 book chapter on relational database
+`Zope book chapter on relational database
 connectivity <http://docs.zope.org/zope2/zope2book/RelationalDatabases.html>`_.
 
 
 Requirements:
 -------------
 
-- Zope 2.10+
+- Zope 4+
 - SQLAlchemy >= 0.5.0 (+ database specific low-level Python drivers)
-- z3c.sqlalchemy >= 1.2.0
+- z3c.sqlalchemy >= 1.5.0
 
-Testing: py.test and testfixtures are needed to run tests.
+Testing: testfixtures are needed to run tests.
 
 
 Installation:
@@ -51,7 +51,7 @@ Installation:
 - Download and install z3c.sqlalchemy as egg or from the sources 
   from PyPI (pip z3c.sqlalchemy). See
 
-    http://pypi.python.org/pypi/z3c.sqlalchemy/
+    https://pypi.org/project/z3c.sqlalchemy/
 
   for details.
 
@@ -103,7 +103,7 @@ Using SQLAlchemyDA:
 
 SQLAlchemyDA works as a database adapter as documented within "The Zope Book"
 
-http://www.plope.com/Books/2_7Edition/RelationalDatabases.stx
+https://zope.readthedocs.io/en/latest/zopebook/RelationalDatabases.html
 
 and can be used like any other DA together with ZSQL methods.
 
@@ -115,7 +115,7 @@ Tested with databases:
 - SQLite 3.3.X
 - Oracle 10g
 - MySQL is *only* supported for MySQL databases with transaction support.
-  (see also z3c/sqlalchemy/README.txt)      
+  (see also z3c/sqlalchemy/README.txt)
 - MSSQL 2008
  
 
@@ -137,22 +137,12 @@ Author
 SQLAlchemyDA was written by Andreas Jung for Haufe Mediengruppe, Freiburg,
 Germany and ZOPYX Ltd. & Co. KG, Tuebingen, Germany.
 
-Currently the package is maintained by Sheila Allen in Texas, USA,
-on behalf of ZeOmega, Inc.
-
 
 License
 -------
 
 SQLAlchemyDA is  licensed under the Zope Public License 2.1. 
 See LICENSE.txt.
-
-
-Contact
--------
-
-| Sheila Allen
-| E-mail: sallen at zeomega.com
 
 
 Credits

@@ -1,9 +1,19 @@
-CHANGELOG
-=========
+Change log
+==========
+
+1.0 (unreleased)
+----------------
+
+- Package cleanup
+
+- Add support for Python 3.5-3.9
+  (`#8 <https://github.com/zopefoundation/Products.SQLAlchemyDA/pull/8>`_)
+
 
 0.6.2b3 (2017-04-03)
 --------------------
 URL fix in add form.
+
 
 0.6.2b2 (2015-06-24)
 --------------------

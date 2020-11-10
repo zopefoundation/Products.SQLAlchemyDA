@@ -1,11 +1,27 @@
+dist: focal
 language: python
 python:
     - 2.7
+    - 3.5
+    - 3.6
+    - 3.7
     - 3.8
+    - 3.9
+
 install:
-    - python bootstrap.py
-    - bin/buildout
+    - pip install -U pip tox-travis
+
 script:
-    - bin/test -v1
+    - tox
+
+after_success:
+    - coverage combine
+    - coveralls
+
 notifications:
     email: false
+
+cache:
+  pip: true
+  directories:
+    - eggs/

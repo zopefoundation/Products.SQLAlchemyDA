@@ -16,10 +16,12 @@
 #buildout/virtualenv cruft
 bin
 lib
+src
 include
-bootstrap.py
+parts
 develop-eggs
 .installed.cfg
+.mr.developer.cfg
 
 #python cruft
 *.egg
@@ -29,10 +31,12 @@ develop-eggs
 pip-log.txt
 *.pyc
 dist
+pyvenv.cfg
 
 # test cruft
 *_test
 .coverage
+coverage.xml
 # SQLite test db
 testdb
 

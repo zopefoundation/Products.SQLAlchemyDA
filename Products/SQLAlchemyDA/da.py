@@ -188,7 +188,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
         # can't use deprecation decorator, due to interference with acquisition context
         warnings.warn("SAWrapper._wrapper deprecated; instead call SAWrapper.sa_zope_wrapper()",
-                      DeprecationWarning)
+                      DeprecationWarning,
+                      stacklevel=2)
         return self.sa_zope_wrapper()
 
     def sa_zope_wrapper(self):
