@@ -80,7 +80,7 @@ class SQLAlchemyDATests(TestBase):
 
     def testDeGhostify(self):
         da = self.createDA(id='spam')
-        from Products.SQLAlchemyDA.da import clear_sa_wrapper_registry, lookup_sa_wrapper
+        from ..da import clear_sa_wrapper_registry, lookup_sa_wrapper
         wrapper = lookup_sa_wrapper('spam')
         assert wrapper
         clear_sa_wrapper_registry()
@@ -196,18 +196,18 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         self.assertEqual(len(rows), 0)
 
     def beforeTearDown(self):
-        from Products.SQLAlchemyDA.da import clear_sa_wrapper_registry
+        from ..da import clear_sa_wrapper_registry
         clear_sa_wrapper_registry()
         metadata.drop_all()
 
     def test_lookup_sa_wrapper(self):
-        from Products.SQLAlchemyDA.da import lookup_sa_wrapper
+        from ..da import lookup_sa_wrapper
         da = self.createDA(id='da')
         wrapper = lookup_sa_wrapper('da')
         assert wrapper is da.sa_zope_wrapper()
 
     def test_lookup_two_sa_wrappers(self):
-        from Products.SQLAlchemyDA.da import lookup_sa_wrapper
+        from ..da import lookup_sa_wrapper
         da1 = self.createDA(id='da1')
         da2 = self.createDA(id='da2')
         wrapper1 = lookup_sa_wrapper('da1')
@@ -216,18 +216,18 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         assert wrapper2 is da2.sa_zope_wrapper()
 
     def test_lookup_nonexistent_sa_wrapper(self):
-        from Products.SQLAlchemyDA.da import lookup_sa_wrapper
+        from ..da import lookup_sa_wrapper
         with self.assertRaises(LookupError):
             lookup_sa_wrapper('dada')
 
     def test_deregister_nonexistent_da(self):
-        from Products.SQLAlchemyDA.da import lookup_sa_wrapper, deregister_sa_wrapper
+        from ..da import lookup_sa_wrapper, deregister_sa_wrapper
         # nonexistent deregistrations have no effect
         deregister_sa_wrapper('yada-yada')
         self.assertRaises(LookupError, lookup_sa_wrapper, 'yada-yada')
 
     def test_clear_sa_wrapper_registry(self):
-        from Products.SQLAlchemyDA.da import lookup_sa_wrapper, clear_sa_wrapper_registry
+        from ..da import lookup_sa_wrapper, clear_sa_wrapper_registry
         da = self.createDA(id='ya-ya')
         wrapper = lookup_sa_wrapper('ya-ya')
         assert wrapper is da.sa_zope_wrapper()
