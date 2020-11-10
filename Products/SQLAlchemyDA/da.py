@@ -300,8 +300,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         if wrapper is not None:
             d = self.sa_zope_wrapper().__dict__.copy()
             d['DSN'] = self.sa_zope_wrapper().dsn
-            dd = d.copy()
-            for k in dd.keys():
+            for k in list(d.keys()):
                 if k.startswith('_'):
                     del d[k]
             return d
