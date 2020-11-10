@@ -9,6 +9,7 @@ and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
 import os
 import logging
 import random
+import six
 import time
 import warnings
 
@@ -452,10 +453,10 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'manage_formatItem')
     def manage_formatItem(self, s):
         """ used by query form """
-        # if isinstance(s, unicode):
-        #    return s
-        # if isinstance(s, str):
-        #    return unicode(s, self.encoding, 'ignore')
+        if isinstance(s, six.text_type):
+           return s
+        if isinstance(s, six.binary_type):
+           return s.decode(self.encoding, 'ignore')
         return str(s)
 
     security.declareProtected(view_management_screens, 'getVersion')
