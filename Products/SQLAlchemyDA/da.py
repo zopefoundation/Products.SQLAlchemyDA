@@ -22,6 +22,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from z3c.sqlalchemy import getSAWrapper, createSAWrapper
 from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
+from zope.sqlalchemy import mark_changed
 
 
 logger = logging.getLogger('SQLAlchemyDA')
@@ -339,6 +340,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ *The* query() method as used by the internal ZSQL
             machinery.
         """
+        mark_changed(self.sa_zope_wrapper().session)
         conn = self.sa_zope_wrapper().connection
         cursor = conn.cursor()
 
