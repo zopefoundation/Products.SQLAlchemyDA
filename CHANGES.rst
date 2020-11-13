@@ -1,8 +1,8 @@
 Change log
 ==========
 
-1.0 (unreleased)
-----------------
+1.0.0 (2020-11-13)
+------------------
 
 - add linting configurations and apply results
 
