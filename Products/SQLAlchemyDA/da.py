@@ -6,23 +6,25 @@ Written by Andreas Jung for Haufe Mediengruppe, Freiburg, Germany
 and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
 """
 
-import os
 import logging
+import os
 import random
-import six
 import time
 import warnings
 
-from AccessControl.class_init import InitializeClass
-from AccessControl import ClassSecurityInfo
-from AccessControl.Permissions import view_management_screens
-from OFS.SimpleItem import SimpleItem
-from OFS.PropertyManager import PropertyManager
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+import six
 
-from z3c.sqlalchemy import getSAWrapper, createSAWrapper
-from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
+from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
+from AccessControl.Permissions import view_management_screens
+from OFS.PropertyManager import PropertyManager
+from OFS.SimpleItem import SimpleItem
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from zope.sqlalchemy import mark_changed
+
+from z3c.sqlalchemy import createSAWrapper
+from z3c.sqlalchemy import getSAWrapper
+from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
 
 
 logger = logging.getLogger('SQLAlchemyDA')
@@ -114,9 +116,9 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     """ A shim around z3c.sqlalchemy implementing something DA-ish """
 
-    # TODO document any special DA-ish hooks or places where Zope
-    #      automatically makes calls, or at least link to docs on
-    #      what makes it DA-ish. Is there a documented protocol?
+    # MISSING document any special DA-ish hooks or places where Zope
+    #         automatically makes calls, or at least link to docs on
+    #         what makes it DA-ish. Is there a documented protocol?
 
     manage_options = (({'label': 'Info', 'action': 'manage_workspace'},) +
                       ({'label': 'Test', 'action': 'manage_test'},) +
@@ -183,13 +185,16 @@ class SAWrapper(SimpleItem, PropertyManager):
 
         This API should no longer be used because:
 
-            1. Python property decorators can interfere with acquisition context
+            1. Python property decorators can interfere with acquisition
+               context
             2. It's not really private so is misnamed.
 
         Instead use self.sa_zope_wrapper
         """
-        # can't use deprecation decorator, due to interference with acquisition context
-        warnings.warn("SAWrapper._wrapper deprecated; instead call SAWrapper.sa_zope_wrapper()",
+        # can't use deprecation decorator, due to interference with
+        # acquisition context
+        warnings.warn("SAWrapper._wrapper deprecated, use "
+                      "SAWrapper.sa_zope_wrapper() instead",
                       DeprecationWarning,
                       stacklevel=2)
         return self.sa_zope_wrapper()
@@ -211,7 +216,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         if wrapper is not None:
             return wrapper
         else:
-            # we've got trouble; log relevant info and fallback on module dict registration
+            # we've got trouble; log relevant info and fallback on module
+            # dict registration
             selftype = type(self)
             try:
                 # don't reveal DSN contents in a log file
@@ -246,35 +252,41 @@ class SAWrapper(SimpleItem, PropertyManager):
             except ValueError:
                 try:
                     if self.util_id is None:
-                        # the z3c.sqlalchemy registration doesn't register None values
-                        # of util_id; we need something that will stick.
+                        # the z3c.sqlalchemy registration doesn't register
+                        # None values of util_id; we need something that
+                        # will stick.
                         self._new_utilid()
-                    wrapper = createSAWrapper(self.dsn,
-                                              forZope=True,
-                                              transactional=self.transactional,
-                                              extension_options={'initial_state': 'invalidated'},
-                                              engine_options=self.engine_options,
-                                              name=self.util_id)
+                    wrapper = createSAWrapper(
+                        self.dsn,
+                        forZope=True,
+                        transactional=self.transactional,
+                        extension_options={'initial_state': 'invalidated'},
+                        engine_options=self.engine_options,
+                        name=self.util_id)
                     register_sa_wrapper(self.id, wrapper)
                 except ValueError as e:
                     # ...weird...could this be a timing issue during startup?
                     # We've seen log messages that look like this:
-                    # "ValueError: SAWrapper '1435583419.58.0.991532919015' already registered.
-                    # You can not register a wrapper twice under the same name."
-                    # This makes little sense because we just tried a lookup under that
-                    # name and did not find it. Wrapper did not exist in
-                    # component registry, but did exist in the z3c.sqlalchemy
-                    # registeredWrappers dict registry. Try recovering by using
-                    # the module dict lookup.
-                    logger.warning("Unexpected failure to create SAWrapper: " + str(e))
+                    # "ValueError: SAWrapper '1435583419.58.0.991532919015'
+                    # already registered. You can not register a wrapper
+                    # twice under the same name."
+                    # This makes little sense because we just tried a lookup
+                    # under that name and did not find it. Wrapper did not
+                    # exist in component registry, but did exist in the
+                    # z3c.sqlalchemy registeredWrappers dict registry. Try
+                    # recovering by using the module dict lookup.
+                    msg = "Unexpected failure to create SAWrapper: " + str(e)
+                    logger.warning(msg)
                     try:
                         wrapper = getSAWrapper(self.util_id)
                     except LookupError as e:
-                        logger.warning("SAWrapper lookup falling back to SQLAlchemyDA registry:"
-                                       + str(e))
+                        msg = ("SAWrapper lookup falling back to SQLAlchemyDA "
+                               " registry:" + str(e))
+                        logger.warning(msg)
                         wrapper = lookup_sa_wrapper(self.id)
                     except Exception:
-                        logger.exception("No z3c.sqlalchemy ZopeWrapper found or created!")
+                        msg = "No z3c.sqlalchemy ZopeWrapper found or created!"
+                        logger.exception(msg)
                         wrapper = None
         return wrapper
 
@@ -296,7 +308,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
         self.extra_engine_options = engine_options
 
-    security.declareProtected(view_management_screens, 'getInfo')
+    @security.protected(view_management_screens)
     def getInfo(self):
         """ return a dict with additional information """
         wrapper = self.sa_zope_wrapper()
@@ -375,18 +387,26 @@ class SAWrapper(SimpleItem, PropertyManager):
                 desc = description
                 types_map = self._typesMap(proxy)
 
-        logger.debug('Execution time: %3.3f seconds' % (time.time() - ts_start))
+        logger.debug('Execution time: %3.3f seconds' %
+                     (time.time() - ts_start))
 
         if desc is None:
             return [], None
 
         items = []
-        for name, type_code, width, internal_size, precision, scale, null_ok in desc:
+        for (name,
+             type_code,
+             width,
+             internal_size,
+             precision,
+             scale,
+             null_ok) in desc:
 
-            items.append({'name': name,
-                          'type': types_mapping.get(types_map.get(type_code, None), 's'),
-                          'null': null_ok,
-                          'width': width, })
+            items.append({
+                'name': name,
+                'type': types_mapping.get(types_map.get(type_code, None), 's'),
+                'null': null_ok,
+                'width': width, })
 
         return items, rows
 
@@ -401,19 +421,19 @@ class SAWrapper(SimpleItem, PropertyManager):
         else:
             return s
 
-    security.declareProtected(view_management_screens, 'connected')
+    @security.protected(view_management_screens)
     def connected(self):
         try:
             return self.sa_zope_wrapper()._engine.pool.checkedin() > 0
         except Exception:
             return 'n/a'
 
-    security.declareProtected(view_management_screens, 'getPoolSize')
+    @security.protected(view_management_screens)
     def getPoolSize(self):
         """ """
         return self.sa_zope_wrapper()._engine.pool.size()
 
-    security.declareProtected(view_management_screens, 'getCheckedin')
+    @security.protected(view_management_screens)
     def getCheckedin(self):
         """ """
         try:
@@ -421,24 +441,23 @@ class SAWrapper(SimpleItem, PropertyManager):
         except Exception:
             return 'n/a'
 
-    security.declareProtected(view_management_screens, 'manage_start')
+    @security.protected(view_management_screens)
     def manage_start(self, RESPONSE=None):
         """ start engine """
+        url = '%s/manage_workspace?manage_tabs_message=%s'
         try:
             self.query('COMMIT')
             if RESPONSE:
                 msg = 'Database connection opened'
-                RESPONSE.redirect(self.absolute_url() +
-                              '/manage_workspace?manage_tabs_message=%s' % msg)
+                RESPONSE.redirect(url % (self.absolute_url(), msg))
         except Exception as e:
             if RESPONSE:
                 msg = 'Database connection could not be opened (%s)' % e
-                RESPONSE.redirect(self.absolute_url() +
-                              '/manage_workspace?manage_tabs_message=%s' % msg)
+                RESPONSE.redirect(url % (self.absolute_url(), msg))
             else:
                 raise
 
-    security.declareProtected(view_management_screens, 'manage_stop')
+    @security.protected(view_management_screens)
     def manage_stop(self, RESPONSE=None):
         """ close engine """
         self.sa_zope_wrapper()._engine.pool.dispose()
@@ -447,27 +466,27 @@ class SAWrapper(SimpleItem, PropertyManager):
             RESPONSE.redirect(self.absolute_url() +
                               '/manage_workspace?manage_tabs_message=%s' % msg)
 
-    security.declareProtected(view_management_screens, 'manage_doQuery')
+    @security.protected(view_management_screens)
     def manage_doQuery(self, query):
         """ perform a query through the ZMI"""
         return self.query(query)
 
-    security.declareProtected(view_management_screens, 'manage_formatItem')
+    @security.protected(view_management_screens)
     def manage_formatItem(self, s):
         """ used by query form """
         if isinstance(s, six.text_type):
-           return s
+            return s
         if isinstance(s, six.binary_type):
-           return s.decode(self.encoding, 'ignore')
+            return s.decode(self.encoding, 'ignore')
         return str(s)
 
-    security.declareProtected(view_management_screens, 'getVersion')
+    @security.protected(view_management_screens)
     def getVersion(self):
         """ return version.txt """
         return open(os.path.join(os.path.dirname(__file__),
                                  'version.txt')).read()
 
-    security.declareProtected(view_management_screens, 'manage_editProperties')
+    @security.protected(view_management_screens)
     def manage_editProperties(self, REQUEST):
         """ Intercept changed properties in order to perform
             further actions.
@@ -480,8 +499,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         except ImportError:
             try:
                 # zope 2.8
-                from zope.component.servicenames import Utilities
                 from zope.app import zapi
+                from zope.component.servicenames import Utilities
                 s = zapi.getGlobalServices().getService(Utilities)
                 s.register((), ISQLAlchemyWrapper, self.util_id, None)
                 self._new_utilid()
@@ -494,7 +513,7 @@ class SAWrapper(SimpleItem, PropertyManager):
     manage_workspace = PageTemplateFile('pt/info', globals(),
                                         __name__='manage_workspace')
     manage_test = PageTemplateFile('pt/query', globals(),
-                                        __name__='manage_test')
+                                   __name__='manage_test')
 
 
 InitializeClass(SAWrapper)
@@ -514,6 +533,7 @@ def manage_addSAWrapper(self, id, dsn, title, encoding='iso-8859-15',
                                  + '/manage_workspace')
     else:
         return wrapper
+
 
 manage_addSAWrapperForm = PageTemplateFile('pt/addSAWrapperForm',
                                            globals(),

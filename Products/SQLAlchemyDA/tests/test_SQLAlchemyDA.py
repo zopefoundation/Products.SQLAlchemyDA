@@ -4,16 +4,23 @@ Tests for SQLAlchemyDA
 
 import copy
 import os
-from Testing import ZopeTestCase
+
 from mock import patch
+from sqlalchemy import Column
+from sqlalchemy import Integer
+from sqlalchemy import MetaData
+from sqlalchemy import String
+from sqlalchemy import Table
+from sqlalchemy import Unicode
+from sqlalchemy.orm import mapper
+from testfixtures import LogCapture
 
 import transaction
 from Products.ZSQLMethods.SQL import manage_addZSQLMethod
-from z3c.sqlalchemy.mapper import MappedClassBase
+from Testing import ZopeTestCase
+
 from z3c.sqlalchemy.base import ZopeWrapper
-from sqlalchemy import MetaData, Table, Column, Integer, String, Unicode
-from sqlalchemy.orm import mapper
-from testfixtures import LogCapture
+from z3c.sqlalchemy.mapper import MappedClassBase
 
 
 ZopeTestCase.installProduct('SQLAlchemyDA', 1)
@@ -80,7 +87,8 @@ class SQLAlchemyDATests(TestBase):
 
     def testDeGhostify(self):
         da = self.createDA(id='spam')
-        from ..da import clear_sa_wrapper_registry, lookup_sa_wrapper
+        from ..da import clear_sa_wrapper_registry
+        from ..da import lookup_sa_wrapper
         wrapper = lookup_sa_wrapper('spam')
         assert wrapper
         clear_sa_wrapper_registry()
@@ -221,13 +229,16 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
             lookup_sa_wrapper('dada')
 
     def test_deregister_nonexistent_da(self):
-        from ..da import lookup_sa_wrapper, deregister_sa_wrapper
+        from ..da import deregister_sa_wrapper
+        from ..da import lookup_sa_wrapper
+
         # nonexistent deregistrations have no effect
         deregister_sa_wrapper('yada-yada')
         self.assertRaises(LookupError, lookup_sa_wrapper, 'yada-yada')
 
     def test_clear_sa_wrapper_registry(self):
-        from ..da import lookup_sa_wrapper, clear_sa_wrapper_registry
+        from ..da import clear_sa_wrapper_registry
+        from ..da import lookup_sa_wrapper
         da = self.createDA(id='ya-ya')
         wrapper = lookup_sa_wrapper('ya-ya')
         assert wrapper is da.sa_zope_wrapper()

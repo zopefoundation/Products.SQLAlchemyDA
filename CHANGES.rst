@@ -4,6 +4,8 @@ Change log
 1.0 (unreleased)
 ----------------
 
+- add linting configurations and apply results
+
 - Package cleanup
 
 - Add support for Python 3.5-3.9

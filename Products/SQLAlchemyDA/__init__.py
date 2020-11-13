@@ -11,9 +11,9 @@ import os
 from Shared.DC import ZRDB
 
 from .config import ADD_SA_WRAPPER_PERMISSION
+from .da import SAWrapper
 from .da import manage_addSAWrapper
 from .da import manage_addSAWrapperForm
-from .da import SAWrapper
 
 
 def initialize(context):

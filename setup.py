@@ -61,7 +61,7 @@ setup(name='Products.SQLAlchemyDA',
       install_requires=[
         'setuptools',
         'six',
-        'z3c.sqlalchemy >1.4.1',
+        'z3c.sqlalchemy >1.5.1',
         'Products.ZSQLMethods'],
       extras_require={'test': ['testfixtures', 'mock']},
       namespace_packages=['Products'],
