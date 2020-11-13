@@ -9,6 +9,7 @@ and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
 import os
 import logging
 import random
+import six
 import time
 import warnings
 
@@ -21,6 +22,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from z3c.sqlalchemy import getSAWrapper, createSAWrapper
 from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
+from zope.sqlalchemy import mark_changed
 
 
 logger = logging.getLogger('SQLAlchemyDA')
@@ -188,7 +190,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         """
         # can't use deprecation decorator, due to interference with acquisition context
         warnings.warn("SAWrapper._wrapper deprecated; instead call SAWrapper.sa_zope_wrapper()",
-                      DeprecationWarning)
+                      DeprecationWarning,
+                      stacklevel=2)
         return self.sa_zope_wrapper()
 
     def sa_zope_wrapper(self):
@@ -300,7 +303,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         if wrapper is not None:
             d = self.sa_zope_wrapper().__dict__.copy()
             d['DSN'] = self.sa_zope_wrapper().dsn
-            for k in d.keys()[:]:
+            for k in list(d.keys()):
                 if k.startswith('_'):
                     del d[k]
             return d
@@ -337,6 +340,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ *The* query() method as used by the internal ZSQL
             machinery.
         """
+        mark_changed(self.sa_zope_wrapper().session)
         conn = self.sa_zope_wrapper().connection
         cursor = conn.cursor()
 
@@ -426,7 +430,7 @@ class SAWrapper(SimpleItem, PropertyManager):
                 msg = 'Database connection opened'
                 RESPONSE.redirect(self.absolute_url() +
                               '/manage_workspace?manage_tabs_message=%s' % msg)
-        except Exception, e:
+        except Exception as e:
             if RESPONSE:
                 msg = 'Database connection could not be opened (%s)' % e
                 RESPONSE.redirect(self.absolute_url() +
@@ -451,10 +455,10 @@ class SAWrapper(SimpleItem, PropertyManager):
     security.declareProtected(view_management_screens, 'manage_formatItem')
     def manage_formatItem(self, s):
         """ used by query form """
-        if isinstance(s, unicode):
-            return s
-        if isinstance(s, str):
-            return unicode(s, self.encoding, 'ignore')
+        if isinstance(s, six.text_type):
+           return s
+        if isinstance(s, six.binary_type):
+           return s.decode(self.encoding, 'ignore')
         return str(s)
 
     security.declareProtected(view_management_screens, 'getVersion')

@@ -3,45 +3,66 @@
 # (C) 2008, ZOPYX Ltd & Co. KG, Tuebingen, Germany
 ##########################################################################
 
+from setuptools import find_packages
 from setuptools import setup
 
 
 CLASSIFIERS = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: Zope Public License',
+    'Operating System :: OS Independent',
+    'Framework :: Zope',
+    'Framework :: Zope :: 3',
+    'Framework :: Zope :: 4',
+    'Framework :: Zope :: 5',
     'Programming Language :: Python',
-    'Framework :: Zope2',
     'Topic :: Database',
+    'Topic :: Database :: Front-Ends',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
 ]
 
-version = '0.6.2b3'
+version = '1.0.0.dev0'
 
 readme_file = 'README.rst'
 changes_file = 'CHANGES.rst'
 desc = open(readme_file).read().strip()
 changes = open(changes_file).read().strip()
-
 long_description = desc + "\n\nCHANGES\n=======\n\n" + changes
-
-print(long_description)
 
 
 setup(name='Products.SQLAlchemyDA',
       version=version,
-      license='ZPL (see LICENSE.txt)',
+      url='https://github.com/zopefoundation/Products.SQLAlchemyDA',
+      project_urls={
+          'Issue Tracker': ('https://github.com/zopefoundation/'
+                            'Products.SQLAlchemyDA/issues'),
+          'Sources': 'https://github.com/zopefoundation/Products.SQLAlchemyDA',
+      },
+      license='ZPL 2.1',
       author='Andreas Jung',
       author_email='info@zopyx.com',
-      maintainer='Sheila Allen',
-      maintainer_email='sallen@zeomega.com',
+      maintainer='Zope Foundation and Contributors',
+      maintainer_email='zope-dev@zope.org',
       classifiers=CLASSIFIERS,
-      keywords='Zope2 Database adapter SQLAlchemy',
-      url='https://github.com/zopefoundation/Products.SQLAlchemyDA',
-      description='A generic database adapter for Zope 2',
+      keywords='Zope Database adapter SQLAlchemy',
+      description='A generic database adapter for Zope',
       long_description=long_description,
-      packages=['Products', 'Products.SQLAlchemyDA'],
+      packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      install_requires=['setuptools', 'z3c.sqlalchemy'],
-      extras_require={'test': ['Zope2', 'Products.ZSQLMethods',
-                               'testfixtures']},
+      python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
+      install_requires=[
+        'setuptools',
+        'six',
+        'z3c.sqlalchemy >1.4.1',
+        'Products.ZSQLMethods'],
+      extras_require={'test': ['testfixtures', 'mock']},
       namespace_packages=['Products'],
-
       )
