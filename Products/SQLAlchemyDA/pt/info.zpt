@@ -1,55 +1,56 @@
 <div tal:replace="structure context/manage_page_header" />
 <div tal:replace="structure context/manage_tabs" />
 
-<tal:def tal:define="info_d context/getInfo">
+<main class="container-fluid mb-5" tal:define="info_d context/getInfo">
 
-    <div tal:condition="not: info_d">
+    <p class="form-help mt-4" tal:condition="not: info_d">
         No database connection configured!
         <br/>
         Go to the <em>Properties</em> tab in order to change the configuration.       
-    </div>
+    </p>
     
     <tal:if condition="info_d">
 
-        <table class="info" >
+        <table class="info table table-sm table-striped" >
             <tbody>
                 <tr>
-                    <td class="form-label">Name</td>
-                    <td class="list-item" tal:content="context/getId" />
+                    <th class="text-muted form-label">Name</th>
+                    <td class="code list-item" tal:content="context/getId" />
                 </tr>
 
                 <tr>
-                    <td class="form-label">Connection pool size</td>
-                    <td class="list-item" tal:content="context/getPoolSize" />
+                    <th class="text-muted form-label">Connection pool size</th>
+                    <td class="code list-item" tal:content="context/getPoolSize" />
                 </tr>
 
                 <tr>
-                    <td class="form-label">Number of open connections</td>
-                    <td class="list-item" tal:content="context/getCheckedin" />
+                    <th class="text-muted form-label">Number of open connections</th>
+                    <td class="code list-item" tal:content="context/getCheckedin" />
                 </tr>
                 <tr>
-                    <td class="form-label">Connected</td>
-                    <td class="list-item" tal:content="context/connected" />
+                    <th class="text-muted form-label">Connected</th>
+                    <td class="code list-item" tal:content="context/connected" />
                 </tr>
 
                 <tr tal:repeat="k info_d">
-                    <td class="form-label" tal:content="k"/>
-                    <td class="list-item" tal:content="python:info_d[k]" />
+                    <th class="text-muted form-label" tal:content="k"/>
+                    <td class="code list-item" tal:content="python:info_d[k]" />
                 </tr>
             </tbody>
         </table>
 
-        <form action="manage_stop" method="POST" tal:condition="context/connected">
-            <input type="submit" value="Close connections"/> 
-        </form>
-
-        <form action="manage_start" method="POST" tal:condition="not: context/connected">
-            <input type="submit" value="Open connections"/> 
-        </form>
+        <div class="zmi-controls">
+            <form action="manage_stop" method="POST" tal:condition="context/connected">
+                <input class="btn btn-primary" type="submit" value="Close connections"/> 
+            </form>
+            <form action="manage_start" method="POST" tal:condition="not: context/connected">
+                <input class="btn btn-primary" type="submit" value="Open connections"/> 
+            </form>
+        </div>
 
     </tal:if>
 
-</tal:def>
+</main>
 
 <hr>
 <div style="font-size: 80%; text-align: center" >

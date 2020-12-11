@@ -142,6 +142,8 @@ class SAWrapper(SimpleItem, PropertyManager):
     quoting_style = 'standard'
     _isAnSQLConnection = True
     extra_engine_options = ()
+    zmi_icon = 'fas fa-database'
+    zmi_show_add_dialog = False
 
     security = ClassSecurityInfo()
 

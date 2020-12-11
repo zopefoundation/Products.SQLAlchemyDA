@@ -1,34 +1,39 @@
 <div tal:replace="structure context/manage_page_header" />
 <div tal:replace="structure context/manage_tabs" />
 
-<tal:def tal:define="info_d context/getInfo">
+<main class="container-fluid mb-5" tal:define="info_d context/getInfo">
 
-    <div tal:condition="not: info_d">
+    <p class="form-help mt-4" tal:condition="not: info_d">
         No database connection configured!
         <br/>
         Go to the <em>Properties</em> tab in order to change the configuration.       
-    </div>
+    </p>
 
     <fieldset tal:condition="info_d">
-        <legend>Test a query</legend>
+        <legend for="query">Test a query</legend>
 
         <form action="manage_test" method="post">
-            <textarea name="query" rows="5" cols="60"><span tal:replace="request/query | nothing"/></textarea>
-            <br/>
-            <input type="submit" value="Execute query" accesskey="U"/>
+            <textarea id="content" name="query:text" 
+                class="form-control zmi-zpt zmi-code col-sm-12" 
+                data-contenttype="sql" 
+                tal:content="request/query | nothing">
+            </textarea>
+
+            <div class="zmi-controls">
+                <input class="btn btn-primary" type="submit" value="Execute query" accesskey="U"/>
+            </div>
         </form>
     </fieldset>
 
-    <fieldset id="resultset" tal:condition="request/query | nothing">
-        <legend>Resultset</legend>
+    <fieldset id="resultset" class="mt-4" tal:condition="request/query | nothing">
+        <legend for="resultset">Resultset</legend>
 
         <tal:def define="result python: context.manage_doQuery(request.query)">
             <div tal:condition="not: result">
                 Empty resultset returned
             </div>
-
-            <span tal:content="python: len(result[1])" /> Hits
-            <table tal:condition="result" border="1">
+            <code tal:content="python:'%s Hits'%(len(result[1]))">Hits</code>
+            <table class="table table-sm table-bordered" tal:condition="result">
                 <thead>
                     <tr> 
                         <th tal:repeat="item python: result[0]"
@@ -47,7 +52,7 @@
         </tal:def>
     </fieldset>
 
-</tal:def>
+</main>
 
 <hr/>
 <div style="font-size: 80%; text-align: center" >
