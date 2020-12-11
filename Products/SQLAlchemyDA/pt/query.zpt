@@ -29,26 +29,28 @@
         <legend for="resultset">Resultset</legend>
 
         <tal:def define="result python: context.manage_doQuery(request.query)">
-            <div tal:condition="not: result">
+            <div tal:condition="python: not result or result[0]==[]">
                 Empty resultset returned
             </div>
-            <code tal:content="python:'%s Hits'%(len(result[1]))">Hits</code>
-            <table class="table table-sm table-bordered" tal:condition="result">
-                <thead>
-                    <tr> 
-                        <th tal:repeat="item python: result[0]"
-                            span tal:content="item/name" 
-                        />
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr tal:repeat="row python: result[1]">
-                        <td tal:repeat="item row">
-                            <span tal:replace="python: context.manage_formatItem(item)" />&nbsp;
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div tal:condition="python: result[0]!=[]">
+                <code tal:content="python:'%s Hits'%(len(result[1]))">Hits</code>
+                <table class="table table-sm table-bordered" tal:condition="result">
+                    <thead>
+                        <tr> 
+                            <th tal:repeat="item python: result[0]"
+                                span tal:content="item/name" 
+                            />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr tal:repeat="row python: result[1]">
+                            <td tal:repeat="item row">
+                                <span tal:replace="python: context.manage_formatItem(item)" />&nbsp;
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </tal:def>
     </fieldset>
 
