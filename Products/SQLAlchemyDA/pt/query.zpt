@@ -12,7 +12,7 @@
     <fieldset tal:condition="info_d">
         <legend for="query">Test a query</legend>
 
-        <form action="manage_test" method="post">
+        <form class="ace-brief" action="manage_test" method="post">
             <textarea id="content" name="query:text" 
                 class="form-control zmi-zpt zmi-code col-sm-12" 
                 data-contenttype="sql" 
