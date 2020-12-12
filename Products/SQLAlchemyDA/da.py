@@ -483,12 +483,6 @@ class SAWrapper(SimpleItem, PropertyManager):
         return str(s)
 
     @security.protected(view_management_screens)
-    def getVersion(self):
-        """ return version.txt """
-        return open(os.path.join(os.path.dirname(__file__),
-                                 'version.txt')).read()
-
-    @security.protected(view_management_screens)
     def manage_editProperties(self, REQUEST):
         """ Intercept changed properties in order to perform
             further actions.
