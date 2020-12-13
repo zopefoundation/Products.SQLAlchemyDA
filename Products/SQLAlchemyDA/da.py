@@ -142,6 +142,8 @@ class SAWrapper(SimpleItem, PropertyManager):
     quoting_style = 'standard'
     _isAnSQLConnection = True
     extra_engine_options = ()
+    zmi_icon = 'fas fa-database'
+    zmi_show_add_dialog = False
 
     security = ClassSecurityInfo()
 
@@ -479,12 +481,6 @@ class SAWrapper(SimpleItem, PropertyManager):
         if isinstance(s, six.binary_type):
             return s.decode(self.encoding, 'ignore')
         return str(s)
-
-    @security.protected(view_management_screens)
-    def getVersion(self):
-        """ return version.txt """
-        return open(os.path.join(os.path.dirname(__file__),
-                                 'version.txt')).read()
 
     @security.protected(view_management_screens)
     def manage_editProperties(self, REQUEST):

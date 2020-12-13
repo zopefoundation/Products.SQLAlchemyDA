@@ -1,90 +1,54 @@
 <div tal:replace="structure context/manage_page_header" />
 <div tal:replace="structure context/manage_tabs" />
 
-<p class="form-help">
-Add a SQLAlchemy wrapper
-</p>
-
-<form action="manage_addSAWrapper" method="post" name="addForm">
-
-<table cellspacing="0" cellpadding="2" border="0">
-  <tr>
-    <td>
-    <div class="form-label">
-    Id
+<main class="container-fluid">
+  <p class="form-help">
+    Add a SQLAlchemy wrapper
+  </p>
+  <form action="manage_addSAWrapper" method="post" name="addForm">
+    <div class="form-group row ">
+      <label for="id" class="form-label col-sm-3 col-md-2">Id</label>
+      <div class="col-sm-9 col-md-10">
+        <input id="id" class="form-control" type="text" name="id" value="">
+      </div>
     </div>
-    </td>
-    <td>
-      <input type="text" name="id" size="40" />
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-    <div class="form-label">
-    Title
+    <div class="form-group row ">
+      <label for="title" class="form-label col-sm-3 col-md-2">Title</label>
+      <div class="col-sm-9 col-md-10">
+        <input id="title" class="form-control" type="text" name="title" value="SQLAlchemy wrapper">
+      </div>
     </div>
-    </td>
-    <td>
-      <input type="text" name="title" size="40" value="SQLAlchemy wrapper"/>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-    <div class="form-label">
-    DSN
+    <div class="form-group row ">
+      <label for="dsn" class="form-label col-sm-3 col-md-2">DSN</label>
+      <div class="col-sm-9 col-md-10">
+        <input id="dsn" class="form-control" type="text" name="dsn" value="">
+        <small>
+          e.g. postgres://username:password@hostname:port/mydatabase<br />
+          <em>Ensure that the underlying database supports transactions!</em>
+        </small>
+      </div>
     </div>
-    </td>
-    <td>
-      <input type="text" name="dsn" size="40" value=""/>
-      <em>e.g. postgres://username:password@hostname:port/mydatabase</em>
-      <br/>
-      Ensure that the underlying database supports transactions!
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-    <div class="form-label">
-    Encoding
+    <div class="form-group row ">
+      <label for="encoding" class="form-label col-sm-3 col-md-2">Encoding</label>
+      <div class="col-sm-9 col-md-10">
+        <input id="encoding" class="form-control" type="text" name="encoding" value="iso-8859-15">
+        <small>
+          Encoding of your database<br />
+          <em>Ensure that the underlying database supports transactions!</em>
+        </small>
+      </div>
     </div>
-    </td>
-    <td>
-      <input type="text" name="encoding" size="40" value="iso-8859-15"/>
-      <em>Encoding of your database</em>
-      <br/>
-      Ensure that the underlying database supports transactions!
-    </td>
-  </tr>
-
-
-  <tr>
-    <td>
-    <div class="form-label">
-    Convert to unicode
+    <div class="form-group row ">
+      <label for="convert_unicode" class="form-label col-sm-3 col-md-2">Convert to unicode</label>
+      <div class="col-sm-9 col-md-10">
+        <input id="convert_unicode" type="checkbox" name="convert_unicode:int" value="1"/>
+        <label for="convert_unicode">&nbsp;&nbsp;Convert string data to unicode</label>
+      </div>
     </div>
-    </td>
-    <td>
-      <input type="checkbox" name="convert_unicode:int" value="1"/>
-      <br/>
-      Convert string data to unicode
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-    </td>
-    <td   colspan="2">
-    <div class="form-element">
-    <input class="form-element" type="submit" name="submit" 
-     value=" Add " /> 
+    <div class="zmi-controls">
+      <input class="btn btn-primary form-element" type="submit" name="submit" value=" Add " /> 
     </div>
-    </td>
-  </tr>
-</table>
-
-
-</form>
+  </form>
+</main>
 
 <div tal:replace="structure context/manage_page_footer" />
