@@ -52,4 +52,11 @@
 
 </main>
 
+<hr/>
+<div style="font-size: 80%; text-align: center" >
+Written by Andreas Jung for <a href="http://www.zopyx.com">ZOPYX Ltd. & Co. KG</a>, D-72070 T&uuml;bingen, Germany.
+<br>
+SQLAlchemyDA is published under the Zope Public License ZPL 2.1.
+</div>
+
 <div tal:replace="structure context/manage_page_footer" />
