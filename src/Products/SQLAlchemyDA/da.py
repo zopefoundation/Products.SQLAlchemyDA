@@ -7,7 +7,6 @@ and ZOPYX Ltd. & Co. KG, Tuebingen, Germany
 """
 
 import logging
-import os
 import random
 import time
 import warnings

@@ -5,5 +5,5 @@ include buildout.cfg
 include zope4.cfg
 include tox.ini
 
-recursive-include Products *.py
-recursive-include Products *.zpt
+recursive-include src *.py
+recursive-include src *.zpt

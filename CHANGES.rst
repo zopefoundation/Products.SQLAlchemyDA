@@ -4,6 +4,8 @@ Change log
 1.0.1 (unreleased)
 ------------------
 
+- change package structure to move package code into a ``src`` subfolder
+
 
 1.0.0 (2020-11-13)
 ------------------
