@@ -1,3 +1,18 @@
+.. image:: https://github.com/zopefoundation/Products.SQLAlchemyDA/actions/workflows/tests.yml/badge.svg
+        :target: https://github.com/zopefoundation/Products.SQLAlchemyDA/actions/workflows/tests.yml
+
+.. image:: https://coveralls.io/repos/github/zopefoundation/Products.SQLAlchemyDA/badge.svg
+        :target: https://coveralls.io/github/zopefoundation/Products.SQLAlchemyDA
+
+.. image:: https://img.shields.io/pypi/v/Products.SQLAlchemyDA.svg
+        :target: https://pypi.org/project/Products.SQLAlchemyDA/
+        :alt: Current version on PyPI
+
+.. image:: https://img.shields.io/pypi/pyversions/Products.SQLAlchemyDA.svg
+        :target: https://pypi.org/project/Products.SQLAlchemyDA/
+        :alt: Supported Python versions
+
+
 Zope ZSQL-SQLAlchemy Integration Wrapper
 ========================================
 
