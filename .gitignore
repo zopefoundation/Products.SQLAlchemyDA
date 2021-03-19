@@ -1,52 +1,29 @@
-# mac cruft
-.DS_Store
-
-#emacs cruft
-*~
-*#*
-*flymake.py
-.ropeproject
-
-# vim cruft
-*.swp
-
-# wing cruft
-*.wpr
-
-#buildout/virtualenv cruft
-bin
-lib
-src
-include
-parts
-develop-eggs
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/zope-product
+*.egg-info/
+*.profraw
+*.pyc
+*.pyo
+.coverage
+.coverage.*
+.eggs/
 .installed.cfg
 .mr.developer.cfg
-
-#python cruft
-*.egg
-*.egg-info
-.noseids
-*prof*
-pip-log.txt
-*.pyc
-dist
-pyvenv.cfg
-
-# test cruft
-*_test
-.coverage
+.tox/
+.vscode/
+__pycache__/
+bin/
+build/
 coverage.xml
-# SQLite test db
-testdb
-
-# Sphinx cruft
-_build
-
-# backup cruft
-*.old
-*.orig
-
-# Misc cruft
-*.log
-*.pid
+develop-eggs/
+develop/
+dist/
+docs/_build
+eggs/
+etc/
+lib/
+lib64
+log/
+parts/
+pyvenv.cfg
+var/

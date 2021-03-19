@@ -19,11 +19,11 @@ from AccessControl.Permissions import view_management_screens
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from zope.sqlalchemy import mark_changed
 
 from z3c.sqlalchemy import createSAWrapper
 from z3c.sqlalchemy import getSAWrapper
 from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
+from zope.sqlalchemy import mark_changed
 
 
 logger = logging.getLogger('SQLAlchemyDA')

@@ -1,0 +1,29 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/zope-product
+[meta]
+template = "zope-product"
+commit-id = "1e429ac2cee8215eabfd77a45e1def750ebaa4a2"
+
+[python]
+with-appveyor = false
+with-pypy = false
+with-legacy-python = true
+with-docs = false
+with-sphinx-doctests = false
+
+[tox]
+use-flake8 = true
+
+[coverage]
+fail-under = 75
+
+[isort]
+known_zope = "transaction"
+known_first_party = "z3c.sqlalchemy, zope.sqlalchemy"
+known_third_party = "mock, six, sqlalchemy, testfixtures"
+
+[manifest]
+additional-rules = [
+    "include buildout4.cfg",
+    "recursive-include src *.zpt",
+    ]
