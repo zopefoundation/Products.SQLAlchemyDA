@@ -4,6 +4,9 @@ Change log
 1.0.1 (unreleased)
 ------------------
 
+- fix test failures under Python 3.5 by pinning SQLAlchemy.
+  Pin can be dropped when support for Zope 4 is dropped.
+
 - change package structure to move package code into a ``src`` subfolder
 
 
