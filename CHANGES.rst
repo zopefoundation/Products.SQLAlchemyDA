@@ -1,7 +1,7 @@
 Change log
 ==========
 
-1.0.1 (unreleased)
+1.0.1 (2021-05-03)
 ------------------
 
 - fix test failures under Python 3.5 by pinning SQLAlchemy.
