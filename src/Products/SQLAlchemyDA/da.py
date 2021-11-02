@@ -392,7 +392,7 @@ class SAWrapper(SimpleItem, PropertyManager):
                      (time.time() - ts_start))
 
         if desc is None:
-            return [], None
+            return (), ()
 
         items = []
         for (name,
