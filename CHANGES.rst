@@ -3,7 +3,7 @@ Change log
 
 1.0.2 (unreleased)
 ------------------
-
+- fix unexpected NoneType return on sql-update
 
 1.0.1 (2021-05-03)
 ------------------
