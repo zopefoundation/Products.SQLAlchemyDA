@@ -1,9 +1,12 @@
 Change log
 ==========
 
-1.0.2 (unreleased)
+1.0.2 (2021-11-02)
 ------------------
+
 - fix unexpected NoneType return on sql-update
+  (`#12 <https://github.com/zopefoundation/Products.SQLAlchemyDA/pull/12>`_)
+
 
 1.0.1 (2021-05-03)
 ------------------
