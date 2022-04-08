@@ -1,9 +1,10 @@
 Change log
 ==========
 
-1.0.3 (unreleased)
+1.1.0 (unreleased)
 ------------------
 
+- Add support for Python 3.10.
 
 1.0.2 (2021-11-02)
 ------------------
@@ -101,7 +102,7 @@ interested in having them merged to public code.
   function `lookup_da`. This was created to allow avoiding Zope Acquisition as
   a lookup mechanism, and to work around the issue that the underlying
   z3c.sqlalchemy `getSAWrapper` function is non-usable when created by the
-  SAWrapper DA. This is because API consumers have no access to the random 
+  SAWrapper DA. This is because API consumers have no access to the random
   internally generated name ('util_id' attribute) under which the utility
   is registered...at least not without resorting to Acquisition calls.
 - Tested with SQLAlchemy 0.7.6, Zope 2.13, and Python 2.7.9, and SQLite.
