@@ -26,9 +26,10 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
 ]
 
-version = '1.1.0.dev0'
+version = '1.1.0'
 
 readme_file = 'README.rst'
 changes_file = 'CHANGES.rst'
