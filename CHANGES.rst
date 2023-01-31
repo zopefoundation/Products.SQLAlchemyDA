@@ -6,6 +6,8 @@ Change log
 
 - Drop support for Python 2.7, 3.5, 3.6.
 
+- Drop support for Python 2.7, 3.5, 3.6.
+
 
 1.1.0 (2022-12-16)
 ------------------

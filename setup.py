@@ -7,28 +7,6 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-CLASSIFIERS = [
-    'Development Status :: 5 - Production/Stable',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: Zope Public License',
-    'Operating System :: OS Independent',
-    'Framework :: Zope',
-    'Framework :: Zope :: 4',
-    'Framework :: Zope :: 5',
-    'Programming Language :: Python',
-    'Topic :: Database',
-    'Topic :: Database :: Front-Ends',
-    'Topic :: Software Development :: Libraries :: Python Modules',
-    'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3.5',
-    'Programming Language :: Python :: 3.6',
-    'Programming Language :: Python :: 3.7',
-    'Programming Language :: Python :: 3.8',
-    'Programming Language :: Python :: 3.9',
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11',
-]
-
 version = '2.0.0.dev0'
 
 readme_file = 'README.rst'
@@ -51,7 +29,27 @@ setup(name='Products.SQLAlchemyDA',
       author_email='info@zopyx.com',
       maintainer='Zope Foundation and Contributors',
       maintainer_email='zope-dev@zope.org',
-      classifiers=CLASSIFIERS,
+      classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Zope Public License',
+        'Operating System :: OS Independent',
+        'Framework :: Zope',
+        'Framework :: Zope :: 4',
+        'Framework :: Zope :: 5',
+        'Programming Language :: Python',
+        'Topic :: Database',
+        'Topic :: Database :: Front-Ends',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        ],
       keywords='Zope Database adapter SQLAlchemy',
       description='A generic database adapter for Zope',
       long_description=long_description,
@@ -62,7 +60,6 @@ setup(name='Products.SQLAlchemyDA',
       python_requires='>=3.7',
       install_requires=[
         'setuptools',
-        'six',
         'SQLAlchemy <1.4',  # SQLAlchemy 1.4 doesn't support Python 3.5
         'z3c.sqlalchemy >1.5.1',
         'Products.ZSQLMethods'],
