@@ -11,8 +11,6 @@ import random
 import time
 import warnings
 
-import six
-
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from AccessControl.Permissions import view_management_screens
@@ -22,7 +20,6 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from z3c.sqlalchemy import createSAWrapper
 from z3c.sqlalchemy import getSAWrapper
-from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
 from zope.sqlalchemy import mark_changed
 
 
@@ -174,7 +171,7 @@ class SAWrapper(SimpleItem, PropertyManager):
 
     def _new_utilid(self):
         """ Assign a new unique utility ID """
-        self.util_id = '%s.%s' % (time.time(), random.random())
+        self.util_id = f'{time.time()}.{random.random()}'
 
     def allQuotingStyles(self):
         return ('standard', 'no-quote')
@@ -475,9 +472,9 @@ class SAWrapper(SimpleItem, PropertyManager):
     @security.protected(view_management_screens)
     def manage_formatItem(self, s):
         """ used by query form """
-        if isinstance(s, six.text_type):
+        if isinstance(s, str):
             return s
-        if isinstance(s, six.binary_type):
+        if isinstance(s, bytes):
             return s.decode(self.encoding, 'ignore')
         return str(s)
 
@@ -486,24 +483,11 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ Intercept changed properties in order to perform
             further actions.
         """
-        try:
-            # zope 2.10
-            from zope.component import unregisterUtility
-            unregisterUtility(name=self.util_id)
-            self._new_utilid()
-        except ImportError:
-            try:
-                # zope 2.8
-                from zope.app import zapi
-                from zope.component.servicenames import Utilities
-                s = zapi.getGlobalServices().getService(Utilities)
-                s.register((), ISQLAlchemyWrapper, self.util_id, None)
-                self._new_utilid()
-            except Exception:
-                # Zope 2.9 ATT: fix this
-                self._new_utilid()
+        from zope.component import unregisterUtility
+        unregisterUtility(name=self.util_id)
+        self._new_utilid()
 
-        return super(SAWrapper, self).manage_editProperties(REQUEST)
+        return super().manage_editProperties(REQUEST)
 
     manage_workspace = PageTemplateFile('pt/info', globals(),
                                         __name__='manage_workspace')
