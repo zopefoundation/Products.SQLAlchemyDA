@@ -7,8 +7,6 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = '2.0.0.dev0'
-
 readme_file = 'README.rst'
 changes_file = 'CHANGES.rst'
 desc = open(readme_file).read().strip()
@@ -17,7 +15,7 @@ long_description = desc + "\n\nCHANGES\n=======\n\n" + changes
 
 
 setup(name='Products.SQLAlchemyDA',
-      version=version,
+      version='2.0',
       url='https://github.com/zopefoundation/Products.SQLAlchemyDA',
       project_urls={
           'Issue Tracker': ('https://github.com/zopefoundation/'
