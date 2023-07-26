@@ -12,7 +12,7 @@ from sqlalchemy import MetaData
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy import Unicode
-from sqlalchemy.orm import mapper
+from sqlalchemy.orm import registry
 from testfixtures import LogCapture
 
 import transaction
@@ -37,7 +37,7 @@ class Test(MappedClassBase):
     pass
 
 
-mapper(Test, test_table)
+registry().map_imperatively(Test, test_table)
 
 
 class TestBase(ZopeTestCase.ZopeTestCase):
@@ -58,8 +58,7 @@ class SQLAlchemyDATests(TestBase):
 
         self.dsn = os.environ.get('TEST_DSN', 'sqlite:///sqlitetestdb1')
         wrapper = createSAWrapper(self.dsn)
-        metadata.bind = wrapper.engine
-        metadata.create_all()
+        metadata.create_all(bind=wrapper.engine)
         session = wrapper.session
         t1 = Test(id=1, utext='Hello world', text='hello world')
         t2 = Test(id=2, utext='foo', text='far')
@@ -162,10 +161,9 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
         from z3c.sqlalchemy import createSAWrapper
         self.folder_path = '/' + self.folder.absolute_url(1)
         self.dsn = os.environ.get('TEST_DSN', 'sqlite:///sqlitetestdb2')
-        wrapper = createSAWrapper(self.dsn)
-        metadata.bind = wrapper.engine
-        metadata.create_all()
-        self.session = wrapper.session
+        self.wrapper = createSAWrapper(self.dsn)
+        metadata.create_all(bind=self.wrapper.engine)
+        self.session = self.wrapper.session
 
     def testZsqlInsertWithCommit(self):
         self.createDA()
@@ -206,7 +204,7 @@ class SQLAlchemyDAFunctionalTests(TestBase, ZopeTestCase.FunctionalTestCase):
     def beforeTearDown(self):
         from ..da import clear_sa_wrapper_registry
         clear_sa_wrapper_registry()
-        metadata.drop_all()
+        metadata.drop_all(bind=self.wrapper.engine)
 
     def test_lookup_sa_wrapper(self):
         from ..da import lookup_sa_wrapper

@@ -4,6 +4,9 @@ Change log
 2.1 (unreleased)
 ----------------
 
+- Add support for SQLAlchemy 2.0
+  (`#16 <https://github.com/zopefoundation/Products.SQLAlchemyDA/issues/16>`_)
+
 
 2.0 (2023-02-01)
 ----------------

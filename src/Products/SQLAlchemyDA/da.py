@@ -291,8 +291,6 @@ class SAWrapper(SimpleItem, PropertyManager):
     @property
     def engine_options(self):
         engine_options = dict(self.extra_engine_options)
-        engine_options.update(convert_unicode=self.convert_unicode,
-                              encoding=self.encoding)
         return engine_options
 
     def add_extra_engine_options(self, engine_options):
