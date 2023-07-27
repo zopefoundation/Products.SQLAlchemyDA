@@ -17,9 +17,11 @@ from AccessControl.Permissions import view_management_screens
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from zope.component import getGlobalSiteManager
 
 from z3c.sqlalchemy import createSAWrapper
 from z3c.sqlalchemy import getSAWrapper
+from z3c.sqlalchemy.interfaces import ISQLAlchemyWrapper
 from zope.sqlalchemy import mark_changed
 
 
@@ -481,8 +483,8 @@ class SAWrapper(SimpleItem, PropertyManager):
         """ Intercept changed properties in order to perform
             further actions.
         """
-        from zope.component import unregisterUtility
-        unregisterUtility(name=self.util_id)
+        gsm = getGlobalSiteManager()
+        gsm.unregisterUtility(provided=ISQLAlchemyWrapper, name=self.util_id)
         self._new_utilid()
 
         return super().manage_editProperties(REQUEST)
