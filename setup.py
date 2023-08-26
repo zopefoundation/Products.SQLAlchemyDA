@@ -54,7 +54,7 @@ setup(name='Products.SQLAlchemyDA',
       python_requires='>=3.7',
       install_requires=[
         'setuptools',
-        'SQLAlchemy <2',  # z3c.sqlalchemy 1.5.2 incompatible with SQLAlchemy 2
+        'SQLAlchemy',
         'z3c.sqlalchemy >1.5.1',
         'Products.ZSQLMethods'],
       extras_require={'test': ['testfixtures']},
