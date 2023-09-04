@@ -1,7 +1,7 @@
 Change log
 ==========
 
-2.1 (unreleased)
+2.1 (2023-09-04)
 ----------------
 
 - Add support for SQLAlchemy 2.0
