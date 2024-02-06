@@ -13,6 +13,7 @@ import warnings
 
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
+from AccessControl.Permissions import change_database_connections
 from AccessControl.Permissions import view_management_screens
 from OFS.PropertyManager import PropertyManager
 from OFS.SimpleItem import SimpleItem
@@ -295,6 +296,7 @@ class SAWrapper(SimpleItem, PropertyManager):
         engine_options = dict(self.extra_engine_options)
         return engine_options
 
+    @security.protected(change_database_connections)
     def add_extra_engine_options(self, engine_options):
         """ engine_options is a tuple containing additional
             options for sqlalchemy.create_engine.
@@ -346,6 +348,7 @@ class SAWrapper(SimpleItem, PropertyManager):
             self._v_types_map = map
         return self._v_types_map
 
+    @security.private
     def query(self, query_string, max_rows=None, query_data=None):
         """ *The* query() method as used by the internal ZSQL
             machinery.

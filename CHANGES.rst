@@ -4,6 +4,9 @@ Change log
 2.2 (unreleased)
 ----------------
 
+- Add missing security declarations on the database adapter class
+  to mitigate arbitrary SQL query execution vulnerability.
+
 - Add support for Python 3.12.
 
 
