@@ -4,6 +4,8 @@ Change log
 2.2 (unreleased)
 ----------------
 
+- Add support for Python 3.12.
+
 
 2.1 (2023-09-04)
 ----------------
