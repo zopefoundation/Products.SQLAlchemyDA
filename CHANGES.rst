@@ -10,6 +10,7 @@ Change log
 
 - Add missing security declarations on the database adapter class
   to mitigate arbitrary SQL query execution vulnerability.
+  [`CVE-2024-24811 <https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-24811>`_]
 
 - Add support for Python 3.12.
 
