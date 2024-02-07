@@ -1,7 +1,7 @@
 Change log
 ==========
 
-2.2 (unreleased)
+2.2 (2024-02-07)
 ----------------
 
 - Add missing security declarations on the database adapter class
