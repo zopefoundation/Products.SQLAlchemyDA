@@ -5,6 +5,8 @@ Change log
 ----------------
 
 
+- Drop support for Python 3.7.
+
 2.2 (2024-02-07)
 ----------------
 
