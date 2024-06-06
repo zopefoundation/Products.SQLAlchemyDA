@@ -15,7 +15,7 @@ long_description = desc + "\n\nCHANGES\n=======\n\n" + changes
 
 
 setup(name='Products.SQLAlchemyDA',
-      version='2.3.dev0',
+      version='3.0.dev0',
       url='https://github.com/zopefoundation/Products.SQLAlchemyDA',
       project_urls={
           'Issue Tracker': ('https://github.com/zopefoundation/'
@@ -38,7 +38,6 @@ setup(name='Products.SQLAlchemyDA',
         'Topic :: Database',
         'Topic :: Database :: Front-Ends',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
@@ -52,7 +51,7 @@ setup(name='Products.SQLAlchemyDA',
       package_dir={'': 'src'},
       include_package_data=True,
       zip_safe=False,
-      python_requires='>=3.7',
+      python_requires='>=3.8',
       install_requires=[
         'setuptools',
         'SQLAlchemy',
