@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/zope-product
 [meta]
 template = "zope-product"
-commit-id = "b1221c3c"
+commit-id = "a0de4e93"
 
 [python]
 with-pypy = false
@@ -21,7 +21,7 @@ fail-under = 75
 [isort]
 known_zope = "transaction"
 known_first_party = "z3c.sqlalchemy, zope.sqlalchemy"
-known_third_party = "mock, six, sqlalchemy, testfixtures"
+known_third_party = "sqlalchemy, testfixtures"
 
 [manifest]
 additional-rules = [
