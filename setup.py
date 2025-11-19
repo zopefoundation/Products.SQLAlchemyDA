@@ -3,7 +3,6 @@
 # (C) 2008, ZOPYX Ltd & Co. KG, Tuebingen, Germany
 ##########################################################################
 
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -38,25 +37,20 @@ setup(name='Products.SQLAlchemyDA',
           'Topic :: Database',
           'Topic :: Database :: Front-Ends',
           'Topic :: Software Development :: Libraries :: Python Modules',
-          'Programming Language :: Python :: 3.9',
           'Programming Language :: Python :: 3.10',
           'Programming Language :: Python :: 3.11',
           'Programming Language :: Python :: 3.12',
           'Programming Language :: Python :: 3.13',
+          'Programming Language :: Python :: 3.14',
       ],
       keywords='Zope Database adapter SQLAlchemy',
       description='A generic database adapter for Zope',
       long_description=long_description,
-      packages=find_packages('src'),
-      package_dir={'': 'src'},
-      include_package_data=True,
-      zip_safe=False,
-      python_requires='>=3.9',
+      python_requires='>=3.10',
       install_requires=[
-          'setuptools',
           'SQLAlchemy',
           'z3c.sqlalchemy >1.5.1',
           'Products.ZSQLMethods'],
       extras_require={'test': ['testfixtures']},
-      namespace_packages=['Products'],
+      include_package_data=True,
       )
