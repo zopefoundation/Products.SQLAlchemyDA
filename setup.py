@@ -52,4 +52,5 @@ setup(name='Products.SQLAlchemyDA',
           'z3c.sqlalchemy >1.5.1',
           'Products.ZSQLMethods'],
       extras_require={'test': ['testfixtures']},
+      include_package_data=True,
       )
