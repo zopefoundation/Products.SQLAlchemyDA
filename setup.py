@@ -14,7 +14,7 @@ long_description = desc + "\n\nCHANGES\n=======\n\n" + changes
 
 
 setup(name='Products.SQLAlchemyDA',
-      version='3.0.dev0',
+      version='3.0',
       url='https://github.com/zopefoundation/Products.SQLAlchemyDA',
       project_urls={
           'Issue Tracker': ('https://github.com/zopefoundation/'
