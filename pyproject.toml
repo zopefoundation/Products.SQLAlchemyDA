@@ -1,12 +1,55 @@
-# Generated from:
-# https://github.com/zopefoundation/meta/tree/master/config/zope-product
-
+# Generated with zope.meta (https://zopemeta.readthedocs.io/) from:
+# https://github.com/zopefoundation/meta/tree/master/src/zope/meta/zope-product
 [build-system]
 requires = [
     "setuptools >= 78.1.1,< 81",
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "Products.SQLAlchemyDA"
+version = "3.1.dev0"
+description = "A generic database adapter for Zope"
+license = "ZPL-2.1"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Framework :: Zope",
+    "Framework :: Zope :: 5",
+    "Programming Language :: Python",
+    "Topic :: Database",
+    "Topic :: Database :: Front-Ends",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dynamic = ["readme"]
+requires-python = ">=3.10"
+authors = [
+    {name = "Andreas Jung",email = "info@zopyx.com"},
+]
+maintainers = [
+    {name = "Plone Foundation and contributors",email = "zope-dev@zope.dev"},
+]
+dependencies = [
+    "SQLAlchemy",
+    "z3c.sqlalchemy >1.5.1",
+    "Products.ZSQLMethods",
+]
+keywords = ["Zope", "Database", "adapter", "SQLAlchemy"]
+
+[project.optional-dependencies]
+test = ["testfixtures"]
+
+[project.urls]
+Source = "https://github.com/zopefoundation/Products.SQLAlchemyDA"
+Issues = "https://github.com/zopefoundation/Products.SQLAlchemyDA/issues"
 
 [tool.coverage.run]
 branch = true
@@ -30,3 +73,7 @@ exclude_lines = [
 
 [tool.coverage.html]
 directory = "parts/htmlcov"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CHANGES.rst"]}
+
