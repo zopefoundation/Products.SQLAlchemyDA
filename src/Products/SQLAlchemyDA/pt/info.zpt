@@ -6,9 +6,9 @@
     <p class="form-help mt-4" tal:condition="not: info_d">
         No database connection configured!
         <br/>
-        Go to the <em>Properties</em> tab in order to change the configuration.       
+        Go to the <em>Properties</em> tab in order to change the configuration.
     </p>
-    
+
     <tal:if condition="info_d">
 
         <table class="info table table-sm table-striped" >
@@ -41,10 +41,10 @@
 
         <div class="zmi-controls">
             <form action="manage_stop" method="POST" tal:condition="context/connected">
-                <input class="btn btn-primary" type="submit" value="Close connections"/> 
+                <input class="btn btn-primary" type="submit" value="Close connections"/>
             </form>
             <form action="manage_start" method="POST" tal:condition="not: context/connected">
-                <input class="btn btn-primary" type="submit" value="Open connections"/> 
+                <input class="btn btn-primary" type="submit" value="Open connections"/>
             </form>
         </div>
 

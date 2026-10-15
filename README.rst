@@ -58,12 +58,12 @@ Installation:
 
 - Download and install SQLAlchemy as egg or from the sources
   from PyPI (pip sqlalchemy). See
-    
+
     http://www.sqlalchemy.org
 
     for details
 
-- Download and install z3c.sqlalchemy as egg or from the sources 
+- Download and install z3c.sqlalchemy as egg or from the sources
   from PyPI (pip z3c.sqlalchemy). See
 
     https://pypi.org/project/z3c.sqlalchemy/
@@ -78,20 +78,20 @@ Installation:
 
 - Click on the new created SQLAlchemyDA instance within the ZMI
   and configure your database connection through the "Properties" tab.
-  The connection parameter 'dsn' must be specified as a valid SQLAlchemy DSN 
+  The connection parameter 'dsn' must be specified as a valid SQLAlchemy DSN
   like
 
          <dbschema>://<username>:<password>@<hostname>/<databasename>
 
     Example:
-        
+
         postgres://admin:123@localhost:5432/TestDB
 
 - ZSQL methods should see the new DA through the selection widget of available
   database adapters
 
-- NOTE: you must have the low-level Python DB drivers installed in order to 
-  access a particular database. See 
+- NOTE: you must have the low-level Python DB drivers installed in order to
+  access a particular database. See
 
         http://www.sqlalchemy.org/docs/dbengine.html#dbengine_supported
 
@@ -108,7 +108,7 @@ Configuration of SQLAlchemyDA:
    commit() related error. Otherwise leave this property checked. Changing this
    property *requires* a Zope restart.
 
-- 'quoting_style' - affects how strings are quoted in SQL. By default 'standard' 
+- 'quoting_style' - affects how strings are quoted in SQL. By default 'standard'
    quotes strings correctly. Setting the value to 'no-quote' might solve quoting issues
    with some databases.
 
@@ -132,7 +132,7 @@ Tested with databases:
 - MySQL is *only* supported for MySQL databases with transaction support.
   (see also z3c/sqlalchemy/README.txt)
 - MSSQL 2008
- 
+
 
 Known issues:
 -------------
@@ -144,7 +144,7 @@ have an error in your SQL syntax near 'COMMIT .
 This bug might appear with older MySQL versions when opening/closing
 the connections manually through the ZMI. It should not affect the
 functionality of SQLAlchemyDA.
-    
+
 
 Author
 ------
@@ -156,7 +156,7 @@ Germany and ZOPYX Ltd. & Co. KG, Tuebingen, Germany.
 License
 -------
 
-SQLAlchemyDA is  licensed under the Zope Public License 2.1. 
+SQLAlchemyDA is  licensed under the Zope Public License 2.1.
 See LICENSE.txt.
 
 
